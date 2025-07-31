@@ -11,7 +11,9 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-producti
 
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:3002', 'http://localhost:3001'],
+  origin: process.env.NODE_ENV === 'production' 
+    ? ['https://sales-management-app-2ysa.onrender.com'] 
+    : ['http://localhost:3000', 'http://localhost:3002', 'http://localhost:3001'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
@@ -955,6 +957,16 @@ app.get('/api/sales/enhanced-report', authenticateToken, async (req, res) => {
   } catch (error) {
     console.error('Error generating enhanced sales report:', error);
     res.status(500).json({ message: 'Server error generating enhanced report' });
+  }
+});
+
+// Serve static files from React build
+app.use(express.static(path.join(__dirname, 'build')));
+
+// Catch all handler: send back React's index.html file for any non-API routes
+app.get('*', (req, res) => {
+  if (!req.path.startsWith('/api')) {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
   }
 });
 

@@ -23,12 +23,12 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "server": "node server.js",
+    "server": "node server-db.js",
     "dev": "concurrently \"npm run server\" \"npm start\"",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "build:backend": "echo 'Backend build complete'",
-    "start:production": "NODE_ENV=production node server.js"
+    "start:production": "NODE_ENV=production node server-db.js"
   },
   "eslintConfig": {
     "extends": [
