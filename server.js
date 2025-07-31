@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 3001;
 // Enable CORS for all origins in production
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
-    ? ['https://sales-management-frontend.onrender.com', 'https://sales-app-frontend.onrender.com']
+    ? ['https://sales-management-app-2ysa.onrender.com'] 
     : 'http://localhost:3000',
   credentials: true
 }));
