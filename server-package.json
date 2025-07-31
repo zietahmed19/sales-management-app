@@ -1,0 +1,20 @@
+{
+  "name": "sales-management-server",
+  "version": "1.0.0",
+  "description": "Sales Management API Server",
+  "main": "server-db.js",
+  "scripts": {
+    "start": "node server-db.js",
+    "dev": "node server-db.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "sqlite3": "^5.1.7",
+    "cors": "^2.8.5",
+    "bcrypt": "^6.0.0",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
