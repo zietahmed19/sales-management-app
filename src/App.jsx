@@ -94,7 +94,7 @@ console.error = (...args) => {
 };
 
 // API configuration
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+const API_BASE_URL = process.env.REACT_APP_API_URL || '/api';
 
 // API helper function with token handling
 const apiRequest = async (endpoint, options = {}) => {

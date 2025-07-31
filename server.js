@@ -208,6 +208,16 @@ app.get('/api/sales', (req, res) => {
   }
 });
 
+// Serve static files from React build
+app.use(express.static(path.join(__dirname, 'build')));
+
+// Catch all handler: send back React's index.html file for any non-API routes
+app.get('*', (req, res) => {
+  if (!req.path.startsWith('/api')) {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  }
+});
+
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`✅ Sales Management API Server running on port ${PORT}`);
   console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
