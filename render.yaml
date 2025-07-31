@@ -2,7 +2,7 @@ services:
   - type: web
     name: sales-management-app
     env: node
-    buildCommand: npm install
+    buildCommand: npm install && npm run build
     startCommand: node server-db.js
     envVars:
       - key: NODE_ENV
