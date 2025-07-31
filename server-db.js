@@ -624,9 +624,11 @@ app.post('/api/sales', authenticateToken, async (req, res) => {
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ 
-    status: 'Server is running', 
+    status: 'COMPREHENSIVE SQLite Server is running', 
     timestamp: new Date().toISOString(),
-    database: 'Connected'
+    database: 'SQLite Connected',
+    server: 'server-db.js',
+    features: ['1306 clients', '27 delegates', 'SQLite database']
   });
 });
 

@@ -39,9 +39,11 @@ if (!fs.existsSync(salesFilePath)) {
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({ 
-    status: 'OK', 
+    status: 'BASIC JSON Server running (NOT the comprehensive version)', 
     timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV || 'development'
+    environment: process.env.NODE_ENV || 'development',
+    server: 'server.js',
+    warning: 'This is the basic server - should be using server-db.js instead'
   });
 });
 
