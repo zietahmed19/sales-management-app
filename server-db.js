@@ -624,11 +624,12 @@ app.post('/api/sales', authenticateToken, async (req, res) => {
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ 
-    status: 'COMPREHENSIVE SQLite Server is running', 
+    status: 'COMPREHENSIVE SQLite Server is running - FORCED DEPLOYMENT', 
     timestamp: new Date().toISOString(),
     database: 'SQLite Connected',
     server: 'server-db.js',
-    features: ['1306 clients', '27 delegates', 'SQLite database']
+    features: ['1306 clients', '27 delegates', 'SQLite database'],
+    deployment: 'Jan 31 2025 - Authentication Fix'
   });
 });
 
@@ -967,8 +968,14 @@ app.use(express.static(path.join(__dirname, 'build')));
 
 // Catch all handler: send back React's index.html file for any non-API routes
 app.get('*', (req, res) => {
+  console.log(`🌐 Frontend route requested: ${req.path}`);
   if (!req.path.startsWith('/api')) {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+    const indexPath = path.join(__dirname, 'build', 'index.html');
+    console.log(`📄 Serving React app from: ${indexPath}`);
+    res.sendFile(indexPath);
+  } else {
+    console.log(`❌ API route not found: ${req.path}`);
+    res.status(404).json({ error: 'API endpoint not found', path: req.path });
   }
 });
 

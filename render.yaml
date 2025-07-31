@@ -6,6 +6,7 @@ build:
     - npm run build
     - mkdir -p data
     - echo "Starting server-db.js with SQLite database..."
+    - ls -la *.js
 services:
   - type: node
     name: sales-backend
@@ -16,5 +17,5 @@ services:
         value: 10000
       - key: JWT_SECRET
         value: sales-management-jwt-secret-2025
-    buildCommand: npm install && npm run build
-    startCommand: node server-db.js
+    buildCommand: npm install && npm run build && ls -la *.js
+    startCommand: node start-server.js
