@@ -14,8 +14,8 @@ COPY . .
 # Build React app
 RUN npm run build
 
-# Expose port
-EXPOSE 3001
+# Expose port (Render will set PORT env var)
+EXPOSE $PORT
 
 # Start the server
 CMD ["node", "server-db.js"]
