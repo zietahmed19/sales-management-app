@@ -1,10 +1,8 @@
 services:
   - type: web
     name: sales-management-app
-    env: node
-    runtime: node
-    buildCommand: npm install && npm run build
-    startCommand: node server-db.js
+    env: docker
+    dockerfilePath: ./Dockerfile
     envVars:
       - key: NODE_ENV
         value: production
