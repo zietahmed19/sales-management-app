@@ -76,7 +76,7 @@ app.post('/api/auth/login', async (req, res) => {
     const represents = JSON.parse(representsData);
     
     // Find user
-    const user = represents.find(rep => rep.rep_name === username);
+    const user = represents.find(rep => rep.username === username);
     
     if (!user) {
       return res.status(401).json({ message: 'Invalid credentials' });
@@ -86,7 +86,7 @@ app.post('/api/auth/login', async (req, res) => {
     // In production, use bcrypt.compare with hashed passwords
     if (password === '123456' || password === user.password) {
       const token = jwt.sign(
-        { id: user.id, username: user.rep_name }, 
+        { id: user.iD, username: user.username }, 
         process.env.JWT_SECRET || 'your-secret-key',
         { expiresIn: '24h' }
       );
@@ -94,9 +94,12 @@ app.post('/api/auth/login', async (req, res) => {
       res.json({
         token,
         user: {
-          id: user.id,
-          rep_name: user.rep_name,
-          wilaya: user.wilaya
+          id: user.iD,
+          username: user.username,
+          RepresentName: user.RepresentName,
+          RepCode: user.RepCode,
+          City: user.City,
+          Wilaya: user.Wilaya
         }
       });
     } else {

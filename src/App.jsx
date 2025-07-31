@@ -41,18 +41,20 @@ const trackUserAction = (action, details = {}) => {
   console.log('  - User exists:', !!localStorage.getItem('currentUser'));
   console.log('='.repeat(80));
   
-  // Also send to terminal watcher if available
-  try {
-    fetch('http://localhost:3002/console', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ 
-        level: 'action', 
-        message: `USER ACTION: ${action}`, 
-        data: details 
-      })
-    }).catch(() => {}); // Ignore errors
-  } catch (e) {}
+  // Also send to terminal watcher if available (only in development)
+  if (process.env.NODE_ENV === 'development') {
+    try {
+      fetch('http://localhost:3002/console', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          level: 'action', 
+          message: `USER ACTION: ${action}`, 
+          data: details 
+        })
+      }).catch(() => {}); // Ignore errors
+    } catch (e) {}
+  }
 };
 
 // Global console interceptor to send messages to terminal
@@ -64,7 +66,7 @@ console.log = (...args) => {
   originalConsoleLog(...args);
   try {
     const message = args.join(' ');
-    if (message.includes('🔍') || message.includes('✅') || message.includes('❌') || message.includes('🔄')) {
+    if (process.env.NODE_ENV === 'development' && (message.includes('🔍') || message.includes('✅') || message.includes('❌') || message.includes('🔄'))) {
       fetch('http://localhost:3002/console', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -80,17 +82,19 @@ console.log = (...args) => {
 
 console.error = (...args) => {
   originalConsoleError(...args);
-  try {
-    fetch('http://localhost:3002/console', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ 
-        level: 'error', 
-        message: args.join(' '),
-        data: args.length > 1 ? args.slice(1) : null
-      })
-    }).catch(() => {});
-  } catch (e) {}
+  if (process.env.NODE_ENV === 'development') {
+    try {
+      fetch('http://localhost:3002/console', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          level: 'error', 
+          message: args.join(' '),
+          data: args.length > 1 ? args.slice(1) : null
+        })
+      }).catch(() => {});
+    } catch (e) {}
+  }
 };
 
 // API configuration
