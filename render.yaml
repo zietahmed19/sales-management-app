@@ -1,20 +1,11 @@
-version: "1"
-build:
-  commands:
-    - echo "Building comprehensive sales management server..."
-    - npm install
-    - npm run build
-    - mkdir -p data
-    - echo "Starting server-db.js with SQLite database..."
 services:
-  - type: node
-    name: sales-backend
-    env:
+  - type: web
+    name: sales-management-app
+    env: node
+    buildCommand: npm install
+    startCommand: node server-db.js
+    envVars:
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: 10000
       - key: JWT_SECRET
         value: sales-management-jwt-secret-2025
-    buildCommand: npm install && npm run build
-    startCommand: node server-db.js
