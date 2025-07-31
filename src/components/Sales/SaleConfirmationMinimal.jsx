@@ -6,7 +6,8 @@ const SaleConfirmationMinimal = ({
   setCurrentScreen,
   setSelectedPacks,
   setSelectedClient,
-  initializeData // Add this prop to refresh data after sale
+  initializeData, // Add this prop to refresh data after sale
+  apiRequest // Add apiRequest prop
 }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [saleCompleted, setSaleCompleted] = useState(false);
@@ -36,25 +37,12 @@ const SaleConfirmationMinimal = ({
 
       console.log('💰 Sending sale data:', newSale);
 
-      // Send to database API
-      const token = localStorage.getItem('token');
-      
-      const response = await fetch('http://localhost:3001/api/sales', {
+      // Send to database API using apiRequest helper
+      const responseData = await apiRequest('/sales', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
         body: JSON.stringify(newSale),
       });
       
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Server response:', errorData);
-        throw new Error(errorData.message || `Failed to save sale: ${response.status}`);
-      }
-
-      const responseData = await response.json();
       console.log('✅ Sale saved successfully:', responseData);
 
       // Refresh data to show new sale in dashboard/reports
