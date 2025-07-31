@@ -1,0 +1,17 @@
+[
+    {
+        "PackName": "Pack A",
+        "Products": [{"ProductName": "Spark Go 1 64+3", "Qte": "30","Price":"16400"},{"ProductName": "Spark Go 1 128+4", "Qte": "20","Price":"18800"}],
+        "Gift": "TV 43'"
+    },
+    {
+      "PackName": "Pack B",
+        "Products": [{"ProductName": "Spark Go 1 64+3", "Qte": "20","Price":"16400"},{"ProductName": "Spark Go 1 128+4", "Qte": "10","Price":"18800"}],
+        "Gift": "TV 32 IRIS'"
+    },
+    {
+     "PackName": "Pack C",
+        "Products": [{"ProductName": "Spark Go 1 64+3", "Qte": "5","Price":"16400"},{"ProductName": "Spark Go 1 128+4", "Qte": "3","Price":"18800"}],
+        "Gift": "5 internet Card 500 DA'"
+    }
+]

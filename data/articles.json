@@ -2,13 +2,73 @@
   {
     "Id": 1,
     "Name": "Spark Go 1 64+3",
-    "Price": 16400 ,
+    "Price": 16400,
     "Category": "Phone"
   },
   {
     "Id": 2,
     "Name": "Spark Go 1 128+4",
-    "Price": 18800 ,
+    "Price": 18800,
     "Category": "Phone"
+  },
+  {
+    "Id": 3,
+    "Name": "Spark Go 2 128+6",
+    "Price": 22500,
+    "Category": "Phone"
+  },
+  {
+    "Id": 4,
+    "Name": "Camon 20 128+8",
+    "Price": 28900,
+    "Category": "Phone"
+  },
+  {
+    "Id": 5,
+    "Name": "Camon 20 Pro 256+8",
+    "Price": 35600,
+    "Category": "Phone"
+  },
+  {
+    "Id": 6,
+    "Name": "Phantom X2 256+12",
+    "Price": 67800,
+    "Category": "Phone"
+  },
+  {
+    "Id": 7,
+    "Name": "Wireless Earbuds",
+    "Price": 4500,
+    "Category": "Accessory"
+  },
+  {
+    "Id": 8,
+    "Name": "Fast Charger 33W",
+    "Price": 2800,
+    "Category": "Accessory"
+  },
+  {
+    "Id": 9,
+    "Name": "Phone Case Premium",
+    "Price": 1200,
+    "Category": "Accessory"
+  },
+  {
+    "Id": 10,
+    "Name": "Screen Protector",
+    "Price": 800,
+    "Category": "Accessory"
+  },
+  {
+    "Id": 11,
+    "Name": "Power Bank 10000mAh",
+    "Price": 3500,
+    "Category": "Accessory"
+  },
+  {
+    "Id": 12,
+    "Name": "Car Mount Holder",
+    "Price": 1500,
+    "Category": "Accessory"
   }
 ]

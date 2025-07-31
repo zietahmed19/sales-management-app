@@ -1,10 +1,16 @@
+version: "1"
+build:
+  commands:
+    - echo "Building backend server..."
+    - npm install
+    - mkdir -p data
 services:
-  - type: web
-    name: sales-management-app
-    env: node
-    buildCommand: npm install && npm run build
-    startCommand: npm start
-    plan: free
-    envVars:
+  - type: node
+    name: sales-backend
+    env:
       - key: NODE_ENV
         value: production
+      - key: PORT
+        value: 10000
+    buildCommand: npm install
+    startCommand: node server.js
