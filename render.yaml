@@ -3,7 +3,7 @@ services:
     name: sales-management-app
     env: node
     buildCommand: npm install && npm run build
-    startCommand: npx serve -s build -l 3000
+    startCommand: npm start
     plan: free
     envVars:
       - key: NODE_ENV

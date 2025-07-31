@@ -16,37 +16,16 @@ import SaleConfirmation from './components/Sales/SaleConfirmation';
 
 const loadData = async () => {
   try {
-    const [repRes, clientRes, articleRes, giftRes, packRes,salesRes] = await Promise.all([
-      fetch("/Data/represents.json"),
-      fetch("/Data/clients.json"),
-      fetch("/Data/articles.json"),
-      fetch("/Data/gifts.json"),
-      fetch("/Data/packs.json"),
-      fetch("/Data/sales.json"),
-      
-    ]);
-console.log("data....");
-    const [repData, clientData, articleData, giftData, packData,salesData] = await Promise.all([
-      repRes.json(),
-      clientRes.json(),
-      articleRes.json(),
-      giftRes.json(),
-      packRes.json(),
-      salesRes.json(),
-    ]);
-
-console.log("data fetched....");
-
-    return {
-      representatives: repData ?? [],
-      clients: clientData ?? [],
-      articles: articleData ?? [],
-      gifts: giftData ?? [],
-      packs: packData ?? [],
-      sales: salesData  ?? []
-    };
+    const response = await fetch("/api/data");
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    console.log("Data fetched from API:", data);
+    return data;
   } catch (error) {
-    console.error("❌ Error loading data:", error);
+    console.error("❌ Error loading data from API:", error);
+    // Fallback to empty data structure
     return {
       representatives: [],
       clients: [],

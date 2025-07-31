@@ -63,14 +63,7 @@ const SaleConfirmation = ({
     setIsProcessing(true);
     
     try {
-      // Load existing sales from localStorage or use current data.sales
-      const existingSales = loadExistingSales();
-      const currentSales = existingSales.length > 0 ? existingSales : (data.sales || []);
-      
-      // Create new sale object with proper ID
       const newSale = {
-        Id: currentSales.length + 1,
-        CreateDate: new Date().toISOString(),
         ClientID: selectedClient.ClientID,
         Client: {
           ClientID: selectedClient.ClientID,
@@ -102,24 +95,26 @@ const SaleConfirmation = ({
         Status: 'Completed'
       };
 
-      // Add new sale to existing sales
-      const updatedSales = [...currentSales, newSale];
-      
-      console.log('Saving sales data:', updatedSales); // Debug log
-      
-      // Save to file
-      const saveSuccess = await saveSalesToFile(updatedSales);
-      
-      if (saveSuccess) {
-        // Update local state
+      const response = await fetch('/api/sales', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newSale),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        // Update local state with new sale
         setData(prevData => ({
           ...prevData,
-          sales: updatedSales
+          sales: [...prevData.sales, result.sale]
         }));
         
         setSaleCompleted(true);
       } else {
-        throw new Error('Failed to save sales data');
+        throw new Error(result.error || 'Failed to save sale');
       }
     } catch (error) {
       console.error('Error completing sale:', error);

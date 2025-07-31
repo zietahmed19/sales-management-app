@@ -11,20 +11,29 @@ const LoginScreen = ({ data, setCurrentUser, setCurrentScreen }) => {
     setLoading(true);
     setError('');
 
-    // Simulate API call
-    setTimeout(() => {
-      const user = data.representatives.find(
-        rep => rep.username === credentials.username && rep.password === credentials.password
-      );
+    try {
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(credentials),
+      });
 
-      if (user) {
-        setCurrentUser(user);
+      const result = await response.json();
+
+      if (result.success) {
+        setCurrentUser(result.user);
         setCurrentScreen('dashboard');
       } else {
-        setError('Invalid username or password');
+        setError(result.message || 'Invalid username or password');
       }
+    } catch (error) {
+      console.error('Login error:', error);
+      setError('Login failed. Please try again.');
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   return (
