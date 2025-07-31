@@ -1,0 +1,14 @@
+[
+  {
+    "Id": 1,
+    "Name": "Spark Go 1 64+3",
+    "Price": 16400 ,
+    "Category": "Phone"
+  },
+  {
+    "Id": 2,
+    "Name": "Spark Go 1 128+4",
+    "Price": 18800 ,
+    "Category": "Phone"
+  }
+]
