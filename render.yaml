@@ -3,22 +3,18 @@ build:
   commands:
     - echo "Building comprehensive sales management server..."
     - npm install
-    - echo "Skipping React build to force server-only deployment"
+    - npm run build
     - mkdir -p data
-    - echo "Files available:"
-    - ls -la *.js
-    - echo "Starting ONLY server-db.js..."
+    - echo "Starting server-db.js with SQLite database..."
 services:
-  - type: web
+  - type: node
     name: sales-backend
-    env: node
-    plan: free
-    buildCommand: npm install
-    startCommand: node server-db.js
-    envVars:
+    env:
       - key: NODE_ENV
         value: production
       - key: PORT
         value: 10000
       - key: JWT_SECRET
         value: sales-management-jwt-secret-2025
+    buildCommand: npm install && npm run build
+    startCommand: node server-db.js

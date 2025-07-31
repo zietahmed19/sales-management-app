@@ -624,12 +624,11 @@ app.post('/api/sales', authenticateToken, async (req, res) => {
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ 
-    status: 'COMPREHENSIVE SQLite Server is running - FORCED DEPLOYMENT', 
+    status: 'COMPREHENSIVE SQLite Server is running', 
     timestamp: new Date().toISOString(),
     database: 'SQLite Connected',
     server: 'server-db.js',
-    features: ['1306 clients', '27 delegates', 'SQLite database'],
-    deployment: 'Jan 31 2025 - Authentication Fix'
+    features: ['1306 clients', '27 delegates', 'SQLite database']
   });
 });
 
@@ -963,37 +962,13 @@ app.get('/api/sales/enhanced-report', authenticateToken, async (req, res) => {
   }
 });
 
-// Serve static files from React build (if available)
-const buildPath = path.join(__dirname, 'build');
-const hasBuild = require('fs').existsSync(buildPath);
-
-if (hasBuild) {
-  console.log('📁 Serving React build from:', buildPath);
-  app.use(express.static(buildPath));
-} else {
-  console.log('⚠️  No React build found - serving API only');
-}
+// Serve static files from React build
+app.use(express.static(path.join(__dirname, 'build')));
 
 // Catch all handler: send back React's index.html file for any non-API routes
 app.get('*', (req, res) => {
-  console.log(`🌐 Frontend route requested: ${req.path}`);
   if (!req.path.startsWith('/api')) {
-    if (hasBuild) {
-      const indexPath = path.join(__dirname, 'build', 'index.html');
-      console.log(`📄 Serving React app from: ${indexPath}`);
-      res.sendFile(indexPath);
-    } else {
-      console.log(`🚫 No React build available, sending API-only message`);
-      res.json({ 
-        message: 'Sales Management API Server', 
-        status: 'running',
-        endpoints: ['/api/health', '/api/auth/login', '/api/delegates-list'],
-        note: 'This is the API server running without React frontend'
-      });
-    }
-  } else {
-    console.log(`❌ API route not found: ${req.path}`);
-    res.status(404).json({ error: 'API endpoint not found', path: req.path });
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
   }
 });
 
