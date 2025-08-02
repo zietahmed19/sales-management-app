@@ -57,8 +57,8 @@ export const SettingsProvider = ({ children }) => {
       t,
       isRTL: language === 'ar',
       availableLanguages: [
-        { code: 'ar', name: 'العربية' },
-        { code: 'fr', name: 'Français' }
+        { code: 'ar', name: 'العربية', nativeName: 'العربية' },
+        { code: 'fr', name: 'Français', nativeName: 'Français' }
       ]
     }}>
       {children}

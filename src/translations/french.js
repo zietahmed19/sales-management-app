@@ -175,7 +175,7 @@ export const translations = {
     "November": "Novembre",
     "December": "Décembre"
   },
-  
+
   // Settings
   settings: "Paramètres",
   language: "Langue",
@@ -183,7 +183,10 @@ export const translations = {
   lightMode: "Mode clair",
   darkMode: "Mode sombre",
   changeLanguage: "Changer la langue",
-  toggleTheme: "Basculer le thème"
+  toggleTheme: "Basculer le thème",
+  preferences: "Préférences",
+  appearance: "Apparence",
+  general: "Général"
 };
 
 // Helper function to get translation
