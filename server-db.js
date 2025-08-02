@@ -1130,7 +1130,7 @@ app.get('/api/statistics', authenticateToken, async (req, res) => {
 // Enhanced Sales Report Endpoint
 app.get('/api/sales/enhanced-report', authenticateToken, async (req, res) => {
   try {
-    const delegateWilaya = req.user.wilaya;
+    const delegateId = req.user.id;
     const timeframe = req.query.timeframe || 'month';
     
     // Calculate date range based on timeframe
@@ -1140,95 +1140,83 @@ app.get('/api/sales/enhanced-report', authenticateToken, async (req, res) => {
     switch (timeframe) {
       case 'week':
         const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-        dateFilter = `AND s.created_at >= '${weekAgo.toISOString()}'`;
+        dateFilter = `AND s.sale_date >= '${weekAgo.toISOString()}'`;
         break;
       case 'month':
         const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-        dateFilter = `AND s.created_at >= '${monthAgo.toISOString()}'`;
+        dateFilter = `AND s.sale_date >= '${monthAgo.toISOString()}'`;
         break;
       case 'year':
         const yearAgo = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
-        dateFilter = `AND s.created_at >= '${yearAgo.toISOString()}'`;
+        dateFilter = `AND s.sale_date >= '${yearAgo.toISOString()}'`;
         break;
     }
 
-    // Enhanced summary statistics
-    const summaryQuery = `
+    // Enhanced summary statistics - Fixed column references
+    const summary = await promiseQuery(`
       SELECT 
         COUNT(*) as totalSales,
-        SUM(s.total_amount) as totalRevenue,
+        COALESCE(SUM(s.total_price), 0) as totalRevenue,
         COUNT(DISTINCT s.client_id) as uniqueClients,
-        AVG(s.total_amount) as averageOrderValue,
-        COUNT(CASE WHEN s.created_at >= datetime('now', '-30 days') THEN 1 END) as recentSales,
-        COUNT(CASE WHEN s.created_at >= datetime('now', '-60 days') AND s.created_at < datetime('now', '-30 days') THEN 1 END) as previousPeriodSales
+        AVG(s.total_price) as averageOrderValue,
+        COUNT(CASE WHEN s.sale_date >= datetime('now', '-30 days') THEN 1 END) as recentSales,
+        COUNT(CASE WHEN s.sale_date >= datetime('now', '-60 days') AND s.sale_date < datetime('now', '-30 days') THEN 1 END) as previousPeriodSales
       FROM sales s
-      JOIN clients c ON s.client_id = c.ClientID
-      WHERE c.Wilaya = ? ${dateFilter}
-    `;
-
-    const summary = db.prepare(summaryQuery).get(delegateWilaya);
+      WHERE s.representative_id = ? ${dateFilter}
+    `, [delegateId]);
 
     // Calculate growth rate
-    const growthRate = summary.previousPeriodSales > 0 
-      ? ((summary.recentSales - summary.previousPeriodSales) / summary.previousPeriodSales * 100).toFixed(1)
+    const growthRate = summary[0].previousPeriodSales > 0 
+      ? ((summary[0].recentSales - summary[0].previousPeriodSales) / summary[0].previousPeriodSales * 100).toFixed(1)
       : 100;
 
     // Daily statistics for charts
-    const dailyStatsQuery = `
+    const dailyStats = await promiseQuery(`
       SELECT 
-        DATE(s.created_at) as date,
+        DATE(s.sale_date) as date,
         COUNT(*) as sales,
-        SUM(s.total_amount) as revenue
+        COALESCE(SUM(s.total_price), 0) as revenue
       FROM sales s
-      JOIN clients c ON s.client_id = c.ClientID
-      WHERE c.Wilaya = ? ${dateFilter}
-      GROUP BY DATE(s.created_at)
+      WHERE s.representative_id = ? ${dateFilter}
+      GROUP BY DATE(s.sale_date)
       ORDER BY date DESC
       LIMIT 7
-    `;
-
-    const dailyStats = db.prepare(dailyStatsQuery).all(delegateWilaya);
+    `, [delegateId]);
 
     // Top performing packs with enhanced metrics
-    const topPacksQuery = `
+    const topPacks = await promiseQuery(`
       SELECT 
-        p.PackName as name,
+        p.pack_name as name,
         COUNT(*) as count,
-        SUM(s.total_amount) as revenue,
-        AVG(s.total_amount) as avgValue
+        COALESCE(SUM(s.total_price), 0) as revenue,
+        AVG(s.total_price) as avgValue
       FROM sales s
-      JOIN clients c ON s.client_id = c.ClientID
-      JOIN packs p ON s.pack_id = p.Id
-      WHERE c.Wilaya = ? ${dateFilter}
-      GROUP BY p.Id, p.PackName
+      JOIN packs p ON s.pack_id = p.id
+      WHERE s.representative_id = ? ${dateFilter}
+      GROUP BY p.id, p.pack_name
       ORDER BY revenue DESC
       LIMIT 5
-    `;
-
-    const topPacks = db.prepare(topPacksQuery).all(delegateWilaya);
+    `, [delegateId]);
 
     // Client engagement metrics
-    const clientMetricsQuery = `
+    const clientMetrics = await promiseQuery(`
       SELECT 
         COUNT(DISTINCT s.client_id) as activeClients,
-        COUNT(*) / COUNT(DISTINCT s.client_id) as avgOrdersPerClient,
-        MAX(s.created_at) as lastSaleDate
+        CAST(COUNT(*) AS FLOAT) / COUNT(DISTINCT s.client_id) as avgOrdersPerClient,
+        MAX(s.sale_date) as lastSaleDate
       FROM sales s
-      JOIN clients c ON s.client_id = c.ClientID
-      WHERE c.Wilaya = ? ${dateFilter}
-    `;
-
-    const clientMetrics = db.prepare(clientMetricsQuery).get(delegateWilaya);
+      WHERE s.representative_id = ? ${dateFilter}
+    `, [delegateId]);
 
     const enhancedReport = {
       summary: {
-        totalSales: summary.totalSales || 0,
-        totalRevenue: summary.totalRevenue || 0,
-        uniqueClients: summary.uniqueClients || 0,
-        averageOrderValue: summary.averageOrderValue || 0,
+        totalSales: summary[0].totalSales || 0,
+        totalRevenue: summary[0].totalRevenue || 0,
+        uniqueClients: summary[0].uniqueClients || 0,
+        averageOrderValue: summary[0].averageOrderValue || 0,
         salesGrowth: parseFloat(growthRate),
-        conversionRate: clientMetrics.activeClients > 0 
-          ? ((summary.totalSales / clientMetrics.activeClients) * 100).toFixed(1)
+        conversionRate: clientMetrics[0].activeClients > 0 
+          ? ((summary[0].totalSales / clientMetrics[0].activeClients) * 100).toFixed(1)
           : 0
       },
       dailyStats: dailyStats.map(stat => [stat.date, {
@@ -1243,17 +1231,17 @@ app.get('/api/sales/enhanced-report', authenticateToken, async (req, res) => {
       })),
       trends: {
         salesTrend: growthRate > 0 ? 'up' : 'down',
-        revenueTrend: 'up', // Could be calculated based on revenue comparison
-        clientTrend: 'up'   // Could be calculated based on client acquisition
+        revenueTrend: 'up',
+        clientTrend: 'up'
       },
       metrics: {
-        activeClients: clientMetrics.activeClients || 0,
-        avgOrdersPerClient: clientMetrics.avgOrdersPerClient || 0,
-        lastSaleDate: clientMetrics.lastSaleDate
+        activeClients: clientMetrics[0].activeClients || 0,
+        avgOrdersPerClient: clientMetrics[0].avgOrdersPerClient || 0,
+        lastSaleDate: clientMetrics[0].lastSaleDate
       }
     };
 
-    console.log(`📈 Enhanced report generated for ${req.user.username} (${delegateWilaya}) - Timeframe: ${timeframe}`);
+    console.log(`📈 Enhanced report generated for ${req.user.username} - Timeframe: ${timeframe}`);
     res.json(enhancedReport);
   } catch (error) {
     console.error('Error generating enhanced sales report:', error);

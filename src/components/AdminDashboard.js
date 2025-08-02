@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
@@ -7,19 +7,44 @@ const AdminDashboard = () => {
   const [allSales, setAllSales] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  // Use ref to prevent multiple API calls
+  const hasFetchedData = useRef(false);
+  const abortControllerRef = useRef(null);
 
   // Fetch admin data from your API
   useEffect(() => {
+    // Prevent duplicate calls in React StrictMode
+    if (hasFetchedData.current) {
+      console.log('🚫 Preventing duplicate API call');
+      return;
+    }
+
     fetchAdminData();
-  }, []);
+    hasFetchedData.current = true;
+
+    // Cleanup function to abort fetch on unmount
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
+  }, []); // Empty dependency array - only run once
 
   const fetchAdminData = async () => {
     try {
       setLoading(true);
+      setError(null);
+      
+      // Create abort controller for this fetch
+      abortControllerRef.current = new AbortController();
+      const signal = abortControllerRef.current.signal;
+      
       const token = localStorage.getItem('token');
       
       if (!token) {
         setError('No authentication token found');
+        setLoading(false);
         return;
       }
 
@@ -28,37 +53,79 @@ const AdminDashboard = () => {
         'Content-Type': 'application/json'
       };
 
+      console.log('🔄 Starting Admin Dashboard API calls...');
+
       // Fetch admin statistics
-      const statsResponse = await fetch('http://localhost:3001/api/admin/statistics', { headers });
-      if (!statsResponse.ok) throw new Error('Failed to fetch admin statistics');
+      console.log('📊 Fetching admin statistics...');
+      const statsResponse = await fetch('http://localhost:3001/api/admin/statistics', { 
+        headers,
+        signal 
+      });
+      
+      if (!statsResponse.ok) {
+        throw new Error(`Statistics API failed: ${statsResponse.status} ${statsResponse.statusText}`);
+      }
       const statsData = await statsResponse.json();
+      console.log('✅ Statistics fetched successfully:', statsData);
 
       // Fetch representatives with performance data
-      const repsResponse = await fetch('http://localhost:3001/api/admin/representatives', { headers });
-      if (!repsResponse.ok) throw new Error('Failed to fetch representatives');
+      console.log('👥 Fetching representatives...');
+      const repsResponse = await fetch('http://localhost:3001/api/admin/representatives', { 
+        headers,
+        signal 
+      });
+      
+      if (!repsResponse.ok) {
+        throw new Error(`Representatives API failed: ${repsResponse.status} ${repsResponse.statusText}`);
+      }
       const repsData = await repsResponse.json();
+      console.log('✅ Representatives fetched successfully:', repsData.length, 'delegates');
 
       // Fetch all sales
-      const salesResponse = await fetch('http://localhost:3001/api/admin/sales', { headers });
-      if (!salesResponse.ok) throw new Error('Failed to fetch sales');
+      console.log('💰 Fetching all sales...');
+      const salesResponse = await fetch('http://localhost:3001/api/admin/sales', { 
+        headers,
+        signal 
+      });
+      
+      if (!salesResponse.ok) {
+        throw new Error(`Sales API failed: ${salesResponse.status} ${salesResponse.statusText}`);
+      }
       const salesData = await salesResponse.json();
+      console.log('✅ Sales fetched successfully:', salesData.length, 'sales records');
 
+      // Set all data at once to prevent multiple re-renders
       setStatistics(statsData);
       setRepresentatives(repsData);
       setAllSales(salesData);
       
-      console.log('📊 Admin Dashboard Data:', {
-        statistics: statsData,
-        representatives: repsData.length,
+      console.log('🎉 Admin Dashboard Data Loaded Successfully:', {
+        overview: statsData.overview,
+        delegates: repsData.length,
         sales: salesData.length
       });
 
     } catch (error) {
-      console.error('Error fetching admin data:', error);
+      if (error.name === 'AbortError') {
+        console.log('🛑 Fetch aborted');
+        return;
+      }
+      
+      console.error('❌ Error fetching admin data:', error);
       setError(error.message);
     } finally {
       setLoading(false);
     }
+  };
+
+  // Manual refresh function
+  const handleRefresh = () => {
+    console.log('🔄 Manual refresh triggered');
+    hasFetchedData.current = false;
+    setLoading(true);
+    setError(null);
+    fetchAdminData();
+    hasFetchedData.current = true;
   };
 
   if (loading) {
@@ -67,6 +134,11 @@ const AdminDashboard = () => {
         <div className="loading-spinner">
           <h2>🔄 Loading Admin Dashboard...</h2>
           <p>Fetching company-wide statistics...</p>
+          <div className="loading-details">
+            <p>• Loading overview statistics</p>
+            <p>• Loading delegate performance</p>
+            <p>• Loading sales data</p>
+          </div>
         </div>
       </div>
     );
@@ -78,18 +150,31 @@ const AdminDashboard = () => {
         <div className="error-message">
           <h2>❌ Error Loading Admin Dashboard</h2>
           <p>{error}</p>
-          <button onClick={fetchAdminData}>🔄 Retry</button>
+          <div className="error-actions">
+            <button onClick={handleRefresh} className="retry-btn">
+              🔄 Retry
+            </button>
+            <button onClick={() => {
+              localStorage.removeItem('token');
+              window.location.href = '/login';
+            }} className="logout-btn">
+              🚪 Logout & Try Again
+            </button>
+          </div>
         </div>
       </div>
     );
   }
 
-  if (!statistics) {
+  if (!statistics || !statistics.overview) {
     return (
       <div className="admin-dashboard">
         <div className="no-data">
           <h2>📊 No Admin Data Available</h2>
           <p>Unable to load statistics</p>
+          <button onClick={handleRefresh} className="retry-btn">
+            🔄 Try Again
+          </button>
         </div>
       </div>
     );
@@ -102,9 +187,14 @@ const AdminDashboard = () => {
       <div className="dashboard-header">
         <h1>🏢 Admin Dashboard</h1>
         <p>Company-wide Sales Management Overview</p>
-        <button onClick={fetchAdminData} className="refresh-btn">
-          🔄 Refresh Data
-        </button>
+        <div className="header-actions">
+          <button onClick={handleRefresh} className="refresh-btn">
+            🔄 Refresh Data
+          </button>
+          <span className="last-updated">
+            Last updated: {new Date().toLocaleTimeString()}
+          </span>
+        </div>
       </div>
 
       {/* Overview Statistics */}
@@ -137,9 +227,9 @@ const AdminDashboard = () => {
 
       {/* Revenue per Delegate */}
       <div className="section">
-        <h2>👨‍💼 Delegate Performance Ranking</h2>
+        <h2>👨‍💼 Delegate Performance Ranking ({revenuePerDelegate?.length || 0} delegates)</h2>
         <div className="delegate-performance">
-          {revenuePerDelegate.slice(0, 10).map((delegate, index) => (
+          {revenuePerDelegate?.slice(0, 10).map((delegate, index) => (
             <div key={delegate.id} className={`delegate-card ${index < 3 ? 'top-performer' : ''}`}>
               <div className="delegate-rank">#{index + 1}</div>
               <div className="delegate-info">
@@ -152,7 +242,7 @@ const AdminDashboard = () => {
               </div>
               {index < 3 && <div className="performance-badge">🏆</div>}
             </div>
-          ))}
+          )) || <p>No delegate performance data available</p>}
         </div>
       </div>
 
@@ -207,7 +297,7 @@ const AdminDashboard = () => {
 
       {/* Recent Sales Activity */}
       <div className="section">
-        <h2>📋 Recent Sales (Latest 20)</h2>
+        <h2>📋 Recent Sales (Latest 20 of {allSales?.length || 0} total)</h2>
         <div className="sales-table">
           <table>
             <thead>
@@ -221,16 +311,16 @@ const AdminDashboard = () => {
               </tr>
             </thead>
             <tbody>
-              {allSales.slice(0, 20).map((sale) => (
+              {allSales?.slice(0, 20).map((sale) => (
                 <tr key={sale.id}>
                   <td>{new Date(sale.createDate).toLocaleDateString()}</td>
-                  <td>{sale.client.FullName}</td>
-                  <td>{sale.represent.RepresentName} ({sale.represent.RepCode})</td>
-                  <td>{sale.pack.PackName}</td>
-                  <td>{sale.totalPrice.toLocaleString()} DA</td>
-                  <td>{sale.client.Wilaya}</td>
+                  <td>{sale.client?.FullName || 'N/A'}</td>
+                  <td>{sale.represent?.RepresentName || 'N/A'} ({sale.represent?.RepCode || 'N/A'})</td>
+                  <td>{sale.pack?.PackName || 'N/A'}</td>
+                  <td>{sale.totalPrice?.toLocaleString() || 0} DA</td>
+                  <td>{sale.client?.Wilaya || 'N/A'}</td>
                 </tr>
-              ))}
+              )) || <tr><td colSpan="6">No sales data available</td></tr>}
             </tbody>
           </table>
         </div>
@@ -240,6 +330,7 @@ const AdminDashboard = () => {
       <div className="dashboard-footer">
         <p>📊 Dashboard last updated: {new Date().toLocaleString()}</p>
         <p>🏢 Total Company Revenue: {overview.totalRevenue?.toLocaleString()} DA across {overview.totalRepresentatives} delegates</p>
+        <p>📈 Showing data for {allSales?.length || 0} sales transactions</p>
       </div>
     </div>
   );
