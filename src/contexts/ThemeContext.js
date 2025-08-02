@@ -12,20 +12,30 @@ export const useTheme = () => {
 
 export const ThemeProvider = ({ children }) => {
   const [isDarkMode, setIsDarkMode] = useState(() => {
-    const saved = localStorage.getItem('theme');
+    const saved = localStorage.getItem('app_theme');
     return saved === 'dark';
   });
 
   useEffect(() => {
-    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
-    document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+    const theme = isDarkMode ? 'dark' : 'light';
+    localStorage.setItem('app_theme', theme);
+    document.documentElement.setAttribute('data-theme', theme);
+    document.body.className = isDarkMode ? 'dark-theme' : 'light-theme';
     
+    // Update CSS variables based on theme
+    const root = document.documentElement;
     if (isDarkMode) {
-      document.body.classList.add('dark-theme');
-      document.body.classList.remove('light-theme');
+      root.style.setProperty('--bg-primary', '#1a1a1a');
+      root.style.setProperty('--bg-secondary', '#2d2d2d');
+      root.style.setProperty('--text-primary', '#ffffff');
+      root.style.setProperty('--text-secondary', '#b0b0b0');
+      root.style.setProperty('--border-color', '#404040');
     } else {
-      document.body.classList.add('light-theme');
-      document.body.classList.remove('dark-theme');
+      root.style.setProperty('--bg-primary', '#ffffff');
+      root.style.setProperty('--bg-secondary', '#f8f9fa');
+      root.style.setProperty('--text-primary', '#212529');
+      root.style.setProperty('--text-secondary', '#6c757d');
+      root.style.setProperty('--border-color', '#dee2e6');
     }
   }, [isDarkMode]);
 

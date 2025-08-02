@@ -17,6 +17,7 @@ import EnhancedSalesReport from './components/Dashboard/EnhancedSalesReport';
 import ClientManagement from './components/Clients/ClientManagement';
 import PackManagement from './components/Products/PackManagement';
 import Settings from './components/Settings/Settings';
+import AdminDashboard from './components/Admin/AdminDashboard';
 import ErrorBoundary from './components/Common/ErrorBoundary';
 
 console.log('🔍 All components imported:');
@@ -401,6 +402,7 @@ const App = () => {
       ClientManagement: typeof ClientManagement,
       PackManagement: typeof PackManagement,
       Settings: typeof Settings,
+      AdminDashboard: typeof AdminDashboard,
       ErrorBoundary: typeof ErrorBoundary
     };
     
@@ -533,6 +535,9 @@ const App = () => {
       case 'settings':
         console.log('Rendering Settings');
         return <Settings {...screenProps} />;
+      case 'admin':
+        console.log('Rendering AdminDashboard');
+        return <AdminDashboard {...screenProps} />;
       default:
         console.log('Rendering default LoginScreen');
         return <LoginScreen {...screenProps} />;

@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { User, Save, Key, Bell, Globe, Shield } from 'lucide-react';
 import Header from '../Common/Header';
+import { useLanguage } from '../../contexts/LanguageContext';
+import { useTheme } from '../../contexts/ThemeContext';
 
 const Settings = ({ 
   currentUser, 
@@ -11,6 +13,9 @@ const Settings = ({
   resetAppState,
   apiRequest 
 }) => {
+  const { language, changeLanguage } = useLanguage();
+  const { theme, setTheme } = useTheme();
+  
   const [activeTab, setActiveTab] = useState('profile');
   const [profileData, setProfileData] = useState({
     RepresentName: currentUser.rep_name || currentUser.RepresentName || '',
@@ -24,11 +29,68 @@ const Settings = ({
     confirmPassword: ''
   });
   const [appSettings, setAppSettings] = useState({
-    language: localStorage.getItem('app_language') || 'en',
+    language: language,
     currency: localStorage.getItem('app_currency') || 'DA',
     notifications: localStorage.getItem('app_notifications') !== 'false',
-    theme: localStorage.getItem('app_theme') || 'light'
+    theme: theme
   });
+
+  // Sync with context changes
+  useEffect(() => {
+    setAppSettings(prev => ({
+      ...prev,
+      language: language,
+      theme: theme
+    }));
+  }, [language, theme]);
+
+  // Apply theme immediately when component mounts
+  useEffect(() => {
+    applyTheme(appSettings.theme);
+    applyLanguage(appSettings.language);
+  }, []);
+
+  // Function to apply theme changes
+  const applyTheme = (theme) => {
+    document.documentElement.setAttribute('data-theme', theme);
+    document.body.className = theme === 'dark' ? 'dark-theme' : 'light-theme';
+    
+    // Update CSS variables based on theme
+    const root = document.documentElement;
+    if (theme === 'dark') {
+      root.style.setProperty('--bg-primary', '#1a1a1a');
+      root.style.setProperty('--bg-secondary', '#2d2d2d');
+      root.style.setProperty('--text-primary', '#ffffff');
+      root.style.setProperty('--text-secondary', '#b0b0b0');
+      root.style.setProperty('--border-color', '#404040');
+    } else {
+      root.style.setProperty('--bg-primary', '#ffffff');
+      root.style.setProperty('--bg-secondary', '#f8f9fa');
+      root.style.setProperty('--text-primary', '#212529');
+      root.style.setProperty('--text-secondary', '#6c757d');
+      root.style.setProperty('--border-color', '#dee2e6');
+    }
+  };
+
+  // Function to apply language changes
+  const applyLanguage = (language) => {
+    document.documentElement.lang = language;
+    document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
+  };
+
+  // Handle theme change with immediate application
+  const handleThemeChange = (newTheme) => {
+    setAppSettings(prev => ({ ...prev, theme: newTheme }));
+    setTheme(newTheme);
+    localStorage.setItem('app_theme', newTheme);
+  };
+
+  // Handle language change with immediate application
+  const handleLanguageChange = (newLanguage) => {
+    setAppSettings(prev => ({ ...prev, language: newLanguage }));
+    changeLanguage(newLanguage);
+    localStorage.setItem('app_language', newLanguage);
+  };
 
   const handleSaveProfile = async () => {
     try {
@@ -60,16 +122,17 @@ const Settings = ({
   };
 
   const handleSaveAppSettings = () => {
-    // Save to localStorage
+    // Save all settings to localStorage
     localStorage.setItem('app_language', appSettings.language);
     localStorage.setItem('app_currency', appSettings.currency);
     localStorage.setItem('app_notifications', appSettings.notifications.toString());
     localStorage.setItem('app_theme', appSettings.theme);
     
-    alert('Application settings saved successfully!');
+    // Apply theme and language
+    applyTheme(appSettings.theme);
+    applyLanguage(appSettings.language);
     
-    // Reload the page to apply changes
-    window.location.reload();
+    alert('Application settings saved successfully!');
   };
 
   const handleChangePassword = () => {
@@ -341,13 +404,14 @@ const Settings = ({
                     </label>
                     <select 
                       value={appSettings.language}
-                      onChange={(e) => setAppSettings({ ...appSettings, language: e.target.value })}
+                      onChange={(e) => handleLanguageChange(e.target.value)}
                       className="w-40 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     >
-                      <option value="en">English</option>
-                      <option value="fr">Français</option>
                       <option value="ar">العربية</option>
+                      <option value="fr">Français</option>
+                      <option value="en">English</option>
                     </select>
+                    <p className="text-xs text-gray-500 mt-1">Changes apply immediately</p>
                   </div>
                   
                   <div>
@@ -371,12 +435,13 @@ const Settings = ({
                     </label>
                     <select 
                       value={appSettings.theme}
-                      onChange={(e) => setAppSettings({ ...appSettings, theme: e.target.value })}
+                      onChange={(e) => handleThemeChange(e.target.value)}
                       className="w-40 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     >
-                      <option value="light">Light</option>
-                      <option value="dark">Dark</option>
+                      <option value="light">Light Mode</option>
+                      <option value="dark">Dark Mode</option>
                     </select>
+                    <p className="text-xs text-gray-500 mt-1">Changes apply immediately</p>
                   </div>
                   
                   <div className="flex items-center space-x-3">
@@ -398,7 +463,7 @@ const Settings = ({
                       className="flex items-center space-x-2 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700"
                     >
                       <Save className="w-4 h-4" />
-                      <span>Save Preferences</span>
+                      <span>Save All Preferences</span>
                     </button>
                   </div>
                 </div>

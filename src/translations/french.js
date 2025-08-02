@@ -234,6 +234,11 @@ export const translations = {
   switchToDelegateLogin: "Basculer vers la connexion délégué",
   adminCredentials: "Identifiants administrateur",
   delegateCredentials: "Identifiants délégué",
+  invalidAdminCredentials: "Identifiants administrateur invalides",
+  invalidCredentials: "Identifiants invalides",
+  loginError: "Erreur de connexion",
+  quickAccess: "Accès rapide",
+
 };
 
 // Helper function to get translation

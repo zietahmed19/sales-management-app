@@ -206,6 +206,10 @@ export const translations = {
   switchToDelegateLogin: "التبديل إلى دخول المندوب",
   adminCredentials: "بيانات اعتماد المدير",
   delegateCredentials: "بيانات اعتماد المندوب",
+  invalidAdminCredentials: "بيانات اعتماد المدير غير صحيحة",
+  invalidCredentials: "بيانات الاعتماد غير صحيحة",
+  loginError: "خطأ في تسجيل الدخول",
+  quickAccess: "وصول سريع",
 
   // Months in Arabic
   months: {

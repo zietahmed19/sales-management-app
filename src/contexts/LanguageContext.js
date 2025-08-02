@@ -19,12 +19,12 @@ export const useLanguage = () => {
 
 export const LanguageProvider = ({ children }) => {
   const [language, setLanguage] = useState(() => {
-    const saved = localStorage.getItem('language');
+    const saved = localStorage.getItem('app_language');
     return saved || 'ar';
   });
 
   useEffect(() => {
-    localStorage.setItem('language', language);
+    localStorage.setItem('app_language', language);
     document.documentElement.lang = language;
     document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
   }, [language]);
