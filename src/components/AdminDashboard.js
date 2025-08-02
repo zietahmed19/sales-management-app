@@ -1,5 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import './AdminDashboard.css';
+
+// Global flag to prevent multiple API calls across React StrictMode reruns
+let hasLoadedData = false;
+let cachedData = null;
 
 const AdminDashboard = () => {
   const [statistics, setStatistics] = useState(null);
@@ -7,45 +11,34 @@ const AdminDashboard = () => {
   const [allSales, setAllSales] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
-  // Use ref to prevent multiple API calls
-  const hasFetchedData = useRef(false);
-  const abortControllerRef = useRef(null);
 
-  // Fetch admin data from your API
-  useEffect(() => {
-    // Prevent duplicate calls in React StrictMode
-    if (hasFetchedData.current) {
-      console.log('🚫 Preventing duplicate API call');
+  const fetchAdminData = async (forceRefresh = false) => {
+    // If we already loaded data and it's not a force refresh, use cached data
+    if (hasLoadedData && !forceRefresh && cachedData) {
+      console.log('🚫 Using cached data, preventing duplicate API call');
+      setStatistics(cachedData.statistics);
+      setRepresentatives(cachedData.representatives);
+      setAllSales(cachedData.allSales);
+      setLoading(false);
       return;
     }
 
-    fetchAdminData();
-    hasFetchedData.current = true;
+    // If currently loading and not a force refresh, skip
+    if (loading && !forceRefresh) {
+      console.log('🚫 Already loading, skipping duplicate call');
+      return;
+    }
 
-    // Cleanup function to abort fetch on unmount
-    return () => {
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
-      }
-    };
-  }, []); // Empty dependency array - only run once
-
-  const fetchAdminData = async () => {
+    console.log('🔄 Starting Admin Dashboard API calls...');
+    
     try {
       setLoading(true);
       setError(null);
       
-      // Create abort controller for this fetch
-      abortControllerRef.current = new AbortController();
-      const signal = abortControllerRef.current.signal;
-      
       const token = localStorage.getItem('token');
       
       if (!token) {
-        setError('No authentication token found');
-        setLoading(false);
-        return;
+        throw new Error('No authentication token found');
       }
 
       const headers = {
@@ -53,27 +46,17 @@ const AdminDashboard = () => {
         'Content-Type': 'application/json'
       };
 
-      console.log('🔄 Starting Admin Dashboard API calls...');
-
-      // Fetch admin statistics
       console.log('📊 Fetching admin statistics...');
-      const statsResponse = await fetch('http://localhost:3001/api/admin/statistics', { 
-        headers,
-        signal 
-      });
+      const statsResponse = await fetch('http://localhost:3001/api/admin/statistics', { headers });
       
       if (!statsResponse.ok) {
         throw new Error(`Statistics API failed: ${statsResponse.status} ${statsResponse.statusText}`);
       }
       const statsData = await statsResponse.json();
-      console.log('✅ Statistics fetched successfully:', statsData);
+      console.log('✅ Statistics fetched successfully');
 
-      // Fetch representatives with performance data
       console.log('👥 Fetching representatives...');
-      const repsResponse = await fetch('http://localhost:3001/api/admin/representatives', { 
-        headers,
-        signal 
-      });
+      const repsResponse = await fetch('http://localhost:3001/api/admin/representatives', { headers });
       
       if (!repsResponse.ok) {
         throw new Error(`Representatives API failed: ${repsResponse.status} ${repsResponse.statusText}`);
@@ -81,12 +64,8 @@ const AdminDashboard = () => {
       const repsData = await repsResponse.json();
       console.log('✅ Representatives fetched successfully:', repsData.length, 'delegates');
 
-      // Fetch all sales
       console.log('💰 Fetching all sales...');
-      const salesResponse = await fetch('http://localhost:3001/api/admin/sales', { 
-        headers,
-        signal 
-      });
+      const salesResponse = await fetch('http://localhost:3001/api/admin/sales', { headers });
       
       if (!salesResponse.ok) {
         throw new Error(`Sales API failed: ${salesResponse.status} ${salesResponse.statusText}`);
@@ -94,38 +73,39 @@ const AdminDashboard = () => {
       const salesData = await salesResponse.json();
       console.log('✅ Sales fetched successfully:', salesData.length, 'sales records');
 
-      // Set all data at once to prevent multiple re-renders
+      // Set all data at once
       setStatistics(statsData);
       setRepresentatives(repsData);
       setAllSales(salesData);
       
-      console.log('🎉 Admin Dashboard Data Loaded Successfully:', {
-        overview: statsData.overview,
-        delegates: repsData.length,
-        sales: salesData.length
-      });
+      // Cache the data and mark as loaded
+      cachedData = {
+        statistics: statsData,
+        representatives: repsData,
+        allSales: salesData
+      };
+      hasLoadedData = true;
+      
+      console.log('🎉 Admin Dashboard Data Loaded Successfully!');
 
     } catch (error) {
-      if (error.name === 'AbortError') {
-        console.log('🛑 Fetch aborted');
-        return;
-      }
-      
       console.error('❌ Error fetching admin data:', error);
       setError(error.message);
+      hasLoadedData = false; // Reset on error
     } finally {
       setLoading(false);
     }
   };
 
-  // Manual refresh function
+  useEffect(() => {
+    fetchAdminData();
+  }, []); // Empty dependency array
+
   const handleRefresh = () => {
     console.log('🔄 Manual refresh triggered');
-    hasFetchedData.current = false;
-    setLoading(true);
-    setError(null);
-    fetchAdminData();
-    hasFetchedData.current = true;
+    hasLoadedData = false; // Reset the global flag
+    cachedData = null; // Clear cache
+    fetchAdminData(true);
   };
 
   if (loading) {
@@ -134,11 +114,6 @@ const AdminDashboard = () => {
         <div className="loading-spinner">
           <h2>🔄 Loading Admin Dashboard...</h2>
           <p>Fetching company-wide statistics...</p>
-          <div className="loading-details">
-            <p>• Loading overview statistics</p>
-            <p>• Loading delegate performance</p>
-            <p>• Loading sales data</p>
-          </div>
         </div>
       </div>
     );
@@ -150,17 +125,9 @@ const AdminDashboard = () => {
         <div className="error-message">
           <h2>❌ Error Loading Admin Dashboard</h2>
           <p>{error}</p>
-          <div className="error-actions">
-            <button onClick={handleRefresh} className="retry-btn">
-              🔄 Retry
-            </button>
-            <button onClick={() => {
-              localStorage.removeItem('token');
-              window.location.href = '/login';
-            }} className="logout-btn">
-              🚪 Logout & Try Again
-            </button>
-          </div>
+          <button onClick={handleRefresh} className="retry-btn">
+            🔄 Retry
+          </button>
         </div>
       </div>
     );
@@ -171,7 +138,6 @@ const AdminDashboard = () => {
       <div className="admin-dashboard">
         <div className="no-data">
           <h2>📊 No Admin Data Available</h2>
-          <p>Unable to load statistics</p>
           <button onClick={handleRefresh} className="retry-btn">
             🔄 Try Again
           </button>
@@ -187,14 +153,9 @@ const AdminDashboard = () => {
       <div className="dashboard-header">
         <h1>🏢 Admin Dashboard</h1>
         <p>Company-wide Sales Management Overview</p>
-        <div className="header-actions">
-          <button onClick={handleRefresh} className="refresh-btn">
-            🔄 Refresh Data
-          </button>
-          <span className="last-updated">
-            Last updated: {new Date().toLocaleTimeString()}
-          </span>
-        </div>
+        <button onClick={handleRefresh} className="refresh-btn">
+          🔄 Refresh Data
+        </button>
       </div>
 
       {/* Overview Statistics */}
