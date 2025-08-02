@@ -30,21 +30,21 @@ const PackCard = ({ pack, onSelect, isSelected }) => {
         )}
         <p className="card-text">
           <strong>{t('available')}:</strong> 
-          <span className={pack.quantity > 0 ? 'text-success' : 'text-danger'}>
-            {pack.quantity} {t('packs')}
+          <span className={(pack.quantity || 0) > 0 ? 'text-success' : 'text-danger'}>
+            {pack.quantity || 0} {t('packs')}
           </span>
         </p>
         
-        {pack.quantity > 0 && (
+        {(pack.quantity || 0) > 0 && (
           <div className="mb-3">
             <label className="form-label">{t('quantity')}:</label>
             <select 
               className="form-select" 
               value={selectedQuantity}
               onChange={handleQuantityChange}
-              max={pack.quantity}
+              max={pack.quantity || 1}
             >
-              {[...Array(Math.min(pack.quantity, 10))].map((_, i) => (
+              {[...Array(Math.min(pack.quantity || 1, 10))].map((_, i) => (
                 <option key={i + 1} value={i + 1}>
                   {i + 1}
                 </option>
@@ -56,7 +56,7 @@ const PackCard = ({ pack, onSelect, isSelected }) => {
         <button 
           className={`btn ${isSelected ? 'btn-success' : 'btn-primary'} w-100`}
           onClick={handleSelect}
-          disabled={pack.quantity === 0}
+          disabled={(pack.quantity || 0) === 0}
         >
           {isSelected ? t('selected') : t('selectPack')}
           {isSelected && ` (${selectedQuantity})`}

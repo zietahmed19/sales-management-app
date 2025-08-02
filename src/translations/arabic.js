@@ -166,6 +166,7 @@ export const translations = {
   selectQuantity: "اختر الكمية",
   outOfStock: "نفد المخزون",
   inStock: "متوفر",
+  packs: "حزم",
 
   // Admin Dashboard
   adminDashboard: "لوحة تحكم المدير",
@@ -189,7 +190,7 @@ export const translations = {
   packAdded: "تم إضافة الحزمة بنجاح",
   packUpdated: "تم تحديث الحزمة بنجاح",
   packDeleted: "تم حذف الحزمة بنجاح",
-
+  
   // Months in Arabic
   months: {
     "January": "يناير",

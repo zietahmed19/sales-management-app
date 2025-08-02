@@ -186,6 +186,49 @@ export const translations = {
   toggleTheme: "Basculer le thème",
   preferences: "Préférences",
   appearance: "Apparence",
+  general: "Général",
+
+  // Pack Quantities
+  quantity: "Quantité",
+  availableQuantity: "Quantité disponible",
+  selectQuantity: "Sélectionner la quantité",
+  outOfStock: "Rupture de stock",
+  inStock: "En stock",
+  packs: "packs",
+
+  // Admin Dashboard
+  adminDashboard: "Tableau de bord administrateur",
+  totalDelegates: "Total des délégués",
+  delegatesPerformance: "Performance des délégués",
+  delegate: "Délégué",
+  salesCount: "Nombre de ventes",
+  averageSale: "Vente moyenne",
+  lastSale: "Dernière vente",
+  topPerformer: "Meilleur performeur",
+  thisWeek: "Cette semaine",
+  thisMonth: "Ce mois",
+  thisQuarter: "Ce trimestre",
+  thisYear: "Cette année",
+  noSales: "Aucune vente",
+
+  // Pack Management
+  addPack: "Ajouter un pack",
+  editPack: "Modifier le pack",
+  deletePack: "Supprimer le pack",
+  packAdded: "Pack ajouté avec succès",
+  packUpdated: "Pack mis à jour avec succès",
+  packDeleted: "Pack supprimé avec succès",
+
+  // Settings
+  settings: "Paramètres",
+  language: "Langue",
+  theme: "Thème",
+  lightMode: "Mode clair",
+  darkMode: "Mode sombre",
+  changeLanguage: "Changer la langue",
+  toggleTheme: "Basculer le thème",
+  preferences: "Préférences",
+  appearance: "Apparence",
   general: "Général"
 };
 
