@@ -13,14 +13,13 @@ export const useTheme = () => {
 export const ThemeProvider = ({ children }) => {
   const [isDarkMode, setIsDarkMode] = useState(() => {
     const saved = localStorage.getItem('theme');
-    return saved ? saved === 'dark' : false;
+    return saved === 'dark';
   });
 
   useEffect(() => {
     localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
     document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
     
-    // Add theme class to body
     if (isDarkMode) {
       document.body.classList.add('dark-theme');
       document.body.classList.remove('light-theme');
@@ -44,3 +43,5 @@ export const ThemeProvider = ({ children }) => {
     </ThemeContext.Provider>
   );
 };
+
+export default ThemeContext;
