@@ -127,6 +127,38 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
+// Admin authentication middleware
+const authenticateAdmin = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
+    return res.sendStatus(401);
+  }
+
+  jwt.verify(token, JWT_SECRET, async (err, user) => {
+    if (err) return res.sendStatus(403);
+    
+    // Check if user is admin (you can modify this logic based on your admin identification)
+    // For now, checking if username is 'admin' or rep_code is 'ADMIN'
+    try {
+      const adminUser = await promiseQuery(
+        'SELECT * FROM representatives WHERE id = ? AND (username = ? OR rep_code = ?)',
+        [user.id, 'admin', 'ADMIN']
+      );
+      
+      if (adminUser.length === 0) {
+        return res.status(403).json({ message: 'Admin access required' });
+      }
+      
+      req.user = user;
+      next();
+    } catch (error) {
+      return res.sendStatus(500);
+    }
+  });
+};
+
 // Helper functions
 const promiseQuery = (query, params = []) => {
   return new Promise((resolve, reject) => {
@@ -617,6 +649,273 @@ app.post('/api/sales', authenticateToken, async (req, res) => {
     });
   } catch (error) {
     console.error('Error creating sale:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Admin: Get all sales across all delegates
+app.get('/api/admin/sales', authenticateAdmin, async (req, res) => {
+  try {
+    const allSales = await promiseQuery(`
+      SELECT 
+        s.id,
+        s.total_price as totalPrice,
+        s.sale_date as createDate,
+        c.client_id as clientID,
+        c.full_name as client_name,
+        c.city as client_city,
+        c.wilaya as client_wilaya,
+        r.id as representID,
+        r.rep_name as rep_name,
+        r.rep_code as rep_code,
+        r.wilaya as rep_wilaya,
+        p.id as packID,
+        p.pack_name as pack_name,
+        p.total_price as pack_price
+      FROM sales s
+      JOIN clients c ON s.client_id = c.id
+      JOIN representatives r ON s.representative_id = r.id
+      JOIN packs p ON s.pack_id = p.id
+      ORDER BY s.sale_date DESC
+    `);
+
+    const formattedSales = allSales.map(sale => ({
+      id: sale.id,
+      createDate: sale.createDate,
+      clientID: sale.clientID,
+      client: {
+        ClientID: sale.clientID,
+        FullName: sale.client_name,
+        City: sale.client_city,
+        Wilaya: sale.client_wilaya
+      },
+      representID: sale.representID,
+      represent: {
+        iD: sale.representID,
+        RepresentName: sale.rep_name,
+        RepCode: sale.rep_code,
+        Wilaya: sale.rep_wilaya
+      },
+      packID: sale.packID,
+      pack: {
+        Id: sale.packID,
+        PackName: sale.pack_name,
+        TotalPackPrice: sale.pack_price
+      },
+      totalPrice: sale.totalPrice
+    }));
+
+    console.log(`🔐 Admin accessed all sales: ${formattedSales.length} records`);
+    res.json(formattedSales);
+  } catch (error) {
+    console.error('Error fetching admin sales:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Admin: Get aggregated statistics
+app.get('/api/admin/statistics', authenticateAdmin, async (req, res) => {
+  try {
+    // Total sales across all delegates
+    const totalSales = await promiseQuery(`
+      SELECT 
+        COUNT(*) as totalSalesCount,
+        COALESCE(SUM(total_price), 0) as totalRevenue
+      FROM sales
+    `);
+
+    // Total clients and representatives
+    const counts = await promiseQuery(`
+      SELECT 
+        (SELECT COUNT(*) FROM clients) as totalClients,
+        (SELECT COUNT(*) FROM representatives) as totalRepresentatives,
+        (SELECT COUNT(*) FROM packs) as totalPacks
+    `);
+
+    // Revenue per delegate
+    const revenuePerDelegate = await promiseQuery(`
+      SELECT 
+        r.id,
+        r.rep_name as name,
+        r.rep_code as code,
+        r.wilaya,
+        COUNT(s.id) as salesCount,
+        COALESCE(SUM(s.total_price), 0) as revenue
+      FROM representatives r
+      LEFT JOIN sales s ON r.id = s.representative_id
+      GROUP BY r.id, r.rep_name, r.rep_code, r.wilaya
+      ORDER BY revenue DESC
+    `);
+
+    // Monthly sales trend
+    const monthlySales = await promiseQuery(`
+      SELECT 
+        strftime('%Y-%m', sale_date) as month,
+        COUNT(*) as salesCount,
+        COALESCE(SUM(total_price), 0) as revenue
+      FROM sales 
+      GROUP BY strftime('%Y-%m', sale_date)
+      ORDER BY month DESC
+      LIMIT 12
+    `);
+
+    // Top performing wilayas
+    const wilayaPerformance = await promiseQuery(`
+      SELECT 
+        r.wilaya,
+        COUNT(s.id) as salesCount,
+        COALESCE(SUM(s.total_price), 0) as revenue,
+        COUNT(DISTINCT r.id) as delegateCount
+      FROM representatives r
+      LEFT JOIN sales s ON r.id = s.representative_id
+      GROUP BY r.wilaya
+      ORDER BY revenue DESC
+    `);
+
+    // Top selling packs
+    const topPacks = await promiseQuery(`
+      SELECT 
+        p.pack_name,
+        COUNT(s.id) as salesCount,
+        COALESCE(SUM(s.total_price), 0) as revenue
+      FROM packs p
+      LEFT JOIN sales s ON p.id = s.pack_id
+      GROUP BY p.id, p.pack_name
+      ORDER BY salesCount DESC
+      LIMIT 10
+    `);
+
+    const adminStatistics = {
+      overview: {
+        totalSales: totalSales[0].totalSalesCount,
+        totalRevenue: totalSales[0].totalRevenue,
+        totalClients: counts[0].totalClients,
+        totalRepresentatives: counts[0].totalRepresentatives,
+        totalPacks: counts[0].totalPacks,
+        averageRevenuePerDelegate: counts[0].totalRepresentatives > 0 
+          ? (totalSales[0].totalRevenue / counts[0].totalRepresentatives).toFixed(2)
+          : 0
+      },
+      revenuePerDelegate: revenuePerDelegate.map(delegate => ({
+        id: delegate.id,
+        name: delegate.name,
+        code: delegate.code,
+        wilaya: delegate.wilaya,
+        salesCount: delegate.salesCount,
+        revenue: delegate.revenue
+      })),
+      monthlySales: monthlySales.map(month => ({
+        month: month.month,
+        salesCount: month.salesCount,
+        revenue: month.revenue
+      })),
+      wilayaPerformance: wilayaPerformance.map(wilaya => ({
+        wilaya: wilaya.wilaya,
+        salesCount: wilaya.salesCount,
+        revenue: wilaya.revenue,
+        delegateCount: wilaya.delegateCount
+      })),
+      topPacks: topPacks.map(pack => ({
+        packName: pack.pack_name,
+        salesCount: pack.salesCount,
+        revenue: pack.revenue
+      }))
+    };
+
+    console.log(`📊 Admin statistics accessed: ${totalSales[0].totalSalesCount} total sales, ${totalSales[0].totalRevenue} DA total revenue`);
+    res.json(adminStatistics);
+  } catch (error) {
+    console.error('Error fetching admin statistics:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Admin: Get all representatives with their performance
+app.get('/api/admin/representatives', authenticateAdmin, async (req, res) => {
+  try {
+    const representativesWithStats = await promiseQuery(`
+      SELECT 
+        r.id as iD,
+        r.rep_name as RepresentName,
+        r.rep_code as RepCode,
+        r.username,
+        r.phone as Phone,
+        r.city as City,
+        r.wilaya as Wilaya,
+        COUNT(s.id) as totalSales,
+        COALESCE(SUM(s.total_price), 0) as totalRevenue,
+        COUNT(DISTINCT c.id) as clientsInTerritory
+      FROM representatives r
+      LEFT JOIN sales s ON r.id = s.representative_id
+      LEFT JOIN clients c ON r.wilaya = c.wilaya
+      GROUP BY r.id, r.rep_name, r.rep_code, r.username, r.phone, r.city, r.wilaya
+      ORDER BY totalRevenue DESC
+    `);
+
+    console.log(`👥 Admin accessed representatives data: ${representativesWithStats.length} delegates`);
+    res.json(representativesWithStats);
+  } catch (error) {
+    console.error('Error fetching admin representatives:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Admin: Get all clients across all territories
+app.get('/api/admin/clients', authenticateAdmin, async (req, res) => {
+  try {
+    const allClients = await promiseQuery(`
+      SELECT 
+        c.id,
+        c.client_id as ClientID,
+        c.full_name as FullName,
+        c.city as City,
+        c.wilaya as Wilaya,
+        c.phone as AllPhones,
+        c.location as Location,
+        COUNT(s.id) as totalPurchases,
+        COALESCE(SUM(s.total_price), 0) as totalSpent,
+        r.rep_name as assignedDelegate
+      FROM clients c
+      LEFT JOIN sales s ON c.id = s.client_id
+      LEFT JOIN representatives r ON c.wilaya = r.wilaya
+      GROUP BY c.id, c.client_id, c.full_name, c.city, c.wilaya, c.phone, c.location, r.rep_name
+      ORDER BY totalSpent DESC
+    `);
+
+    console.log(`👤 Admin accessed all clients: ${allClients.length} clients`);
+    res.json(allClients);
+  } catch (error) {
+    console.error('Error fetching admin clients:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Admin: Create admin user (for initial setup)
+app.post('/api/admin/create-admin', async (req, res) => {
+  try {
+    const { username, password, rep_name } = req.body;
+    
+    // Check if admin already exists
+    const existingAdmin = await promiseQuery(
+      'SELECT * FROM representatives WHERE username = ? OR rep_code = ?',
+      [username, 'ADMIN']
+    );
+    
+    if (existingAdmin.length > 0) {
+      return res.status(400).json({ message: 'Admin user already exists' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    
+    await promiseRun(`
+      INSERT INTO representatives (rep_code, rep_name, username, password_hash, phone, city, wilaya)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+    `, ['ADMIN', rep_name || 'System Administrator', username, hashedPassword, '', 'Admin', 'ADMIN']);
+
+    console.log(`🔐 Admin user created: ${username}`);
+    res.status(201).json({ message: 'Admin user created successfully' });
+  } catch (error) {
+    console.error('Error creating admin user:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });
