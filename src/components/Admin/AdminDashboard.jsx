@@ -39,38 +39,116 @@ const AdminDashboard = ({
       setLoading(true);
       setError(null);
       
-      // Use existing data from your database first
-      if (data) {
-        console.log('Using existing data for admin dashboard');
+      console.log('🔍 Admin - Current data structure:', data);
+      
+      // Try to get delegates from actual database via API
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('/api/representatives', {
+          headers: { 
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
         
-        // Get delegates from your existing representatives data
-        const delegatesFromData = data.representatives || [];
-        setDelegates(delegatesFromData.map(rep => ({
-          id: rep.iD || rep.id,
-          username: rep.username,
-          territory: rep.City || rep.Wilaya || 'Unknown',
-          role: 'delegate',
-          name: rep.RepresentName || rep.rep_name
-        })));
+        if (response.ok) {
+          const representatives = await response.json();
+          console.log('✅ Admin - Got representatives from API:', representatives);
+          
+          setDelegates(representatives.map(rep => ({
+            id: rep.iD || rep.id,
+            username: rep.username,
+            territory: rep.City || rep.Wilaya || rep.territory || 'Unknown',
+            role: 'delegate',
+            name: rep.RepresentName || rep.representName || rep.name || rep.username
+          })));
+        } else {
+          throw new Error('API not available');
+        }
+      } catch (apiError) {
+        console.log('⚠️ Admin - API not available, using data prop:', apiError.message);
+        
+        // Fallback to data prop with multiple possible structures
+        if (data) {
+          console.log('🔍 Admin - Data keys:', Object.keys(data));
+          
+          // Try different possible data structures
+          const representatives = data.representatives || 
+                                data.delegates || 
+                                data.users || 
+                                data.reps || 
+                                [];
+          
+          console.log('📊 Admin - Found representatives:', representatives);
+          
+          if (representatives && representatives.length > 0) {
+            setDelegates(representatives.map(rep => ({
+              id: rep.iD || rep.id || Math.random(),
+              username: rep.username || rep.Username || 'Unknown',
+              territory: rep.City || rep.city || rep.Wilaya || rep.wilaya || rep.territory || 'Unknown',
+              role: 'delegate',
+              name: rep.RepresentName || rep.representName || rep.name || rep.fullName || rep.username || 'Unknown'
+            })));
+          } else {
+            console.log('⚠️ Admin - No representatives found in data, using sample data');
+            generateSampleData();
+            return;
+          }
+        } else {
+          console.log('⚠️ Admin - No data available, using sample data');
+          generateSampleData();
+          return;
+        }
+      }
 
-        // Get sales data
-        const salesFromData = data.sales || [];
-        setSalesData(salesFromData.map(sale => ({
-          id: sale.id,
-          delegateId: sale.representativeId || sale.delegate_id,
-          delegateName: sale.representative_name || 'Unknown',
-          totalAmount: sale.totalPrice || sale.total_amount || 0,
-          date: sale.createdAt || sale.date || new Date().toISOString(),
-          clientName: sale.client_name || 'Unknown Client'
-        })));
-      } else {
-        // Fallback to sample data
-        console.log('No data available, using sample data');
-        generateSampleData();
+      // Try to get sales data
+      try {
+        const token = localStorage.getItem('token');
+        const salesResponse = await fetch('/api/sales', {
+          headers: { 
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (salesResponse.ok) {
+          const sales = await salesResponse.json();
+          console.log('✅ Admin - Got sales from API:', sales);
+          
+          setSalesData(sales.map(sale => ({
+            id: sale.id,
+            delegateId: sale.representativeId || sale.representative_id || sale.delegateId,
+            delegateName: sale.representative_name || sale.delegateName || 'Unknown',
+            totalAmount: sale.totalPrice || sale.total_amount || sale.amount || 0,
+            date: sale.createdAt || sale.date || sale.created_at || new Date().toISOString(),
+            clientName: sale.client_name || sale.clientName || 'Unknown Client'
+          })));
+        } else {
+          throw new Error('Sales API not available');
+        }
+      } catch (salesError) {
+        console.log('⚠️ Admin - Sales API not available, using data prop:', salesError.message);
+        
+        if (data && data.sales) {
+          const sales = data.sales;
+          console.log('📊 Admin - Found sales in data:', sales.length);
+          
+          setSalesData(sales.map(sale => ({
+            id: sale.id,
+            delegateId: sale.representativeId || sale.representative_id || sale.delegateId,
+            delegateName: sale.representative_name || sale.delegateName || 'Unknown',
+            totalAmount: sale.totalPrice || sale.total_amount || sale.amount || 0,
+            date: sale.createdAt || sale.date || sale.created_at || new Date().toISOString(),
+            clientName: sale.client_name || sale.clientName || 'Unknown Client'
+          })));
+        } else {
+          console.log('⚠️ Admin - No sales data found, using sample data');
+          generateSampleSalesData();
+        }
       }
       
     } catch (error) {
-      console.error('Error fetching admin data:', error);
+      console.error('❌ Admin - Error fetching admin data:', error);
       setError('Failed to load admin data');
       generateSampleData();
     } finally {
@@ -79,6 +157,7 @@ const AdminDashboard = ({
   };
 
   const generateSampleData = () => {
+    console.log('🔄 Admin - Generating sample data');
     setDelegates([
       { id: 1, username: 'ahmed', territory: 'Algiers', role: 'delegate', name: 'Ahmed Ali' },
       { id: 2, username: 'fatima', territory: 'Oran', role: 'delegate', name: 'Fatima Ben' },
@@ -86,6 +165,10 @@ const AdminDashboard = ({
       { id: 4, username: 'sara', territory: 'Annaba', role: 'delegate', name: 'Sara Hassan' }
     ]);
 
+    generateSampleSalesData();
+  };
+
+  const generateSampleSalesData = () => {
     const sampleSales = [
       { id: 1, delegateId: 1, delegateName: 'ahmed', totalAmount: 850000, date: new Date().toISOString(), clientName: 'Client A' },
       { id: 2, delegateId: 1, delegateName: 'ahmed', totalAmount: 620000, date: new Date(Date.now() - 86400000).toISOString(), clientName: 'Client B' },
