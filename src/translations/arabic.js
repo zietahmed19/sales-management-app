@@ -159,7 +159,37 @@ export const translations = {
   failed: "فشل",
   retry: "إعادة المحاولة",
   refresh: "تحديث",
-  
+
+  // Pack Quantities
+  quantity: "الكمية",
+  availableQuantity: "الكمية المتوفرة",
+  selectQuantity: "اختر الكمية",
+  outOfStock: "نفد المخزون",
+  inStock: "متوفر",
+
+  // Admin Dashboard
+  adminDashboard: "لوحة تحكم المدير",
+  totalDelegates: "إجمالي المندوبين",
+  delegatesPerformance: "أداء المندوبين",
+  delegate: "مندوب",
+  salesCount: "عدد المبيعات",
+  averageSale: "متوسط البيع",
+  lastSale: "آخر بيع",
+  topPerformer: "أفضل مؤدي",
+  thisWeek: "هذا الأسبوع",
+  thisMonth: "هذا الشهر",
+  thisQuarter: "هذا الربع",
+  thisYear: "هذا العام",
+  noSales: "لا توجد مبيعات",
+
+  // Pack Management
+  addPack: "إضافة حزمة",
+  editPack: "تعديل الحزمة",
+  deletePack: "حذف الحزمة",
+  packAdded: "تم إضافة الحزمة بنجاح",
+  packUpdated: "تم تحديث الحزمة بنجاح",
+  packDeleted: "تم حذف الحزمة بنجاح",
+
   // Months in Arabic
   months: {
     "January": "يناير",
