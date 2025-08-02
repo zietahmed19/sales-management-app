@@ -1,44 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import './AdminDashboard.css';
 
-// Global flag to prevent multiple API calls across React StrictMode reruns
-let hasLoadedData = false;
-let cachedData = null;
+// Single instance flag to prevent React StrictMode double execution
+let isDataLoaded = false;
 
 const AdminDashboard = () => {
-  const [statistics, setStatistics] = useState(null);
-  const [representatives, setRepresentatives] = useState([]);
-  const [allSales, setAllSales] = useState([]);
+  const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [lastUpdated, setLastUpdated] = useState(null);
 
-  const fetchAdminData = async (forceRefresh = false) => {
-    // If we already loaded data and it's not a force refresh, use cached data
-    if (hasLoadedData && !forceRefresh && cachedData) {
-      console.log('🚫 Using cached data, preventing duplicate API call');
-      setStatistics(cachedData.statistics);
-      setRepresentatives(cachedData.representatives);
-      setAllSales(cachedData.allSales);
-      setLoading(false);
+  const fetchAdminData = async (isRefresh = false) => {
+    // Prevent duplicate calls unless it's a manual refresh
+    if (isDataLoaded && !isRefresh) {
+      console.log('🚫 Data already loaded, skipping duplicate call');
       return;
     }
 
-    // If currently loading and not a force refresh, skip
-    if (loading && !forceRefresh) {
-      console.log('🚫 Already loading, skipping duplicate call');
-      return;
-    }
-
-    console.log('🔄 Starting Admin Dashboard API calls...');
+    console.log(`🔄 ${isRefresh ? 'Refreshing' : 'Loading'} Admin Dashboard...`);
     
     try {
       setLoading(true);
       setError(null);
       
       const token = localStorage.getItem('token');
-      
       if (!token) {
-        throw new Error('No authentication token found');
+        throw new Error('Admin authentication required');
       }
 
       const headers = {
@@ -46,52 +33,39 @@ const AdminDashboard = () => {
         'Content-Type': 'application/json'
       };
 
-      console.log('📊 Fetching admin statistics...');
-      const statsResponse = await fetch('http://localhost:3001/api/admin/statistics', { headers });
-      
-      if (!statsResponse.ok) {
-        throw new Error(`Statistics API failed: ${statsResponse.status} ${statsResponse.statusText}`);
-      }
-      const statsData = await statsResponse.json();
-      console.log('✅ Statistics fetched successfully');
+      // Fetch all admin data in parallel
+      const [statsRes, repsRes, salesRes] = await Promise.all([
+        fetch('http://localhost:3001/api/admin/statistics', { headers }),
+        fetch('http://localhost:3001/api/admin/representatives', { headers }),
+        fetch('http://localhost:3001/api/admin/sales', { headers })
+      ]);
 
-      console.log('👥 Fetching representatives...');
-      const repsResponse = await fetch('http://localhost:3001/api/admin/representatives', { headers });
-      
-      if (!repsResponse.ok) {
-        throw new Error(`Representatives API failed: ${repsResponse.status} ${repsResponse.statusText}`);
-      }
-      const repsData = await repsResponse.json();
-      console.log('✅ Representatives fetched successfully:', repsData.length, 'delegates');
+      if (!statsRes.ok) throw new Error(`Statistics API failed: ${statsRes.status}`);
+      if (!repsRes.ok) throw new Error(`Representatives API failed: ${repsRes.status}`);
+      if (!salesRes.ok) throw new Error(`Sales API failed: ${salesRes.status}`);
 
-      console.log('💰 Fetching all sales...');
-      const salesResponse = await fetch('http://localhost:3001/api/admin/sales', { headers });
-      
-      if (!salesResponse.ok) {
-        throw new Error(`Sales API failed: ${salesResponse.status} ${salesResponse.statusText}`);
-      }
-      const salesData = await salesResponse.json();
-      console.log('✅ Sales fetched successfully:', salesData.length, 'sales records');
+      const [statistics, representatives, sales] = await Promise.all([
+        statsRes.json(),
+        repsRes.json(),
+        salesRes.json()
+      ]);
 
-      // Set all data at once
-      setStatistics(statsData);
-      setRepresentatives(repsData);
-      setAllSales(salesData);
+      // Combine all data into single state
+      setDashboardData({
+        statistics,
+        representatives,
+        sales
+      });
+
+      setLastUpdated(new Date());
+      isDataLoaded = true;
       
-      // Cache the data and mark as loaded
-      cachedData = {
-        statistics: statsData,
-        representatives: repsData,
-        allSales: salesData
-      };
-      hasLoadedData = true;
-      
-      console.log('🎉 Admin Dashboard Data Loaded Successfully!');
+      console.log('✅ Admin dashboard loaded successfully!');
 
     } catch (error) {
-      console.error('❌ Error fetching admin data:', error);
+      console.error('❌ Admin dashboard error:', error);
       setError(error.message);
-      hasLoadedData = false; // Reset on error
+      isDataLoaded = false;
     } finally {
       setLoading(false);
     }
@@ -99,21 +73,24 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     fetchAdminData();
-  }, []); // Empty dependency array
+  }, []);
 
   const handleRefresh = () => {
-    console.log('🔄 Manual refresh triggered');
-    hasLoadedData = false; // Reset the global flag
-    cachedData = null; // Clear cache
+    isDataLoaded = false;
     fetchAdminData(true);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    window.location.href = '/';
   };
 
   if (loading) {
     return (
       <div className="admin-dashboard">
-        <div className="loading-spinner">
+        <div className="admin-loading">
           <h2>🔄 Loading Admin Dashboard...</h2>
-          <p>Fetching company-wide statistics...</p>
+          <p>Fetching company-wide analytics...</p>
         </div>
       </div>
     );
@@ -122,176 +99,214 @@ const AdminDashboard = () => {
   if (error) {
     return (
       <div className="admin-dashboard">
-        <div className="error-message">
-          <h2>❌ Error Loading Admin Dashboard</h2>
+        <div className="admin-error">
+          <h2>❌ Admin Access Error</h2>
           <p>{error}</p>
-          <button onClick={handleRefresh} className="retry-btn">
-            🔄 Retry
-          </button>
+          <div className="admin-error-actions">
+            <button onClick={handleRefresh}>🔄 Retry</button>
+            <button onClick={handleLogout}>🚪 Logout</button>
+          </div>
         </div>
       </div>
     );
   }
 
-  if (!statistics || !statistics.overview) {
+  if (!dashboardData?.statistics?.overview) {
     return (
       <div className="admin-dashboard">
-        <div className="no-data">
-          <h2>📊 No Admin Data Available</h2>
-          <button onClick={handleRefresh} className="retry-btn">
-            🔄 Try Again
-          </button>
+        <div className="admin-no-data">
+          <h2>📊 No Dashboard Data</h2>
+          <button onClick={handleRefresh}>🔄 Reload</button>
         </div>
       </div>
     );
   }
 
+  const { statistics, representatives, sales } = dashboardData;
   const { overview, revenuePerDelegate, monthlySales, wilayaPerformance, topPacks } = statistics;
 
   return (
     <div className="admin-dashboard">
-      <div className="dashboard-header">
-        <h1>🏢 Admin Dashboard</h1>
-        <p>Company-wide Sales Management Overview</p>
-        <button onClick={handleRefresh} className="refresh-btn">
-          🔄 Refresh Data
-        </button>
-      </div>
-
-      {/* Overview Statistics */}
-      <div className="overview-cards">
-        <div className="overview-card">
-          <h3>💰 Total Revenue</h3>
-          <p className="big-number">{overview.totalRevenue?.toLocaleString()} DA</p>
+      {/* Admin Header */}
+      <div className="admin-header">
+        <div className="admin-title">
+          <h1>🏢 Admin Control Center</h1>
+          <p>Company-wide Sales Analytics & Management</p>
         </div>
-        <div className="overview-card">
-          <h3>📊 Total Sales</h3>
-          <p className="big-number">{overview.totalSales}</p>
-        </div>
-        <div className="overview-card">
-          <h3>👥 Representatives</h3>
-          <p className="big-number">{overview.totalRepresentatives}</p>
-        </div>
-        <div className="overview-card">
-          <h3>🏪 Total Clients</h3>
-          <p className="big-number">{overview.totalClients}</p>
-        </div>
-        <div className="overview-card">
-          <h3>📦 Available Packs</h3>
-          <p className="big-number">{overview.totalPacks}</p>
-        </div>
-        <div className="overview-card">
-          <h3>📈 Avg Revenue/Delegate</h3>
-          <p className="big-number">{parseFloat(overview.averageRevenuePerDelegate).toLocaleString()} DA</p>
+        <div className="admin-actions">
+          <button onClick={handleRefresh} className="admin-refresh-btn">
+            🔄 Refresh Data
+          </button>
+          <button onClick={handleLogout} className="admin-logout-btn">
+            🚪 Logout
+          </button>
         </div>
       </div>
 
-      {/* Revenue per Delegate */}
-      <div className="section">
-        <h2>👨‍💼 Delegate Performance Ranking ({revenuePerDelegate?.length || 0} delegates)</h2>
-        <div className="delegate-performance">
-          {revenuePerDelegate?.slice(0, 10).map((delegate, index) => (
-            <div key={delegate.id} className={`delegate-card ${index < 3 ? 'top-performer' : ''}`}>
-              <div className="delegate-rank">#{index + 1}</div>
-              <div className="delegate-info">
+      {/* Company Overview */}
+      <div className="admin-overview">
+        <h2>📈 Company Performance Overview</h2>
+        <div className="overview-metrics">
+          <div className="metric-card primary">
+            <h3>💰 Total Revenue</h3>
+            <div className="metric-value">{overview.totalRevenue?.toLocaleString()} DA</div>
+          </div>
+          <div className="metric-card">
+            <h3>📊 Total Sales</h3>
+            <div className="metric-value">{overview.totalSales}</div>
+          </div>
+          <div className="metric-card">
+            <h3>👥 Active Delegates</h3>
+            <div className="metric-value">{overview.totalRepresentatives}</div>
+          </div>
+          <div className="metric-card">
+            <h3>🏪 Total Clients</h3>
+            <div className="metric-value">{overview.totalClients}</div>
+          </div>
+          <div className="metric-card">
+            <h3>📦 Product Packs</h3>
+            <div className="metric-value">{overview.totalPacks}</div>
+          </div>
+          <div className="metric-card success">
+            <h3>📈 Avg per Delegate</h3>
+            <div className="metric-value">{parseFloat(overview.averageRevenuePerDelegate).toLocaleString()} DA</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Delegate Performance Analysis */}
+      <div className="admin-section">
+        <h2>🏆 Top Performing Delegates</h2>
+        <div className="delegates-ranking">
+          {revenuePerDelegate?.slice(0, 8).map((delegate, index) => (
+            <div key={delegate.id} className={`delegate-performance-card rank-${index + 1}`}>
+              <div className="rank-badge">#{index + 1}</div>
+              <div className="delegate-details">
                 <h4>{delegate.name}</h4>
-                <p>Code: {delegate.code} | Territory: {delegate.wilaya}</p>
-                <div className="delegate-stats">
-                  <span>💰 {delegate.revenue.toLocaleString()} DA</span>
-                  <span>📊 {delegate.salesCount} sales</span>
+                <p className="delegate-code">Code: {delegate.code}</p>
+                <p className="delegate-territory">📍 {delegate.wilaya}</p>
+              </div>
+              <div className="performance-metrics">
+                <div className="metric">
+                  <span className="metric-label">Revenue</span>
+                  <span className="metric-amount">{delegate.revenue.toLocaleString()} DA</span>
+                </div>
+                <div className="metric">
+                  <span className="metric-label">Sales Count</span>
+                  <span className="metric-count">{delegate.salesCount}</span>
                 </div>
               </div>
-              {index < 3 && <div className="performance-badge">🏆</div>}
             </div>
-          )) || <p>No delegate performance data available</p>}
+          ))}
         </div>
       </div>
 
-      {/* Wilaya Performance */}
-      <div className="section">
-        <h2>🗺️ Territory Performance</h2>
-        <div className="wilaya-grid">
-          {wilayaPerformance.map((wilaya, index) => (
-            <div key={wilaya.wilaya} className="wilaya-card">
-              <h4>{wilaya.wilaya}</h4>
-              <div className="wilaya-stats">
-                <p>💰 Revenue: {wilaya.revenue.toLocaleString()} DA</p>
-                <p>📊 Sales: {wilaya.salesCount}</p>
-                <p>👥 Delegates: {wilaya.delegateCount}</p>
-                <p>📈 Avg/Delegate: {wilaya.delegateCount > 0 ? (wilaya.revenue / wilaya.delegateCount).toFixed(0) : 0} DA</p>
+      {/* Territory Analysis */}
+      <div className="admin-section">
+        <h2>🗺️ Regional Performance Analysis</h2>
+        <div className="territory-analysis">
+          {wilayaPerformance?.map((territory) => (
+            <div key={territory.wilaya} className="territory-card">
+              <h4>{territory.wilaya}</h4>
+              <div className="territory-stats">
+                <div className="stat">
+                  <span>💰</span>
+                  <div>
+                    <p>{territory.revenue.toLocaleString()} DA</p>
+                    <small>Total Revenue</small>
+                  </div>
+                </div>
+                <div className="stat">
+                  <span>📊</span>
+                  <div>
+                    <p>{territory.salesCount}</p>
+                    <small>Sales Made</small>
+                  </div>
+                </div>
+                <div className="stat">
+                  <span>👥</span>
+                  <div>
+                    <p>{territory.delegateCount}</p>
+                    <small>Delegates</small>
+                  </div>
+                </div>
+                <div className="stat">
+                  <span>📈</span>
+                  <div>
+                    <p>{territory.delegateCount > 0 ? (territory.revenue / territory.delegateCount).toFixed(0) : 0} DA</p>
+                    <small>Avg per Delegate</small>
+                  </div>
+                </div>
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Top Selling Packs */}
-      <div className="section">
-        <h2>📦 Top Selling Packs</h2>
-        <div className="packs-grid">
-          {topPacks.map((pack, index) => (
-            <div key={index} className="pack-card">
-              <h4>{pack.packName}</h4>
-              <div className="pack-stats">
-                <p>📊 Sales: {pack.salesCount}</p>
-                <p>💰 Revenue: {pack.revenue.toLocaleString()} DA</p>
-                <p>📈 Avg Value: {pack.salesCount > 0 ? (pack.revenue / pack.salesCount).toFixed(0) : 0} DA</p>
+      {/* Product Performance */}
+      <div className="admin-section">
+        <h2>📦 Best Selling Products</h2>
+        <div className="products-performance">
+          {topPacks?.map((pack, index) => (
+            <div key={index} className="product-card">
+              <div className="product-rank">#{index + 1}</div>
+              <div className="product-info">
+                <h4>{pack.packName}</h4>
+                <div className="product-metrics">
+                  <span>📊 {pack.salesCount} sales</span>
+                  <span>💰 {pack.revenue.toLocaleString()} DA</span>
+                  <span>📈 Avg: {pack.salesCount > 0 ? (pack.revenue / pack.salesCount).toFixed(0) : 0} DA</span>
+                </div>
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Monthly Sales Trend */}
-      <div className="section">
-        <h2>📈 Monthly Sales Trend</h2>
-        <div className="monthly-trend">
-          {monthlySales.map((month, index) => (
-            <div key={month.month} className="month-card">
-              <h4>{month.month}</h4>
-              <p>📊 {month.salesCount} sales</p>
-              <p>💰 {month.revenue.toLocaleString()} DA</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Recent Sales Activity */}
-      <div className="section">
-        <h2>📋 Recent Sales (Latest 20 of {allSales?.length || 0} total)</h2>
-        <div className="sales-table">
-          <table>
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Client</th>
-                <th>Delegate</th>
-                <th>Pack</th>
-                <th>Amount</th>
-                <th>Territory</th>
-              </tr>
-            </thead>
-            <tbody>
-              {allSales?.slice(0, 20).map((sale) => (
-                <tr key={sale.id}>
-                  <td>{new Date(sale.createDate).toLocaleDateString()}</td>
-                  <td>{sale.client?.FullName || 'N/A'}</td>
-                  <td>{sale.represent?.RepresentName || 'N/A'} ({sale.represent?.RepCode || 'N/A'})</td>
-                  <td>{sale.pack?.PackName || 'N/A'}</td>
-                  <td>{sale.totalPrice?.toLocaleString() || 0} DA</td>
-                  <td>{sale.client?.Wilaya || 'N/A'}</td>
+      {/* Recent Activity Monitor */}
+      <div className="admin-section">
+        <h2>📋 Recent Sales Activity</h2>
+        <div className="activity-monitor">
+          <div className="activity-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Delegate</th>
+                  <th>Client</th>
+                  <th>Product</th>
+                  <th>Amount</th>
+                  <th>Territory</th>
                 </tr>
-              )) || <tr><td colSpan="6">No sales data available</td></tr>}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {sales?.slice(0, 15).map((sale) => (
+                  <tr key={sale.id}>
+                    <td>{new Date(sale.createDate).toLocaleDateString()}</td>
+                    <td>
+                      <strong>{sale.represent?.RepresentName}</strong>
+                      <br />
+                      <small>{sale.represent?.RepCode}</small>
+                    </td>
+                    <td>{sale.client?.FullName}</td>
+                    <td>{sale.pack?.PackName}</td>
+                    <td className="amount">{sale.totalPrice?.toLocaleString()} DA</td>
+                    <td>{sale.client?.Wilaya}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
-      {/* Summary Footer */}
-      <div className="dashboard-footer">
-        <p>📊 Dashboard last updated: {new Date().toLocaleString()}</p>
-        <p>🏢 Total Company Revenue: {overview.totalRevenue?.toLocaleString()} DA across {overview.totalRepresentatives} delegates</p>
-        <p>📈 Showing data for {allSales?.length || 0} sales transactions</p>
+      {/* Admin Footer */}
+      <div className="admin-footer">
+        <div className="admin-info">
+          <p>🔐 Admin Dashboard - Last Updated: {lastUpdated?.toLocaleString()}</p>
+          <p>📊 Monitoring {overview.totalRepresentatives} delegates across {wilayaPerformance?.length} territories</p>
+          <p>💼 Total Business: {overview.totalRevenue?.toLocaleString()} DA from {overview.totalSales} sales</p>
+        </div>
       </div>
     </div>
   );
