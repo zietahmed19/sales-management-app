@@ -5,36 +5,36 @@
 /* Theme Variables */
 :root {
   --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
-  --bg-tertiary: #e9ecef;
-  --text-primary: #212529;
-  --text-secondary: #6c757d;
-  --text-muted: #adb5bd;
-  --border-color: #dee2e6;
+  --bg-secondary: #fef3c7; /* amber-100 */
+  --bg-tertiary: #fcd34d; /* amber-300 */
+  --text-primary: #000000;
+  --text-secondary: #d97706; /* amber-600 */
+  --text-muted: #f59e0b; /* amber-500 */
+  --border-color: #fbbf24; /* amber-400 */
   --shadow: rgba(0, 0, 0, 0.1);
-  --accent-color: #007bff;
-  --accent-hover: #0056b3;
-  --success-color: #28a745;
-  --warning-color: #ffc107;
-  --danger-color: #dc3545;
+  --accent-color: #d97706; /* amber-600 */
+  --accent-hover: #b45309; /* amber-700 */
+  --success-color: #16a34a; /* green-600 */
+  --warning-color: #eab308; /* yellow-500 */
+  --danger-color: #dc2626; /* red-600 */
 }
 
 [data-theme="dark"], 
 .dark-theme,
 .dark-theme * {
-  --bg-primary: #1a1a1a !important;
-  --bg-secondary: #2d2d2d !important;
-  --bg-tertiary: #404040 !important;
+  --bg-primary: #000000 !important;
+  --bg-secondary: #1c1917 !important; /* stone-900 */
+  --bg-tertiary: #292524 !important; /* stone-800 */
   --text-primary: #ffffff !important;
-  --text-secondary: #b0b0b0 !important;
-  --text-muted: #808080 !important;
-  --border-color: #404040 !important;
-  --shadow: rgba(255, 255, 255, 0.1) !important;
-  --accent-color: #4dabf7 !important;
-  --accent-hover: #339af0 !important;
-  --success-color: #51cf66 !important;
-  --warning-color: #ffd43b !important;
-  --danger-color: #ff6b6b !important;
+  --text-secondary: #fbbf24 !important; /* amber-400 */
+  --text-muted: #d97706 !important; /* amber-600 */
+  --border-color: #78716c !important; /* stone-500 */
+  --shadow: rgba(251, 191, 36, 0.1) !important; /* amber shadow */
+  --accent-color: #fbbf24 !important; /* amber-400 */
+  --accent-hover: #f59e0b !important; /* amber-500 */
+  --success-color: #22c55e !important; /* green-500 */
+  --warning-color: #eab308 !important; /* yellow-500 */
+  --danger-color: #ef4444 !important; /* red-500 */
 }
 
 /* Apply theme variables globally */
@@ -91,7 +91,7 @@ code {
   border-color: var(--border-color) !important;
 }
 
-/* Input fields */
+/* Input fields with amber theme */
 input,
 select,
 textarea,
@@ -113,7 +113,7 @@ textarea:focus,
   --tw-ring-color: var(--accent-color) !important;
 }
 
-/* Buttons */
+/* Buttons with amber theme */
 .bg-indigo-600,
 .dark-theme .bg-indigo-600 {
   background-color: var(--accent-color) !important;
@@ -135,41 +135,32 @@ textarea:focus,
   box-shadow: 0 10px 15px -3px var(--shadow), 0 4px 6px -2px var(--shadow) !important;
 }
 
-/* Tables */
-.table,
-.dark-theme .table {
-  color: var(--text-primary) !important;
-}
+/* Custom amber/yellow color classes */
+.bg-amber-50 { background-color: #fffbeb !important; }
+.bg-amber-100 { background-color: #fef3c7 !important; }
+.bg-amber-200 { background-color: #fde68a !important; }
+.bg-amber-300 { background-color: #fcd34d !important; }
+.bg-amber-400 { background-color: #fbbf24 !important; }
+.bg-amber-500 { background-color: #f59e0b !important; }
+.bg-amber-600 { background-color: #d97706 !important; }
 
-.table th,
-.dark-theme .table th {
-  background-color: var(--bg-secondary) !important;
-  border-color: var(--border-color) !important;
-  color: var(--text-primary) !important;
-}
+.text-amber-400 { color: #fbbf24 !important; }
+.text-amber-500 { color: #f59e0b !important; }
+.text-amber-600 { color: #d97706 !important; }
 
-.table td,
-.dark-theme .table td {
-  border-color: var(--border-color) !important;
-  color: var(--text-primary) !important;
-}
+.border-amber-200 { border-color: #fde68a !important; }
+.border-amber-300 { border-color: #fcd34d !important; }
+.border-amber-400 { border-color: #fbbf24 !important; }
 
-.table-striped tbody tr:nth-of-type(odd),
-.dark-theme .table-striped tbody tr:nth-of-type(odd) {
-  background-color: var(--bg-tertiary) !important;
-}
+.bg-yellow-50 { background-color: #fefce8 !important; }
+.bg-yellow-500 { background-color: #eab308 !important; }
+.text-yellow-600 { color: #ca8a04 !important; }
 
-/* Alerts */
-.alert,
-.dark-theme .alert {
-  background-color: var(--bg-secondary) !important;
-  border-color: var(--border-color) !important;
-  color: var(--text-primary) !important;
-}
+/* Keep green and red for sales indicators */
+.bg-green-100 { background-color: #dcfce7 !important; }
+.text-green-600 { color: #16a34a !important; }
+.text-green-800 { color: #166534 !important; }
 
-/* Badges */
-.badge,
-.dark-theme .badge {
-  background-color: var(--accent-color) !important;
-  color: white !important;
-}
+.bg-red-100 { background-color: #fee2e2 !important; }
+.text-red-600 { color: #dc2626 !important; }
+.text-red-800 { color: #991b1b !important; }
