@@ -182,6 +182,11 @@ export const translations = {
   thisQuarter: "هذا الربع",
   thisYear: "هذا العام",
   noSales: "لا توجد مبيعات",
+  accessDenied: "رُفض الوصول",
+  adminPrivilegesRequired: "تحتاج إلى صلاحيات المدير للوصول إلى هذه الصفحة",
+  authorizedAdmins: "المديرون المخولون",
+  noDelegatesFound: "لم يتم العثور على مندوبين",
+  you: "أنت",
 
   // Pack Management
   addPack: "إضافة حزمة",
@@ -190,7 +195,18 @@ export const translations = {
   packAdded: "تم إضافة الحزمة بنجاح",
   packUpdated: "تم تحديث الحزمة بنجاح",
   packDeleted: "تم حذف الحزمة بنجاح",
-  
+
+  // Admin Authentication  
+  adminLogin: "دخول المدير",
+  adminPanel: "لوحة الإدارة",
+  adminAccess: "وصول المدير",
+  loginAsAdmin: "الدخول كمدير",
+  delegateLogin: "دخول المندوب",
+  switchToAdminLogin: "التبديل إلى دخول المدير",
+  switchToDelegateLogin: "التبديل إلى دخول المندوب",
+  adminCredentials: "بيانات اعتماد المدير",
+  delegateCredentials: "بيانات اعتماد المندوب",
+
   // Months in Arabic
   months: {
     "January": "يناير",

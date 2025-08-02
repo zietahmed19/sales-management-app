@@ -210,6 +210,11 @@ export const translations = {
   thisQuarter: "Ce trimestre",
   thisYear: "Cette année",
   noSales: "Aucune vente",
+  accessDenied: "Accès refusé",
+  adminPrivilegesRequired: "Vous avez besoin de privilèges administrateur pour accéder à cette page",
+  authorizedAdmins: "Administrateurs autorisés",
+  noDelegatesFound: "Aucun délégué trouvé",
+  you: "Vous",
 
   // Pack Management
   addPack: "Ajouter un pack",
@@ -219,17 +224,16 @@ export const translations = {
   packUpdated: "Pack mis à jour avec succès",
   packDeleted: "Pack supprimé avec succès",
 
-  // Settings
-  settings: "Paramètres",
-  language: "Langue",
-  theme: "Thème",
-  lightMode: "Mode clair",
-  darkMode: "Mode sombre",
-  changeLanguage: "Changer la langue",
-  toggleTheme: "Basculer le thème",
-  preferences: "Préférences",
-  appearance: "Apparence",
-  general: "Général"
+  // Admin Authentication
+  adminLogin: "Connexion administrateur",
+  adminPanel: "Panneau d'administration",
+  adminAccess: "Accès administrateur",
+  loginAsAdmin: "Se connecter en tant qu'administrateur",
+  delegateLogin: "Connexion délégué",
+  switchToAdminLogin: "Basculer vers la connexion administrateur",
+  switchToDelegateLogin: "Basculer vers la connexion délégué",
+  adminCredentials: "Identifiants administrateur",
+  delegateCredentials: "Identifiants délégué",
 };
 
 // Helper function to get translation
