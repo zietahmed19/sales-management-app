@@ -21,6 +21,7 @@ const PackSelection = ({
   const [sortBy, setSortBy] = useState('name'); // name, price, articles
   const [sortOrder, setSortOrder] = useState('asc');
   const [showDetails, setShowDetails] = useState({}); // Track which pack details are shown
+  const [selectedQuantities, setSelectedQuantities] = useState({});
 
   // Filter and sort packs with enhanced logic (must be before early returns)
   const filteredAndSortedPacks = useMemo(() => {
@@ -103,6 +104,18 @@ const PackSelection = ({
     
     if (!isAlreadySelected) {
       setSelectedPacks(prev => [...prev, pack]);
+    }
+  };
+
+  const handlePackSelection = (pack) => {
+    const quantity = selectedQuantities[pack.id] || 1;
+    if (pack.quantity >= quantity) {
+      setSelectedPacks(prev => [
+        ...prev,
+        { ...pack, selectedQuantity: quantity }
+      ]);
+    } else {
+      alert('Not enough quantity available');
     }
   };
 
