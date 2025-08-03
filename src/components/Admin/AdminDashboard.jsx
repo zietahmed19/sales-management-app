@@ -18,6 +18,14 @@ const AdminDashboard = ({
   const [loading, setLoading] = useState(true);
   const [selectedPeriod, setSelectedPeriod] = useState('month');
   const [error, setError] = useState(null);
+  const [isMounted, setIsMounted] = useState(true);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      setIsMounted(false);
+    };
+  }, []);
 
   // Admin users list
   const adminUsers = ['mohcenacid', 'djalili', 'houcemacid'];
@@ -26,19 +34,37 @@ const AdminDashboard = ({
   const isAdmin = currentUser && (currentUser.role === 'admin' || adminUsers.includes(currentUser.username));
 
   useEffect(() => {
-    if (isAdmin) {
+    console.log('🔍 Admin - useEffect triggered', { isAdmin, selectedPeriod, loading });
+    
+    if (isAdmin && !loading) {
       fetchAdminData();
-    } else {
+    } else if (!isAdmin) {
       setError('Access denied: Admin privileges required');
       setLoading(false);
     }
-  }, [selectedPeriod, isAdmin]);
+  }, [isAdmin]); // Remove selectedPeriod from dependencies to prevent multiple loads
+
+  // Separate useEffect for period changes
+  useEffect(() => {
+    console.log('🔍 Admin - Period changed:', selectedPeriod);
+    if (isAdmin && !loading && delegates.length > 0) {
+      // Only refetch if we already have data loaded
+      fetchAdminData();
+    }
+  }, [selectedPeriod]);
 
   const fetchAdminData = async () => {
+    // Prevent multiple simultaneous calls
+    if (loading) {
+      console.log('🔍 Admin - Already loading, skipping fetch');
+      return;
+    }
+    
     try {
       setLoading(true);
       setError(null);
       
+      console.log('🔍 Admin - Starting fetchAdminData');
       console.log('🔍 Admin - Current data structure:', data);
       console.log('🔍 Admin - Current user:', currentUser);
       
@@ -95,7 +121,7 @@ const AdminDashboard = ({
               name: rep.RepresentName || rep.representName || rep.name || rep.fullName || rep.username || 'Unknown'
             }));
             
-            setDelegates(foundDelegates);
+            if (isMounted) setDelegates(foundDelegates);
           } else {
             console.log('⚠️ Admin - No representatives found in data, using sample data');
             generateSampleData();
@@ -142,7 +168,7 @@ const AdminDashboard = ({
           });
           
           console.log('📊 Admin - Mapped sales data:', mappedSales);
-          setSalesData(mappedSales);
+          if (isMounted) setSalesData(mappedSales);
         } else {
           throw new Error('Sales API not available');
         }
@@ -178,7 +204,7 @@ const AdminDashboard = ({
           });
           
           console.log('📊 Admin - Final mapped sales:', mappedSales);
-          setSalesData(mappedSales);
+          if (isMounted) setSalesData(mappedSales);
         } else {
           console.log('⚠️ Admin - No sales data found, generating sample data with real delegates');
           generateSampleSalesData(foundDelegates);
@@ -187,14 +213,18 @@ const AdminDashboard = ({
       
     } catch (error) {
       console.error('❌ Admin - Error fetching admin data:', error);
-      setError('Failed to load admin data');
-      generateSampleData();
+      if (isMounted) {
+        setError('Failed to load admin data');
+        generateSampleData();
+      }
     } finally {
-      setLoading(false);
+      if (isMounted) setLoading(false);
     }
   };
 
   const generateSampleData = () => {
+    if (!isMounted) return;
+    
     console.log('🔄 Admin - Generating sample data');
     const sampleDelegates = [
       { id: 1, username: 'ahmed', territory: 'Algiers', role: 'delegate', name: 'Ahmed Ali' },
@@ -208,6 +238,8 @@ const AdminDashboard = ({
   };
 
   const generateSampleSalesData = (delegatesList = delegates) => {
+    if (!isMounted) return;
+    
     console.log('🔄 Admin - Generating sample sales for delegates:', delegatesList);
     
     const sampleSales = [
