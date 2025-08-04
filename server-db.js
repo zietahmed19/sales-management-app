@@ -13,7 +13,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-producti
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
     ? ['https://sales-management-app-2ysa.onrender.com'] 
-    : ['http://localhost:3000', 'http://localhost:3002', 'http://localhost:3001'],
+    : ['http://localhost:3001'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
@@ -88,11 +88,19 @@ const initializeDatabase = () => {
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     pack_id INTEGER NOT NULL,
     article_id INTEGER NOT NULL,
+    quantity INTEGER DEFAULT 1,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (pack_id) REFERENCES packs (id) ON DELETE CASCADE,
     FOREIGN KEY (article_id) REFERENCES articles (id) ON DELETE CASCADE,
     UNIQUE(pack_id, article_id)
   )`);
+
+  // Add quantity column if it doesn't exist (for existing databases)
+  db.run(`ALTER TABLE pack_articles ADD COLUMN quantity INTEGER DEFAULT 1`, (err) => {
+    if (err && !err.message.includes('duplicate column name')) {
+      console.error('Error adding quantity column:', err);
+    }
+  });
 
   // Sales table
   db.run(`CREATE TABLE IF NOT EXISTS sales (
@@ -139,12 +147,11 @@ const authenticateAdmin = (req, res, next) => {
   jwt.verify(token, JWT_SECRET, async (err, user) => {
     if (err) return res.sendStatus(403);
     
-    // Check if user is admin (you can modify this logic based on your admin identification)
-    // For now, checking if username is 'admin' or rep_code is 'ADMIN'
+    // Check if user is admin by checking their rep_code is 'ADMIN'
     try {
       const adminUser = await promiseQuery(
-        'SELECT * FROM representatives WHERE id = ? AND (username = ? OR rep_code = ?)',
-        [user.id, 'admin', 'ADMIN']
+        'SELECT * FROM representatives WHERE id = ? AND rep_code = ?',
+        [user.id, 'ADMIN']
       );
       
       if (adminUser.length === 0) {
@@ -421,7 +428,7 @@ app.get('/api/packs', async (req, res) => {
     const packsWithArticles = await Promise.all(
       packs.map(async (pack) => {
         const articles = await promiseQuery(`
-          SELECT a.id, a.name, a.price
+          SELECT a.id, a.name, a.price, pa.quantity
           FROM articles a
           JOIN pack_articles pa ON a.id = pa.article_id
           WHERE pa.pack_id = ?
@@ -510,6 +517,207 @@ app.put('/api/packs/:id', authenticateToken, async (req, res) => {
   } catch (error) {
     console.error('Error updating pack:', error);
     res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// ADMIN PACK MANAGEMENT ROUTES
+app.get('/api/admin/packs', authenticateToken, async (req, res) => {
+  try {
+    // Get comprehensive pack information for admin
+    const packs = await promiseQuery(`
+      SELECT 
+        p.id,
+        p.pack_name,
+        p.total_price,
+        p.created_at,
+        p.updated_at,
+        g.id as gift_id,
+        g.gift_name,
+        g.description as gift_description,
+        COUNT(DISTINCT s.id) as total_sales,
+        COALESCE(SUM(s.total_price), 0) as total_revenue,
+        COUNT(DISTINCT s.client_id) as unique_clients
+      FROM packs p
+      LEFT JOIN gifts g ON p.gift_id = g.id
+      LEFT JOIN sales s ON p.id = s.pack_id
+      GROUP BY p.id, p.pack_name, p.total_price, p.created_at, p.updated_at, g.id, g.gift_name, g.description
+      ORDER BY p.pack_name
+    `);
+
+    // Get articles for each pack
+    const packsWithDetails = await Promise.all(
+      packs.map(async (pack) => {
+        const articles = await promiseQuery(`
+          SELECT a.id, a.name, a.price, pa.quantity
+          FROM articles a
+          JOIN pack_articles pa ON a.id = pa.article_id
+          WHERE pa.pack_id = ?
+        `, [pack.id]);
+
+        // Calculate article total cost
+        const articlesCost = articles.reduce((sum, article) => sum + (article.price * (article.quantity || 1)), 0);
+
+        return {
+          id: pack.id,
+          pack_name: pack.pack_name,
+          total_price: pack.total_price,
+          created_at: pack.created_at,
+          updated_at: pack.updated_at,
+          articles,
+          articles_cost: articlesCost,
+          articles_count: articles.length,
+          gift: pack.gift_id ? {
+            id: pack.gift_id,
+            gift_name: pack.gift_name,
+            description: pack.gift_description
+          } : null,
+          sales_stats: {
+            total_sales: pack.total_sales,
+            total_revenue: pack.total_revenue,
+            unique_clients: pack.unique_clients,
+            profit_margin: pack.total_price > 0 ? ((pack.total_price - articlesCost) / pack.total_price * 100).toFixed(2) : 0
+          }
+        };
+      })
+    );
+
+    res.json(packsWithDetails);
+  } catch (error) {
+    console.error('Error fetching admin packs:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+app.post('/api/admin/packs', authenticateToken, async (req, res) => {
+  try {
+    const { pack_name, total_price, articles, gift_id, description } = req.body;
+
+    // Validate required fields
+    if (!pack_name || !total_price) {
+      return res.status(400).json({ message: 'Pack name and total price are required' });
+    }
+
+    // Insert pack
+    const result = await promiseRun(`
+      INSERT INTO packs (pack_name, total_price, gift_id, created_at, updated_at)
+      VALUES (?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+    `, [pack_name, total_price, gift_id || null]);
+
+    const packId = result.lastID;
+
+    // Insert pack articles if provided
+    if (articles && Array.isArray(articles)) {
+      for (const article of articles) {
+        await promiseRun(`
+          INSERT INTO pack_articles (pack_id, article_id, quantity)
+          VALUES (?, ?, ?)
+        `, [packId, article.id, article.quantity || 1]);
+      }
+    }
+
+    // Get the created pack with details
+    const createdPack = await promiseQuery(`
+      SELECT p.*, g.gift_name, g.description as gift_description
+      FROM packs p
+      LEFT JOIN gifts g ON p.gift_id = g.id
+      WHERE p.id = ?
+    `, [packId]);
+
+    res.status(201).json({ 
+      message: 'Pack created successfully', 
+      pack: createdPack[0],
+      packId 
+    });
+  } catch (error) {
+    console.error('Error creating pack:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
+app.put('/api/admin/packs/:id', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { pack_name, total_price, articles, gift_id } = req.body;
+
+    // Validate required fields
+    if (!pack_name || !total_price) {
+      return res.status(400).json({ message: 'Pack name and total price are required' });
+    }
+
+    // Update pack
+    await promiseRun(`
+      UPDATE packs 
+      SET pack_name = ?, total_price = ?, gift_id = ?, updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `, [pack_name, total_price, gift_id || null, id]);
+
+    // Delete existing pack articles
+    await promiseRun('DELETE FROM pack_articles WHERE pack_id = ?', [id]);
+
+    // Insert new pack articles
+    if (articles && Array.isArray(articles)) {
+      for (const article of articles) {
+        await promiseRun(`
+          INSERT INTO pack_articles (pack_id, article_id, quantity)
+          VALUES (?, ?, ?)
+        `, [id, article.id, article.quantity || 1]);
+      }
+    }
+
+    // Get the updated pack with details
+    const updatedPack = await promiseQuery(`
+      SELECT p.*, g.gift_name, g.description as gift_description
+      FROM packs p
+      LEFT JOIN gifts g ON p.gift_id = g.id
+      WHERE p.id = ?
+    `, [id]);
+
+    res.json({ 
+      message: 'Pack updated successfully',
+      pack: updatedPack[0]
+    });
+  } catch (error) {
+    console.error('Error updating pack:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
+app.delete('/api/admin/packs/:id', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Check if pack exists and has sales
+    const packInfo = await promiseQuery(`
+      SELECT p.pack_name, COUNT(s.id) as sales_count
+      FROM packs p
+      LEFT JOIN sales s ON p.id = s.pack_id
+      WHERE p.id = ?
+      GROUP BY p.id, p.pack_name
+    `, [id]);
+
+    if (packInfo.length === 0) {
+      return res.status(404).json({ message: 'Pack not found' });
+    }
+
+    if (packInfo[0].sales_count > 0) {
+      return res.status(400).json({ 
+        message: `Cannot delete pack "${packInfo[0].pack_name}" because it has ${packInfo[0].sales_count} associated sales.`,
+        sales_count: packInfo[0].sales_count
+      });
+    }
+
+    // Delete pack articles first (foreign key constraint)
+    await promiseRun('DELETE FROM pack_articles WHERE pack_id = ?', [id]);
+
+    // Delete the pack
+    await promiseRun('DELETE FROM packs WHERE id = ?', [id]);
+
+    res.json({ 
+      message: `Pack "${packInfo[0].pack_name}" deleted successfully` 
+    });
+  } catch (error) {
+    console.error('Error deleting pack:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
@@ -842,7 +1050,7 @@ app.get('/api/admin/representatives', authenticateAdmin, async (req, res) => {
         r.phone as Phone,
         r.city as City,
         r.wilaya as Wilaya,
-        COUNT(s.id) as totalSales,
+        COUNT(DISTINCT s.id) as totalSales,
         COALESCE(SUM(s.total_price), 0) as totalRevenue,
         COUNT(DISTINCT c.id) as clientsInTerritory
       FROM representatives r
@@ -920,6 +1128,24 @@ app.post('/api/admin/create-admin', async (req, res) => {
   }
 });
 
+// Admin: Reset all sales data (for testing)
+app.post('/api/admin/reset-sales', authenticateAdmin, async (req, res) => {
+  try {
+    // Delete all sales records
+    const result = await promiseRun('DELETE FROM sales');
+    
+    console.log(`🧹 Admin ${req.user.username} reset all sales data - ${result.changes} records deleted`);
+    res.json({ 
+      message: 'All sales data has been reset successfully',
+      deletedRecords: result.changes,
+      note: 'All delegate statistics are now 0. Delegates, clients, and packs remain intact.'
+    });
+  } catch (error) {
+    console.error('Error resetting sales data:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ 
@@ -953,12 +1179,12 @@ app.get('/api/delegates-list', async (req, res) => {
     
     res.json({
       message: 'Delegate credentials for testing',
-      loginUrl: 'http://localhost:3000',
+      loginUrl: 'http://localhost:3001',
       totalDelegates: delegateList.length,
       delegates: delegateList,
       note: 'All delegates use password: 123456',
       instructions: [
-        '1. Go to http://localhost:3000',
+        '1. Go to http://localhost:3001',
         '2. Login with any username below and password: 123456',
         '3. Each delegate will see ONLY their personal statistics',
         '4. Check the browser console for detailed logging',

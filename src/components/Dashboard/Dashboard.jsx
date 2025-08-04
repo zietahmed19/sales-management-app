@@ -10,10 +10,48 @@ const Dashboard = ({
   resetAppState,
   setData, // Add setData to props 
   initializeData, // Add manual data loading function
-  trackUserAction // Add tracking function
+  trackUserAction, // Add tracking function
+  apiRequest
 }) => {
   const [statistics, setStatistics] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [dashboardData, setDashboardData] = useState(null);
+
+  // Load dashboard data (packs, articles, etc.)
+  useEffect(() => {
+    const loadDashboardData = async () => {
+      try {
+        const [packsData, articlesData, clientsData] = await Promise.all([
+          apiRequest('/api/packs'),
+          apiRequest('/api/articles'),
+          apiRequest('/api/clients')
+        ]);
+        
+        setDashboardData({
+          packs: packsData || [],
+          articles: articlesData || [],
+          clients: clientsData || []
+        });
+        
+        console.log('✅ Dashboard - Data loaded:', {
+          packs: packsData?.length,
+          articles: articlesData?.length,
+          clients: clientsData?.length
+        });
+      } catch (error) {
+        console.error('❌ Dashboard - Error loading data:', error);
+        setDashboardData({
+          packs: [],
+          articles: [],
+          clients: []
+        });
+      }
+    };
+
+    if (apiRequest) {
+      loadDashboardData();
+    }
+  }, [apiRequest]);
 
   // Load personal statistics for delegate
   const loadStatistics = async () => {
@@ -52,24 +90,25 @@ const Dashboard = ({
   useEffect(() => {
     trackUserAction('DASHBOARD_LOADED', {
       user: currentUser ? currentUser.username : null,
-      dataExists: !!data,
-      clientCount: data?.clients?.length || 0,
-      packCount: data?.packs?.length || 0,
+      dataExists: !!dashboardData,
+      clientCount: dashboardData?.clients?.length || 0,
+      packCount: dashboardData?.packs?.length || 0,
       salesCount: data?.sales?.length || 0
     });
     
     // Load personal statistics
     loadStatistics();
-  }, []);
+  }, [dashboardData]);
   
   // Debug logging
   console.log('🏠 Dashboard - Received data:', data);
-  console.log('🏠 Dashboard - Clients data:', data?.clients);
-  console.log('🏠 Dashboard - Packs data:', data?.packs);
+  console.log('🏠 Dashboard - Dashboard data:', dashboardData);
+  console.log('🏠 Dashboard - Clients data:', dashboardData?.clients);
+  console.log('🏠 Dashboard - Packs data:', dashboardData?.packs);
   console.log('🏠 Dashboard - Sales data:', data?.sales);
 
   // Safety check for data loading
-  if (!data && !statistics) {
+  if (!dashboardData && !statistics) {
     console.log('⚠️ Dashboard - No data available, showing loading screen');
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -85,12 +124,14 @@ const Dashboard = ({
   const stats = statistics ? {
     totalSales: statistics.delegate.personalStats.totalSales,
     totalClients: statistics.delegate.personalStats.wilayaClients,
-    totalPacks: data?.packs?.length || 0,
+    totalPacks: dashboardData?.packs?.length || 0,
+    totalPackStock: dashboardData?.packs?.reduce((sum, pack) => sum + (pack.quantity || 0), 0) || 0,
     totalRevenue: statistics.delegate.personalStats.totalRevenue
   } : {
     totalSales: data?.sales?.length || 0,
-    totalClients: data?.clients?.length || 0,
-    totalPacks: data?.packs?.length || 0,
+    totalClients: dashboardData?.clients?.length || 0,
+    totalPacks: dashboardData?.packs?.length || 0,
+    totalPackStock: dashboardData?.packs?.reduce((sum, pack) => sum + (pack.quantity || 0), 0) || 0,
     totalRevenue: data?.sales?.reduce((sum, sale) => sum + (sale.pack?.TotalPackPrice || sale.totalPrice || 0), 0) || 0
   };
 
@@ -98,6 +139,7 @@ const Dashboard = ({
     { title: t('personalSales'), value: stats.totalSales, icon: ShoppingCart, color: 'bg-blue-500' },
     { title: `${t('clientsInTerritory')} ${statistics?.delegate.wilaya || 'المنطقة'}`, value: stats.totalClients, icon: Users, color: 'bg-green-500' },
     { title: t('availablePacks'), value: stats.totalPacks, icon: Package, color: 'bg-purple-500' },
+    { title: 'إجمالي المخزون', value: stats.totalPackStock, icon: Package, color: 'bg-orange-500' },
     { title: t('personalRevenue'), value: `${stats.totalRevenue.toLocaleString('ar-DZ')} ${t('currency')}`, icon: TrendingUp, color: 'bg-indigo-500' }
   ];
 
@@ -158,10 +200,20 @@ const Dashboard = ({
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <button
               onClick={() => {
+                console.log('🔵 Dashboard - New Sale button clicked');
+                console.log('🔵 Dashboard - Current data state:', data);
+                console.log('🔵 Dashboard - Dashboard data state:', dashboardData);
+                console.log('🔵 Dashboard - Data exists:', !!data);
+                console.log('🔵 Dashboard - Packs exists:', !!dashboardData?.packs);
+                console.log('🔵 Dashboard - Packs length:', dashboardData?.packs?.length);
+                console.log('🔵 Dashboard - Packs content:', dashboardData?.packs);
+                console.log('🔵 Dashboard - Clients length:', dashboardData?.clients?.length);
+                console.log('🔵 Dashboard - About to navigate to packs screen');
+                
                 trackUserAction('CLICK_NEW_SALE', { 
                   user: currentUser?.username,
-                  clientCount: data?.clients?.length || 0,
-                  packCount: data?.packs?.length || 0
+                  clientCount: dashboardData?.clients?.length || 0,
+                  packCount: dashboardData?.packs?.length || 0
                 });
                 setCurrentScreen('packs');
               }}
@@ -186,7 +238,7 @@ const Dashboard = ({
               onClick={() => {
                 trackUserAction('CLICK_MANAGE_PACKS', { 
                   user: currentUser?.username,
-                  packCount: data?.packs?.length || 0
+                  packCount: dashboardData?.packs?.length || 0
                 });
                 setCurrentScreen('pack-management');
               }}

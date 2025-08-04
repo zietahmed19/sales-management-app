@@ -13,7 +13,8 @@ const PackSelection = ({
   selectedPacks, 
   setSelectedPacks, 
   data,
-  setCurrentScreen
+  setCurrentScreen,
+  apiRequest
 }) => {
   // Local state for UI management (must be before any early returns)
   const [searchTerm, setSearchTerm] = useState('');
@@ -22,12 +23,35 @@ const PackSelection = ({
   const [sortOrder, setSortOrder] = useState('asc');
   const [showDetails, setShowDetails] = useState({}); // Track which pack details are shown
   const [selectedQuantities, setSelectedQuantities] = useState({});
+  const [packs, setPacks] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Load packs when component mounts
+  React.useEffect(() => {
+    const loadPacks = async () => {
+      try {
+        setLoading(true);
+        const packsData = await apiRequest('/api/packs');
+        setPacks(packsData || []);
+        console.log('✅ PackSelection - Loaded packs:', packsData);
+      } catch (error) {
+        console.error('❌ PackSelection - Error loading packs:', error);
+        setPacks([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (apiRequest) {
+      loadPacks();
+    }
+  }, [apiRequest]);
 
   // Filter and sort packs with enhanced logic (must be before early returns)
   const filteredAndSortedPacks = useMemo(() => {
-    if (!data?.packs) return [];
+    if (!packs || packs.length === 0) return [];
     
-    let filtered = data.packs.filter(pack => {
+    let filtered = packs.filter(pack => {
       const packName = pack.PackName || pack.pack_name || '';
       const totalPrice = pack.TotalPackPrice || pack.total_price || 0;
       const articles = pack.articles || [];
@@ -77,15 +101,10 @@ const PackSelection = ({
     });
     
     return filtered;
-  }, [data?.packs, searchTerm, filterByPrice, sortBy, sortOrder]);
+  }, [packs, searchTerm, filterByPrice, sortBy, sortOrder]);
 
-  // Debug logging
-  console.log('🔍 PackSelection - Received data:', data);
-  console.log('🔍 PackSelection - Packs data:', data?.packs);
-
-  // Safety check for data
-  if (!data || !data.packs) {
-    console.log('⚠️ PackSelection - No data or packs available');
+  // Show loading state
+  if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center" dir="rtl">
         <div className="text-center">
@@ -95,6 +114,12 @@ const PackSelection = ({
       </div>
     );
   }
+
+  // Debug logging
+  console.log('🔍 PackSelection - Loaded packs:', packs);
+  console.log('🔍 PackSelection - Packs length:', packs?.length);
+
+  // Safety check for data - removed since we load our own data now
 
   // Handle pack selection
   const handlePackSelect = (pack) => {
@@ -172,7 +197,7 @@ const PackSelection = ({
                 <h1 className="text-2xl font-bold text-gray-900">{t('selectPacks')}</h1>
                 <p className="text-sm text-gray-500">
                   {selectedPacks.length > 0 && `محدد ${selectedPacks.length} حزمة • `}
-                  عرض {filteredAndSortedPacks.length} من أصل {data?.packs?.length || 0} حزمة
+                  عرض {filteredAndSortedPacks.length} من أصل {packs?.length || 0} حزمة
                 </p>
               </div>
             </div>
@@ -367,6 +392,9 @@ const PackSelection = ({
                     <div className="text-right">
                       <div className="text-xl font-bold text-green-600">{totalPrice?.toLocaleString('ar-DZ')} د.ج</div>
                       <div className="text-xs text-gray-500">{articles.length} مقالة</div>
+                      <div className={`text-xs font-medium ${pack.quantity > 10 ? 'text-green-600' : pack.quantity > 0 ? 'text-yellow-600' : 'text-red-600'}`}>
+                        المتاح: {pack.quantity || 0} وحدة
+                      </div>
                     </div>
                   </div>
                   
@@ -383,26 +411,46 @@ const PackSelection = ({
                     </div>
                     
                     {detailsShown ? (
-                      <div className="text-sm text-gray-600 space-y-1">
-                        {articles.map(article => {
-                          const articleId = article.Id || article.id;
-                          const articleName = article.Name || article.name;
-                          const articlePrice = article.Price || article.price;
-                          return (
-                            <div key={articleId} className="flex justify-between items-center">
-                              <span>{articleName}</span>
-                              <span className="font-medium">{articlePrice?.toLocaleString('ar-DZ')} د.ج</span>
+                      <div className="text-sm text-gray-600 space-y-2">
+                        <div className="bg-gray-50 rounded-md p-3">
+                          <h4 className="font-medium text-gray-800 mb-2">المنتجات المضمنة:</h4>
+                          {articles.map(article => {
+                            const articleId = article.Id || article.id;
+                            const articleName = article.Name || article.name;
+                            const articlePrice = article.Price || article.price;
+                            return (
+                              <div key={articleId} className="flex justify-between items-center py-1 border-b border-gray-200 last:border-b-0">
+                                <div className="flex-1">
+                                  <span className="font-medium">{articleName}</span>
+                                  <span className="text-xs text-gray-500 mr-2">(الكمية: {article.quantity || 1})</span>
+                                </div>
+                                <span className="font-medium text-green-600">{articlePrice?.toLocaleString('ar-DZ')} د.ج</span>
+                              </div>
+                            );
+                          })}
+                          <div className="mt-2 pt-2 border-t border-gray-300">
+                            <div className="flex justify-between items-center font-bold">
+                              <span>إجمالي الحزمة:</span>
+                              <span className="text-green-600">{totalPrice?.toLocaleString('ar-DZ')} د.ج</span>
                             </div>
-                          );
-                        })}
+                          </div>
+                        </div>
                       </div>
                     ) : (
                       <div className="text-sm text-gray-600">
-                        {articles.slice(0, 2).map(article => (
-                          <div key={article.Id || article.id}>• {article.Name || article.name}</div>
+                        <div className="mb-2">
+                          <span className="font-medium text-gray-700">المنتجات ({articles.length}):</span>
+                        </div>
+                        {articles.slice(0, 3).map(article => (
+                          <div key={article.Id || article.id} className="flex justify-between items-center mb-1">
+                            <span>• {article.Name || article.name}</span>
+                            <span className="text-xs text-gray-500">{(article.Price || article.price)?.toLocaleString('ar-DZ')} د.ج</span>
+                          </div>
                         ))}
-                        {articles.length > 2 && (
-                          <div className="text-xs text-indigo-600">و {articles.length - 2} مقالة أخرى...</div>
+                        {articles.length > 3 && (
+                          <div className="text-xs text-indigo-600 mt-1">
+                            و {articles.length - 3} منتج أخرى...
+                          </div>
                         )}
                       </div>
                     )}

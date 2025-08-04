@@ -61,7 +61,7 @@ const server = http.createServer((req, res) => {
   }
 });
 
-const PORT = 3002;
+const PORT = 3001;
 server.listen(PORT, () => {
   console.log(`🎯 Console watcher listening on http://localhost:${PORT}/console`);
   console.log('📋 Add this to your React app to send console messages here:');

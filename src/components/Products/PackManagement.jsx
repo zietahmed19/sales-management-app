@@ -7,7 +7,8 @@ const PackManagement = ({
   data, 
   setData,
   setCurrentScreen, 
-  resetAppState 
+  resetAppState,
+  apiRequest
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [priceFilter, setPriceFilter] = useState('all');
@@ -22,11 +23,63 @@ const PackManagement = ({
   });
   const [selectedArticles, setSelectedArticles] = useState([]);
   const [selectedGift, setSelectedGift] = useState('');
+  const [packs, setPacks] = useState([]);
+  const [articles, setArticles] = useState([]);
+  const [gifts, setGifts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Filter packs
-  const filteredPacks = data.packs.filter(pack => {
+  // Load packs, articles, and gifts when component mounts
+  React.useEffect(() => {
+    const loadData = async () => {
+      try {
+        setLoading(true);
+        const [packsData, articlesData, giftsData] = await Promise.all([
+          apiRequest('/api/packs'),
+          apiRequest('/api/articles'),
+          apiRequest('/api/gifts')
+        ]);
+        
+        setPacks(packsData || []);
+        setArticles(articlesData || []);
+        setGifts(giftsData || []);
+        
+        console.log('✅ PackManagement - Loaded data:', {
+          packs: packsData?.length,
+          articles: articlesData?.length,
+          gifts: giftsData?.length
+        });
+        console.log('📋 PackManagement - Articles data:', articlesData);
+        console.log('🎁 PackManagement - Gifts data:', giftsData);
+        console.log('📦 PackManagement - Packs with articles:', packsData);
+      } catch (error) {
+        console.error('❌ PackManagement - Error loading data:', error);
+        setPacks([]);
+        setArticles([]);
+        setGifts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, [apiRequest]);
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading pack management...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Filter packs with safety check
+  const filteredPacks = (packs || []).filter(pack => {
     const matchesSearch = pack.PackName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         pack.articles.some(article => 
+                         (pack.articles || []).some(article => 
                            article.Name.toLowerCase().includes(searchTerm.toLowerCase())
                          );
     
@@ -38,9 +91,9 @@ const PackManagement = ({
     return matchesSearch && matchesPrice;
   });
 
-  // Get pack statistics
+  // Get pack statistics with safety check
   const getPackStats = (packId) => {
-    const packSales = data.sales.filter(sale => sale.packID === packId);
+    const packSales = (data?.sales || []).filter(sale => sale.packID === packId);
     const totalSold = packSales.length;
     const totalRevenue = packSales.reduce((sum, sale) => sum + (sale.totalPrice || 0), 0);
     
@@ -65,44 +118,58 @@ const PackManagement = ({
   };
 
   // Handle save pack
-  const handleSavePack = () => {
+  const handleSavePack = async () => {
     if (!newPack.PackName || selectedArticles.length === 0) {
       alert('Please provide pack name and select at least one article');
       return;
     }
 
-    const gift = selectedGift ? data.gifts.find(g => g.Id === parseInt(selectedGift)) : null;
+    const gift = selectedGift ? gifts.find(g => g.Id === parseInt(selectedGift)) : null;
     const totalPrice = newPack.TotalPackPrice || calculateTotalPrice();
 
-    if (editingPack) {
-      // Update existing pack
-      const updatedPacks = data.packs.map(pack => 
-        pack.Id === editingPack.Id ? {
-          ...pack,
+    try {
+      if (editingPack) {
+        // Update existing pack
+        const updatedPack = {
+          ...editingPack,
           PackName: newPack.PackName,
           TotalPackPrice: parseFloat(totalPrice),
           articles: selectedArticles,
           Gift: gift,
           quantity: newPack.quantity,
-        } : pack
-      );
-      setData({ ...data, packs: updatedPacks });
-      setEditingPack(null);
-    } else {
-      // Add new pack
-      const packId = Math.max(...data.packs.map(p => p.Id), 0) + 1;
-      const pack = {
-        Id: packId,
-        PackName: newPack.PackName,
-        TotalPackPrice: parseFloat(totalPrice),
-        articles: selectedArticles,
-        Gift: gift,
-        quantity: newPack.quantity,
-      };
-      setData({ ...data, packs: [...data.packs, pack] });
-    }
+        };
+        
+        await apiRequest(`/api/packs/${editingPack.Id}`, 'PUT', updatedPack);
+        
+        // Update local state
+        setPacks(packs.map(pack => 
+          pack.Id === editingPack.Id ? updatedPack : pack
+        ));
+        setEditingPack(null);
+      } else {
+        // Add new pack
+        const packId = packs.length > 0 ? Math.max(...packs.map(p => p.Id), 0) + 1 : 1;
+        const pack = {
+          Id: packId,
+          PackName: newPack.PackName,
+          TotalPackPrice: parseFloat(totalPrice),
+          articles: selectedArticles,
+          Gift: gift,
+          quantity: newPack.quantity,
+        };
+        
+        await apiRequest('/api/packs', 'POST', pack);
+        
+        // Update local state
+        setPacks([...packs, pack]);
+      }
 
-    handleCancelEdit();
+      handleCancelEdit();
+      console.log('✅ Pack saved successfully');
+    } catch (error) {
+      console.error('❌ Error saving pack:', error);
+      alert('Error saving pack: ' + error.message);
+    }
   };
 
   const handleEditPack = (pack) => {
@@ -238,7 +305,7 @@ const PackManagement = ({
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   >
                     <option value="">No Gift</option>
-                    {data.gifts.map(gift => (
+                    {(gifts || []).map(gift => (
                       <option key={gift.Id} value={gift.Id}>
                         {gift.GiftName}
                       </option>
@@ -266,7 +333,16 @@ const PackManagement = ({
                   Select Articles * ({selectedArticles.length} selected)
                 </label>
                 <div className="max-h-60 overflow-y-auto border border-gray-300 rounded-md p-3">
-                  {data.articles.map(article => {
+                  {console.log('🔍 PackManagement - Rendering articles, count:', articles?.length)}
+                  {console.log('🔍 PackManagement - Articles array:', articles)}
+                  {(articles || []).length === 0 && (
+                    <div className="text-center text-gray-500 py-4">
+                      <p>No articles available</p>
+                      <p className="text-xs">Loading: {loading ? 'Yes' : 'No'}</p>
+                      <p className="text-xs">Articles count: {articles?.length || 0}</p>
+                    </div>
+                  )}
+                  {(articles || []).map(article => {
                     const isSelected = selectedArticles.find(a => a.Id === article.Id);
                     return (
                       <label key={article.Id} className="flex items-center space-x-3 py-2 hover:bg-gray-50 rounded cursor-pointer">
@@ -350,14 +426,20 @@ const PackManagement = ({
                 
                 {/* Articles */}
                 <div className="mb-4">
-                  <h4 className="text-sm font-medium text-gray-700 mb-2">Articles:</h4>
+                  <h4 className="text-sm font-medium text-gray-700 mb-2">Articles ({(pack.articles || []).length}):</h4>
                   <div className="space-y-1">
-                    {pack.articles.map(article => (
-                      <div key={article.Id} className="flex justify-between text-sm">
-                        <span className="text-gray-600">{article.Name}</span>
-                        <span className="text-green-600">${article.Price}</span>
-                      </div>
-                    ))}
+                    {console.log('🔍 Pack articles for', pack.PackName, ':', pack.articles)}
+                    {(pack.articles && pack.articles.length > 0) ? (
+                      pack.articles.map(article => (
+                        <div key={article.Id || article.id} className="flex justify-between text-sm">
+                          <span className="text-gray-600">{article.Name || article.name}</span>
+                          <span className="text-green-600">${article.Price || article.price}</span>
+                          <span className="text-xs text-gray-500">Qty: {article.quantity || 1}</span>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="text-sm text-gray-500">No articles found</div>
+                    )}
                   </div>
                 </div>
                 

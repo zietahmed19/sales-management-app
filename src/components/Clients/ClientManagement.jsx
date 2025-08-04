@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Search, Plus, Edit, MapPin, Phone, Users, Filter } from 'lucide-react';
+import { Search, Plus, Edit, MapPin, Phone, Users } from 'lucide-react';
 import Header from '../Common/Header';
 
 const ClientManagement = ({ 
@@ -7,7 +7,8 @@ const ClientManagement = ({
   data, 
   setData,
   setCurrentScreen, 
-  resetAppState 
+  resetAppState,
+  apiRequest
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [cityFilter, setCityFilter] = useState('all');
@@ -20,12 +21,57 @@ const ClientManagement = ({
     AllPhones: '',
     Location: ''
   });
+  const [clients, setClients] = useState([]);
+  const [sales, setSales] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Load clients and sales when component mounts
+  React.useEffect(() => {
+    const loadData = async () => {
+      try {
+        setLoading(true);
+        
+        // Load clients and sales in parallel
+        const [clientsData, salesData] = await Promise.all([
+          apiRequest('/api/clients'),
+          apiRequest('/api/sales')
+        ]);
+        
+        setClients(clientsData || []);
+        setSales(salesData || []);
+        console.log('✅ ClientManagement - Loaded clients:', clientsData?.length);
+        console.log('✅ ClientManagement - Loaded sales:', salesData?.length);
+      } catch (error) {
+        console.error('❌ ClientManagement - Error loading data:', error);
+        setClients([]);
+        setSales([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (apiRequest) {
+      loadData();
+    }
+  }, [apiRequest]);
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading client management...</p>
+        </div>
+      </div>
+    );
+  }
 
   // Get unique cities for filter
-  const cities = [...new Set(data.clients.map(client => client.City))].sort();
+  const cities = [...new Set(clients.map(client => client.City))].sort();
 
   // Filter clients
-  const filteredClients = data.clients.filter(client => {
+  const filteredClients = clients.filter(client => {
     const matchesSearch = client.FullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          client.City.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          client.AllPhones.includes(searchTerm);
@@ -35,7 +81,7 @@ const ClientManagement = ({
 
   // Get client statistics
   const getClientStats = (clientId) => {
-    const clientSales = data.sales.filter(sale => sale.clientID === clientId);
+    const clientSales = sales.filter(sale => sale.clientID === clientId);
     const totalSales = clientSales.length;
     const totalSpent = clientSales.reduce((sum, sale) => sum + (sale.totalPrice || 0), 0);
     const lastSale = clientSales.length > 0 ? 
@@ -49,38 +95,51 @@ const ClientManagement = ({
   };
 
   // Handle add/edit client
-  const handleSaveClient = () => {
+  const handleSaveClient = async () => {
     if (!newClient.FullName || !newClient.City || !newClient.AllPhones) {
       alert('Please fill in all required fields');
       return;
     }
 
-    if (editingClient) {
-      // Update existing client
-      const updatedClients = data.clients.map(client => 
-        client.ClientID === editingClient.ClientID ? 
-        { ...editingClient, ...newClient } : client
-      );
-      setData({ ...data, clients: updatedClients });
-      setEditingClient(null);
-    } else {
-      // Add new client
-      const clientId = `C${(data.clients.length + 1).toString().padStart(3, '0')}`;
-      const client = {
-        ClientID: clientId,
-        ...newClient
-      };
-      setData({ ...data, clients: [...data.clients, client] });
-    }
+    try {
+      if (editingClient) {
+        // Update existing client
+        const updatedClient = { ...editingClient, ...newClient };
+        await apiRequest(`/api/clients/${editingClient.ClientID}`, 'PUT', updatedClient);
+        
+        // Update local state
+        setClients(clients.map(client => 
+          client.ClientID === editingClient.ClientID ? updatedClient : client
+        ));
+        setEditingClient(null);
+      } else {
+        // Add new client
+        const clientId = `C${(clients.length + 1).toString().padStart(3, '0')}`;
+        const client = {
+          ClientID: clientId,
+          ...newClient
+        };
+        
+        await apiRequest('/api/clients', 'POST', client);
+        
+        // Update local state
+        setClients([...clients, client]);
+      }
 
-    setNewClient({
-      FullName: '',
-      City: '',
-      Wilaya: '',
-      AllPhones: '',
-      Location: ''
-    });
-    setShowAddForm(false);
+      setNewClient({
+        FullName: '',
+        City: '',
+        Wilaya: '',
+        AllPhones: '',
+        Location: ''
+      });
+      setShowAddForm(false);
+      
+      console.log('✅ Client saved successfully');
+    } catch (error) {
+      console.error('❌ Error saving client:', error);
+      alert('Error saving client: ' + error.message);
+    }
   };
 
   const handleEditClient = (client) => {

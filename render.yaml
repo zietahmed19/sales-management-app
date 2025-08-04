@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: sales-management-app
+    env: docker
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        value: sales-management-jwt-secret-2025

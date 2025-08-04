@@ -38,7 +38,7 @@ const SaleConfirmationMinimal = ({
       console.log('💰 Sending sale data:', newSale);
 
       // Send to database API using apiRequest helper
-      const responseData = await apiRequest('/sales', {
+      const responseData = await apiRequest('/api/sales', {
         method: 'POST',
         body: JSON.stringify(newSale),
       });

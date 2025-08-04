@@ -12,7 +12,6 @@ import ClientManagement from './components/Clients/ClientManagement';
 import PackManagement from './components/Products/PackManagement';
 import Settings from './components/Settings/Settings';
 import AdminDashboard from './components/Admin/AdminDashboard';
-import AdminPackManagement from './components/Admin/AdminPackManagement';
 import ErrorBoundary from './components/Common/ErrorBoundary';
 
 const App = () => {
@@ -37,7 +36,7 @@ const App = () => {
   // Simple API helper
   const apiRequest = async (endpoint, options = {}) => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`http://localhost:3001${endpoint}`, {
+    const response = await fetch(`http://localhost:3001/api${endpoint}`, {
       headers: {
         'Content-Type': 'application/json',
         ...(token && { Authorization: `Bearer ${token}` }),
@@ -45,12 +44,6 @@ const App = () => {
       ...options,
     });
     return await response.json();
-  };
-
-  // Simple tracking function (no-op for now)
-  const trackUserAction = (action, details = {}) => {
-    // Optional: console.log for debugging
-    // console.log(`Action: ${action}`, details);
   };
 
   // Check for existing auth
@@ -83,8 +76,7 @@ const App = () => {
     data,
     setData,
     apiRequest,
-    loading,
-    trackUserAction
+    loading
   };
 
   // Simple render logic
@@ -112,8 +104,6 @@ const App = () => {
         return <Settings {...screenProps} />;
       case 'admin':
         return <AdminDashboard {...screenProps} />;
-      case 'admin-pack-management':
-        return <AdminPackManagement {...screenProps} />;
       default:
         return <LoginScreen {...screenProps} />;
     }

@@ -147,7 +147,7 @@ If you only want to share locally:
 1. Find your IP address: `ipconfig` (Windows) or `ifconfig` (Mac/Linux)
 2. Update `.env`: `REACT_APP_API_URL=http://YOUR-IP:3001`
 3. Run: `npm run dev`
-4. Share: `http://YOUR-IP:3000`
+4. Share: `http://YOUR-IP:3001`
 
 ## 📁 Project Structure
 

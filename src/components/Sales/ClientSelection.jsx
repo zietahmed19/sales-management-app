@@ -1,9 +1,9 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { ArrowLeft, Search, MapPin, Phone, Users, Filter, SortAsc, SortDesc } from 'lucide-react';
 import { t } from '../../translations/arabic';
 
 const ClientSelection = ({ 
-  data, 
+  apiRequest,
   setSelectedClient, 
   setCurrentScreen,
   selectedPacks 
@@ -12,48 +12,39 @@ const ClientSelection = ({
   const [sortBy, setSortBy] = useState('name'); // name, city, recent
   const [sortOrder, setSortOrder] = useState('asc');
   const [selectedWilaya, setSelectedWilaya] = useState('all');
-  // Enhanced debug logging
-  console.log('🔍 ClientSelection - Component rendered');
-  console.log('🔍 ClientSelection - Received props:');
-  console.log('🔍 ClientSelection - data:', !!data);
-  console.log('🔍 ClientSelection - setSelectedClient:', typeof setSelectedClient);
-  console.log('🔍 ClientSelection - setCurrentScreen:', typeof setCurrentScreen);
-  console.log('🔍 ClientSelection - selectedPacks:', selectedPacks);
-  console.log('🔍 ClientSelection - selectedPacks length:', selectedPacks?.length);
-  console.log('  - data exists:', !!data);
-  console.log('  - data type:', typeof data);
-  console.log('  - data keys:', data ? Object.keys(data) : 'none');
-  console.log('  - data.clients exists:', !!data?.clients);
-  console.log('  - data.clients type:', typeof data?.clients);
-  console.log('  - data.clients length:', data?.clients?.length);
-  console.log('  - setSelectedClient function exists:', typeof setSelectedClient === 'function');
-  console.log('  - setCurrentScreen function exists:', typeof setCurrentScreen === 'function');
-  
-  // Log localStorage state
-  console.log('🔍 ClientSelection - localStorage state:');
-  console.log('  - token exists:', !!localStorage.getItem('token'));
-  console.log('  - authToken exists:', !!localStorage.getItem('authToken'));
-  console.log('  - currentUser exists:', !!localStorage.getItem('currentUser'));
-  
-  if (data?.clients) {
-    console.log('🔍 ClientSelection - First few clients:');
-    data.clients.slice(0, 3).forEach((client, index) => {
-      console.log(`  Client ${index + 1}:`, {
-        id: client.ClientID || client.id,
-        name: client.FullName,
-        city: client.City,
-        wilaya: client.Wilaya
-      });
-    });
-  }
+  const [clients, setClients] = useState([]);
+  const [loading, setLoading] = useState(true);
 
+  // Load clients data
+  useEffect(() => {
+    const loadClients = async () => {
+      try {
+        setLoading(true);
+        console.log('🔄 ClientSelection - Loading clients...');
+        
+        const response = await apiRequest('/api/clients');
+        if (response && response.length) {
+          setClients(response);
+          console.log('✅ ClientSelection - Loaded clients:', response.length);
+        } else {
+          console.warn('⚠️ ClientSelection - No clients data received');
+          setClients([]);
+        }
+      } catch (error) {
+        console.error('❌ ClientSelection - Error loading clients:', error);
+        setClients([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (apiRequest) {
+      loadClients();
+    }
+  }, [apiRequest]);
   const handleClientSelect = (client) => {
     console.log('🔵 ClientSelection - handleClientSelect called');
     console.log('🔵 Selected client:', client);
-    console.log('🔵 setSelectedClient function:', typeof setSelectedClient);
-    console.log('🔵 setCurrentScreen function:', typeof setCurrentScreen);
-    console.log('🔵 Current selectedPacks:', selectedPacks);
-    console.log('🔵 selectedPacks length:', selectedPacks?.length);
     
     try {
       // Validate client object
@@ -87,16 +78,16 @@ const ClientSelection = ({
 
   // Get unique wilayas for filter
   const uniqueWilayas = useMemo(() => {
-    if (!data?.clients) return [];
-    const wilayas = [...new Set(data.clients.map(client => client.Wilaya))].filter(Boolean);
+    if (!clients) return [];
+    const wilayas = [...new Set(clients.map(client => client.Wilaya))].filter(Boolean);
     return wilayas.sort();
-  }, [data?.clients]);
+  }, [clients]);
 
   // Filter and search clients
   const filteredClients = useMemo(() => {
-    if (!data?.clients) return [];
+    if (!clients) return [];
     
-    let filtered = data.clients;
+    let filtered = clients;
     
     // Filter by wilaya
     if (selectedWilaya !== 'all') {
@@ -146,9 +137,20 @@ const ClientSelection = ({
     });
     
     return filtered;
-  }, [data?.clients, searchTerm, sortBy, sortOrder, selectedWilaya]);
+  }, [clients, searchTerm, sortBy, sortOrder, selectedWilaya]);
 
-  if (!data || !data.clients || data.clients.length === 0) {
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center" dir="rtl">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">جاري تحميل العملاء...</h2>
+          <p className="text-gray-600">يرجى الانتظار</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!clients || clients.length === 0) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center" dir="rtl">
         <div className="text-center">
@@ -188,7 +190,7 @@ const ClientSelection = ({
             <div className="flex-1">
               <h2 className="text-lg font-semibold text-gray-900 mb-2">اختر عميلاً لإتمام البيع</h2>
               <p className="text-sm text-gray-500">
-                عرض {filteredClients.length} من أصل {data.clients.length} عميل
+                عرض {filteredClients.length} من أصل {clients.length} عميل
               </p>
             </div>
             

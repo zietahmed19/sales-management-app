@@ -23,49 +23,75 @@ const LoginScreen = ({ setCurrentUser, setCurrentScreen, initializeData, trackUs
       console.log('🔐 LoginScreen - Attempting login with:', credentials.username);
       
       if (isAdminLogin) {
-        // Admin login validation (local)
-        if (adminUsers.includes(credentials.username) && credentials.password === adminPassword) {
-          const user = {
-            id: 'admin_' + credentials.username,
-            username: credentials.username,
-            role: 'admin',
-            territory: 'All Regions',
-            isAdmin: true
-          };
+        // Admin login validation (use real API)
+        const response = await fetch('http://localhost:3001/api/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(credentials),
+        });
 
-          console.log('✅ LoginScreen - Admin login successful');
-          
-          trackUserAction('LOGIN_SUCCESS', { 
-            username: credentials.username, 
-            user: user,
-            role: 'admin'
-          });
-          
-          // Store admin data
-          const token = 'admin-token-' + Date.now();
-          localStorage.setItem('token', token);
-          localStorage.setItem('currentUser', JSON.stringify(user));
-          localStorage.setItem('userRole', 'admin');
-          localStorage.setItem('territory', 'All Regions');
-          
-          await new Promise(resolve => setTimeout(resolve, 50));
-          
-          setCurrentUser(user);
-          setCurrentScreen('admin');
-          
-          trackUserAction('NAVIGATE_TO_ADMIN', { user: user });
-          
-          if (initializeData) {
-            setTimeout(() => {
-              initializeData(user);
-            }, 100);
-          }
-        } else {
+        console.log('🔐 LoginScreen - Admin API Response status:', response.status);
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('🔐 LoginScreen - Admin login failed:', errorText);
+          trackUserAction('LOGIN_FAILED', { username: credentials.username, error: errorText, isAdmin: true });
           throw new Error('Invalid admin credentials');
+        }
+
+        const { token, user } = await response.json();
+        
+        // Verify this is actually an admin user (rep_code = 'ADMIN')
+        if (user.rep_code !== 'ADMIN') {
+          console.error('🔐 LoginScreen - User is not an admin:', user);
+          throw new Error('Admin access required');
+        }
+
+        const adminUser = {
+          id: user.id,
+          username: user.username,
+          role: 'admin',
+          territory: 'All Regions',
+          isAdmin: true,
+          rep_code: user.rep_code,
+          rep_name: user.rep_name || 'Administrator'
+        };
+
+        console.log('✅ LoginScreen - Admin login successful');
+        console.log('👤 Admin user object:', adminUser);
+        
+        trackUserAction('LOGIN_SUCCESS', { 
+          username: credentials.username, 
+          user: adminUser,
+          role: 'admin'
+        });
+        
+        // Store admin data with real JWT token
+        localStorage.setItem('token', token);
+        localStorage.setItem('currentUser', JSON.stringify(adminUser));
+        localStorage.setItem('userRole', 'admin');
+        localStorage.setItem('territory', 'All Regions');
+        
+        await new Promise(resolve => setTimeout(resolve, 50));
+        
+        console.log('🔄 Setting currentUser...');
+        setCurrentUser(adminUser);
+        console.log('🚀 Setting currentScreen to admin...');
+        setCurrentScreen('admin');
+        console.log('📱 Admin login process complete');
+        
+        trackUserAction('NAVIGATE_TO_ADMIN', { user: adminUser });
+        
+        if (initializeData) {
+          setTimeout(() => {
+            initializeData(adminUser);
+          }, 100);
         }
       } else {
         // Delegate login validation (use existing API)
-        const response = await fetch('/api/auth/login', {
+        const response = await fetch('http://localhost:3001/api/auth/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

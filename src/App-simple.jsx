@@ -6,14 +6,6 @@ import Dashboard from './components/Dashboard/Dashboard';
 import PackSelection from './components/Sales/PackSelection';
 import ClientSelection from './components/Sales/ClientSelection';
 import SaleConfirmation from './components/Sales/SaleConfirmationMinimal';
-import SalesReport from './components/Reports/SalesReport';
-import EnhancedSalesReport from './components/Dashboard/EnhancedSalesReport';
-import ClientManagement from './components/Clients/ClientManagement';
-import PackManagement from './components/Products/PackManagement';
-import Settings from './components/Settings/Settings';
-import AdminDashboard from './components/Admin/AdminDashboard';
-import AdminPackManagement from './components/Admin/AdminPackManagement';
-import ErrorBoundary from './components/Common/ErrorBoundary';
 
 const App = () => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -22,6 +14,11 @@ const App = () => {
   const [selectedClient, setSelectedClient] = useState(null);
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  // Simple navigation
+  const setCurrentScreen = (screen) => {
+    setCurrentScreen(screen);
+  };
 
   // Simple reset
   const resetAppState = () => {
@@ -45,12 +42,6 @@ const App = () => {
       ...options,
     });
     return await response.json();
-  };
-
-  // Simple tracking function (no-op for now)
-  const trackUserAction = (action, details = {}) => {
-    // Optional: console.log for debugging
-    // console.log(`Action: ${action}`, details);
   };
 
   // Check for existing auth
@@ -83,8 +74,7 @@ const App = () => {
     data,
     setData,
     apiRequest,
-    loading,
-    trackUserAction
+    loading
   };
 
   // Simple render logic
@@ -100,31 +90,15 @@ const App = () => {
         return <ClientSelection {...screenProps} />;
       case 'confirmation':
         return <SaleConfirmation {...screenProps} />;
-      case 'reports':
-        return <SalesReport {...screenProps} />;
-      case 'enhanced-reports':
-        return <EnhancedSalesReport {...screenProps} />;
-      case 'client-management':
-        return <ClientManagement {...screenProps} />;
-      case 'pack-management':
-        return <PackManagement {...screenProps} />;
-      case 'settings':
-        return <Settings {...screenProps} />;
-      case 'admin':
-        return <AdminDashboard {...screenProps} />;
-      case 'admin-pack-management':
-        return <AdminPackManagement {...screenProps} />;
       default:
         return <LoginScreen {...screenProps} />;
     }
   };
 
   return (
-    <ErrorBoundary onRetry={() => setCurrentScreen('dashboard')}>
-      <div className="App">
-        {renderScreen()}
-      </div>
-    </ErrorBoundary>
+    <div className="App">
+      {renderScreen()}
+    </div>
   );
 };
 

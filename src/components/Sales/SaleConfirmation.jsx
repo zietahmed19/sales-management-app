@@ -105,7 +105,7 @@ const handleCompleteSale = async () => {
     // Send to database API
     const token = localStorage.getItem('token');
     
-    const response = await fetch('/api/sales', {
+    const response = await fetch('http://localhost:3001/api/sales', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
