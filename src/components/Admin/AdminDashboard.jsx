@@ -24,6 +24,8 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
   const fetchAdminData = async () => {
     // Get admin token from localStorage (if using token-based auth)
     const token = localStorage.getItem('token');
+    const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+    const apiBase = baseURL.replace('/api', '');
     
     try {
       console.log('📡 AdminDashboard: Fetching real data from database...');
@@ -34,7 +36,7 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
       };
 
       // Fetch delegates with performance data
-      const delegatesResponse = await fetch('http://localhost:3001/api/admin/representatives', {
+      const delegatesResponse = await fetch(`${apiBase}/api/admin/representatives`, {
         headers
       });
       
@@ -46,7 +48,7 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
       console.log('👥 AdminDashboard: Delegates data received:', delegatesData.length, 'delegates');
 
       // Fetch admin statistics
-      const statsResponse = await fetch('http://localhost:3001/api/admin/statistics', {
+      const statsResponse = await fetch(`${apiBase}/api/admin/statistics`, {
         headers
       });
       
@@ -88,10 +90,10 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
         };
         
         const [salesResponse, clientsResponse, packsResponse, represResponse] = await Promise.all([
-          fetch('http://localhost:3001/api/sales', { headers: basicHeaders }),
-          fetch('http://localhost:3001/api/clients', { headers: basicHeaders }),
-          fetch('http://localhost:3001/api/packs', { headers: basicHeaders }),
-          fetch('http://localhost:3001/api/representatives', { headers: basicHeaders })
+          fetch(`${apiBase}/api/sales`, { headers: basicHeaders }),
+          fetch(`${apiBase}/api/clients`, { headers: basicHeaders }),
+          fetch(`${apiBase}/api/packs`, { headers: basicHeaders }),
+          fetch(`${apiBase}/api/representatives`, { headers: basicHeaders })
         ]);
 
         if (salesResponse.ok && clientsResponse.ok && packsResponse.ok && represResponse.ok) {

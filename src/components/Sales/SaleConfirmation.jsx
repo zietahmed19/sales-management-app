@@ -104,8 +104,10 @@ const handleCompleteSale = async () => {
 
     // Send to database API
     const token = localStorage.getItem('token');
+    const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+    const apiBase = baseURL.replace('/api', '');
     
-    const response = await fetch('http://localhost:3001/api/sales', {
+    const response = await fetch(`${apiBase}/api/sales`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

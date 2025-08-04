@@ -37,7 +37,8 @@ const App = () => {
   // Simple API helper
   const apiRequest = async (endpoint, options = {}) => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`http://localhost:3001${endpoint}`, {
+    const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+    const response = await fetch(`${baseURL.replace('/api', '')}${endpoint}`, {
       headers: {
         'Content-Type': 'application/json',
         ...(token && { Authorization: `Bearer ${token}` }),

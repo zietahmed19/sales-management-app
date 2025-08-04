@@ -27,7 +27,10 @@ const EnhancedSalesReport = ({ currentUser, data, setCurrentScreen }) => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:3001/api/sales/enhanced-report?timeframe=${timeframe}`, {
+      const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+      const apiBase = baseURL.replace('/api', '');
+      
+      const response = await fetch(`${apiBase}/api/sales/enhanced-report?timeframe=${timeframe}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'

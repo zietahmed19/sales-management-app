@@ -29,11 +29,14 @@ const AdminPackManagement = ({ resetAppState, setCurrentScreen }) => {
         'Authorization': `Bearer ${token}`
       };
 
+      const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+      const apiBase = baseURL.replace('/api', '');
+
       // Fetch packs, articles, and gifts
       const [packsResponse, articlesResponse, giftsResponse] = await Promise.all([
-        fetch('http://localhost:3001/api/admin/packs', { headers }),
-        fetch('http://localhost:3001/api/articles', { headers }),
-        fetch('http://localhost:3001/api/gifts', { headers })
+        fetch(`${apiBase}/api/admin/packs`, { headers }),
+        fetch(`${apiBase}/api/articles`, { headers }),
+        fetch(`${apiBase}/api/gifts`, { headers })
       ]);
 
       if (!packsResponse.ok || !articlesResponse.ok || !giftsResponse.ok) {
@@ -103,9 +106,12 @@ const AdminPackManagement = ({ resetAppState, setCurrentScreen }) => {
         'Authorization': `Bearer ${token}`
       };
 
+      const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+      const apiBase = baseURL.replace('/api', '');
+
       const url = editingPack 
-        ? `http://localhost:3001/api/admin/packs/${editingPack.id}`
-        : 'http://localhost:3001/api/admin/packs';
+        ? `${apiBase}/api/admin/packs/${editingPack.id}`
+        : `${apiBase}/api/admin/packs`;
       
       const method = editingPack ? 'PUT' : 'POST';
 
@@ -143,7 +149,10 @@ const AdminPackManagement = ({ resetAppState, setCurrentScreen }) => {
         'Authorization': `Bearer ${token}`
       };
 
-      const response = await fetch(`http://localhost:3001/api/admin/packs/${pack.id}`, {
+      const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+      const apiBase = baseURL.replace('/api', '');
+
+      const response = await fetch(`${apiBase}/api/admin/packs/${pack.id}`, {
         method: 'DELETE',
         headers
       });

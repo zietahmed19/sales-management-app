@@ -24,7 +24,8 @@ const LoginScreen = ({ setCurrentUser, setCurrentScreen, initializeData, trackUs
       
       if (isAdminLogin) {
         // Admin login validation (use real API)
-        const response = await fetch('http://localhost:3001/api/auth/login', {
+        const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+        const response = await fetch(`${baseURL.replace('/api', '')}/api/auth/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -91,7 +92,8 @@ const LoginScreen = ({ setCurrentUser, setCurrentScreen, initializeData, trackUs
         }
       } else {
         // Delegate login validation (use existing API)
-        const response = await fetch('http://localhost:3001/api/auth/login', {
+        const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+        const response = await fetch(`${baseURL.replace('/api', '')}/api/auth/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

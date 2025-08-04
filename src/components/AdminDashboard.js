@@ -34,10 +34,13 @@ const AdminDashboard = () => {
       };
 
       // Fetch all admin data in parallel
+      const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+      const apiBase = baseURL.replace('/api', '');
+      
       const [statsRes, repsRes, salesRes] = await Promise.all([
-        fetch('http://localhost:3001/api/admin/statistics', { headers }),
-        fetch('http://localhost:3001/api/admin/representatives', { headers }),
-        fetch('http://localhost:3001/api/admin/sales', { headers })
+        fetch(`${apiBase}/api/admin/statistics`, { headers }),
+        fetch(`${apiBase}/api/admin/representatives`, { headers }),
+        fetch(`${apiBase}/api/admin/sales`, { headers })
       ]);
 
       if (!statsRes.ok) throw new Error(`Statistics API failed: ${statsRes.status}`);

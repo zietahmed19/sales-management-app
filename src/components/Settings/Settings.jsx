@@ -96,7 +96,10 @@ const Settings = ({
     try {
       // Update via API
       const userId = currentUser.id || currentUser.iD;
-      const response = await fetch(`http://localhost:3001/api/representatives/${userId}`, {
+      const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+      const apiBase = baseURL.replace('/api', '');
+      
+      const response = await fetch(`${apiBase}/api/representatives/${userId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

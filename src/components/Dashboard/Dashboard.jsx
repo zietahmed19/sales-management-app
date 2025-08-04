@@ -60,7 +60,10 @@ const Dashboard = ({
       const token = localStorage.getItem('token');
       if (!token) return;
 
-      const response = await fetch('http://localhost:3001/api/statistics', {
+      const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+      const apiBase = baseURL.replace('/api', '');
+
+      const response = await fetch(`${apiBase}/api/statistics`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
