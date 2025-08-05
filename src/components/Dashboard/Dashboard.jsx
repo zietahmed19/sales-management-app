@@ -114,10 +114,10 @@ const Dashboard = ({
   if (!dashboardData && !statistics) {
     console.log('⚠️ Dashboard - No data available, showing loading screen');
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-amber-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-black-to-purple flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-          <p className="text-purple-600 font-medium">Loading dashboard...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-medium mx-auto mb-4"></div>
+          <p className="text-white font-medium">Loading dashboard...</p>
         </div>
       </div>
     );
@@ -139,15 +139,15 @@ const Dashboard = ({
   };
 
   const statCards = [
-    { title: t('personalSales'), value: stats.totalSales, icon: ShoppingCart, color: 'bg-gradient-to-r from-purple-500 to-purple-600' },
-    { title: `${t('clientsInTerritory')} ${statistics?.delegate.wilaya || 'المنطقة'}`, value: stats.totalClients, icon: Users, color: 'bg-gradient-to-r from-amber-500 to-amber-600' },
-    { title: t('availablePacks'), value: stats.totalPacks, icon: Package, color: 'bg-gradient-to-r from-purple-600 to-amber-500' },
-    { title: 'إجمالي المخزون', value: stats.totalPackStock, icon: Package, color: 'bg-gradient-to-r from-amber-600 to-purple-500' },
-    { title: t('personalRevenue'), value: `${stats.totalRevenue.toLocaleString('ar-DZ')} ${t('currency')}`, icon: TrendingUp, color: 'bg-gradient-to-r from-purple-700 to-amber-600' }
+    { title: t('personalSales'), value: stats.totalSales, icon: ShoppingCart, color: 'bg-gradient-black-purple-dark' },
+    { title: `${t('clientsInTerritory')} ${statistics?.delegate.wilaya || 'المنطقة'}`, value: stats.totalClients, icon: Users, color: 'bg-gradient-purple-dark-medium' },
+    { title: t('availablePacks'), value: stats.totalPacks, icon: Package, color: 'bg-gradient-purple-medium-light' },
+    { title: 'إجمالي المخزون', value: stats.totalPackStock, icon: Package, color: 'bg-gradient-three-purple' },
+    { title: t('personalRevenue'), value: `${stats.totalRevenue.toLocaleString('ar-DZ')} ${t('currency')}`, icon: TrendingUp, color: 'bg-gradient-black-to-purple' }
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-amber-50" dir="rtl">
+    <div className="min-h-screen bg-gradient-black-to-purple" dir="rtl">
       <Header 
         currentUser={currentUser} 
         onLogout={resetAppState}
@@ -158,24 +158,24 @@ const Dashboard = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Personal Delegate Info Banner */}
         {statistics && (
-          <div className="bg-gradient-to-r from-purple-600 via-purple-500 to-amber-500 text-white rounded-xl p-6 mb-8 shadow-xl border border-purple-300">
+          <div className="bg-gradient-three-purple text-white rounded-xl p-6 mb-8 shadow-2xl border border-purple-medium">
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-2xl font-bold">
                   {t('welcome')}, {currentUser?.rep_name || currentUser?.username}!
                 </h2>
-                <p className="text-purple-100 mt-1">
-                  📍 {t('territory')}: <span className="font-semibold text-amber-200">{statistics.delegate.wilaya}</span>
+                <p className="text-purple-light mt-1">
+                  📍 {t('territory')}: <span className="font-semibold text-white">{statistics.delegate.wilaya}</span>
                 </p>
-                <p className="text-purple-100 text-sm mt-1">
+                <p className="text-purple-light text-sm mt-1">
                   {t('showsPersonalData')}
                 </p>
               </div>
-              <div className="text-left bg-white bg-opacity-20 backdrop-blur-sm rounded-lg p-4">
-                <div className="text-3xl font-bold text-amber-200">{statistics.delegate.personalStats.totalSales}</div>
-                <div className="text-sm text-purple-200">{t('personalSales')}</div>
-                <div className="text-lg font-semibold mt-1 text-amber-300">{statistics.delegate.personalStats.totalRevenue.toLocaleString()} {t('DA')}</div>
-                <div className="text-xs text-purple-200">{t('personalRevenue')}</div>
+              <div className="text-left bg-black bg-opacity-30 backdrop-blur-sm rounded-lg p-4 border border-purple-medium">
+                <div className="text-3xl font-bold text-white">{statistics.delegate.personalStats.totalSales}</div>
+                <div className="text-sm text-purple-light">{t('personalSales')}</div>
+                <div className="text-lg font-semibold mt-1 text-white">{statistics.delegate.personalStats.totalRevenue.toLocaleString()} {t('DA')}</div>
+                <div className="text-xs text-purple-light">{t('personalRevenue')}</div>
               </div>
             </div>
           </div>
@@ -183,14 +183,14 @@ const Dashboard = ({
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {statCards.map((stat, index) => (
-            <div key={index} className="bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-lg p-6 border border-purple-200 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+            <div key={index} className="bg-black bg-opacity-50 backdrop-blur-lg rounded-xl shadow-2xl p-6 border border-purple-medium hover:shadow-purple-500/25 transition-all duration-300 transform hover:-translate-y-1 hover:border-purple-light">
               <div className="flex items-center">
-                <div className={`${stat.color} p-3 rounded-full text-white ml-4 shadow-lg`}>
+                <div className={`${stat.color} p-3 rounded-full text-white ml-4 shadow-2xl`}>
                   <stat.icon className="w-6 h-6" />
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-medium text-purple-600">{stat.title}</p>
-                  <p className="text-2xl font-bold text-purple-800">{stat.value}</p>
+                  <p className="text-sm font-medium text-purple-light">{stat.title}</p>
+                  <p className="text-2xl font-bold text-white">{stat.value}</p>
                 </div>
               </div>
             </div>

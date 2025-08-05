@@ -2,49 +2,47 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Purple & Amber Theme Variables */
+/* Black & Purple Theme Variables */
 :root {
-  --bg-primary: #faf7ff; /* light purple background */
-  --bg-secondary: #f3e8ff; /* purple-100 */
-  --bg-tertiary: #e9d5ff; /* purple-200 */
-  --bg-accent: #fef3c7; /* amber-100 */
-  --text-primary: #581c87; /* purple-900 */
-  --text-secondary: #7c3aed; /* purple-600 */
-  --text-muted: #a855f7; /* purple-500 */
-  --text-accent: #d97706; /* amber-600 */
-  --border-color: #c4b5fd; /* purple-300 */
-  --border-accent: #fbbf24; /* amber-400 */
-  --shadow: rgba(139, 92, 246, 0.15); /* purple shadow */
-  --accent-color: #7c3aed; /* purple-600 */
-  --accent-hover: #6d28d9; /* purple-700 */
-  --amber-accent: #f59e0b; /* amber-500 */
-  --amber-hover: #d97706; /* amber-600 */
-  --success-color: #059669; /* emerald-600 */
-  --warning-color: #f59e0b; /* amber-500 */
-  --danger-color: #dc2626; /* red-600 */
+  --bg-primary: #000000; /* Pure black */
+  --bg-secondary: #1a0d2e; /* Dark purple */
+  --bg-tertiary: #2d1b69; /* Medium purple */
+  --bg-accent: #4c1d95; /* Light purple */
+  --text-primary: #ffffff; /* White text */
+  --text-secondary: #e9d5ff; /* Light purple text */
+  --text-muted: #c4b5fd; /* Purple-300 */
+  --text-accent: #a78bfa; /* Purple-400 */
+  --border-color: #6d28d9; /* Purple-700 */
+  --border-accent: #8b5cf6; /* Purple-500 */
+  --shadow: rgba(167, 139, 250, 0.3); /* Purple shadow */
+  --accent-color: #8b5cf6; /* Purple-500 */
+  --accent-hover: #7c3aed; /* Purple-600 */
+  --accent-light: #c4b5fd; /* Purple-300 */
+  --success-color: #10b981; /* Emerald-500 */
+  --warning-color: #f59e0b; /* Amber-500 */
+  --danger-color: #ef4444; /* Red-500 */
 }
 
 [data-theme="dark"], 
 .dark-theme,
 .dark-theme * {
-  --bg-primary: #2d1b69 !important; /* deep purple */
-  --bg-secondary: #1e1b4b !important; /* purple-900 */
-  --bg-tertiary: #312e81 !important; /* purple-800 */
-  --bg-accent: #451a03 !important; /* amber-900 */
-  --text-primary: #f3e8ff !important; /* purple-100 */
-  --text-secondary: #c4b5fd !important; /* purple-300 */
-  --text-muted: #a78bfa !important; /* purple-400 */
-  --text-accent: #fbbf24 !important; /* amber-400 */
-  --border-color: #6d28d9 !important; /* purple-700 */
-  --border-accent: #f59e0b !important; /* amber-500 */
-  --shadow: rgba(196, 181, 253, 0.2) !important; /* purple shadow */
-  --accent-color: #8b5cf6 !important; /* purple-500 */
-  --accent-hover: #a78bfa !important; /* purple-400 */
-  --amber-accent: #fbbf24 !important; /* amber-400 */
-  --amber-hover: #f59e0b !important; /* amber-500 */
-  --success-color: #10b981 !important; /* emerald-500 */
-  --warning-color: #fbbf24 !important; /* amber-400 */
-  --danger-color: #ef4444 !important; /* red-500 */
+  --bg-primary: #000000 !important; /* Pure black */
+  --bg-secondary: #1a0d2e !important; /* Dark purple */
+  --bg-tertiary: #2d1b69 !important; /* Medium purple */
+  --bg-accent: #4c1d95 !important; /* Light purple */
+  --text-primary: #ffffff !important; /* White text */
+  --text-secondary: #e9d5ff !important; /* Light purple text */
+  --text-muted: #c4b5fd !important; /* Purple-300 */
+  --text-accent: #a78bfa !important; /* Purple-400 */
+  --border-color: #6d28d9 !important; /* Purple-700 */
+  --border-accent: #8b5cf6 !important; /* Purple-500 */
+  --shadow: rgba(167, 139, 250, 0.3) !important; /* Purple shadow */
+  --accent-color: #8b5cf6 !important; /* Purple-500 */
+  --accent-hover: #7c3aed !important; /* Purple-600 */
+  --accent-light: #c4b5fd !important; /* Purple-300 */
+  --success-color: #10b981 !important; /* Emerald-500 */
+  --warning-color: #f59e0b !important; /* Amber-500 */
+  --danger-color: #ef4444 !important; /* Red-500 */
 }
 
 /* Apply theme variables globally */
@@ -123,7 +121,7 @@ textarea:focus,
   --tw-ring-color: var(--accent-color) !important;
 }
 
-/* Buttons with purple & amber theme */
+/* Buttons with black & purple theme */
 .bg-indigo-600,
 .dark-theme .bg-indigo-600 {
   background-color: var(--accent-color) !important;
@@ -134,31 +132,44 @@ textarea:focus,
   background-color: var(--accent-hover) !important;
 }
 
-/* Purple & Amber Button Classes */
-.btn-purple {
-  background: linear-gradient(135deg, #7c3aed, #8b5cf6) !important;
+/* Black & Purple Button Classes */
+.btn-purple-dark {
+  background: linear-gradient(135deg, #000000, #2d1b69) !important;
   color: white !important;
   border: none !important;
   transition: all 0.3s ease !important;
 }
 
-.btn-purple:hover {
-  background: linear-gradient(135deg, #6d28d9, #7c3aed) !important;
+.btn-purple-dark:hover {
+  background: linear-gradient(135deg, #1a0d2e, #4c1d95) !important;
   transform: translateY(-2px) !important;
-  box-shadow: 0 8px 25px rgba(124, 58, 237, 0.3) !important;
+  box-shadow: 0 8px 25px rgba(167, 139, 250, 0.4) !important;
 }
 
-.btn-amber {
-  background: linear-gradient(135deg, #f59e0b, #fbbf24) !important;
-  color: #451a03 !important;
+.btn-purple-medium {
+  background: linear-gradient(135deg, #2d1b69, #8b5cf6) !important;
+  color: white !important;
   border: none !important;
   transition: all 0.3s ease !important;
 }
 
-.btn-amber:hover {
-  background: linear-gradient(135deg, #d97706, #f59e0b) !important;
+.btn-purple-medium:hover {
+  background: linear-gradient(135deg, #4c1d95, #a78bfa) !important;
   transform: translateY(-2px) !important;
-  box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3) !important;
+  box-shadow: 0 8px 25px rgba(167, 139, 250, 0.4) !important;
+}
+
+.btn-purple-light {
+  background: linear-gradient(135deg, #8b5cf6, #c4b5fd) !important;
+  color: #000000 !important;
+  border: none !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn-purple-light:hover {
+  background: linear-gradient(135deg, #a78bfa, #e9d5ff) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(167, 139, 250, 0.4) !important;
 }
 
 /* Cards and containers */
@@ -172,7 +183,25 @@ textarea:focus,
   box-shadow: 0 10px 15px -3px var(--shadow), 0 4px 6px -2px var(--shadow) !important;
 }
 
-/* Purple Color Classes */
+/* Black Color Classes */
+.bg-black { background-color: #000000 !important; }
+.text-black { color: #000000 !important; }
+.border-black { border-color: #000000 !important; }
+
+/* Purple Color Classes - 3 Main Shades */
+.bg-purple-dark { background-color: #2d1b69 !important; }
+.bg-purple-medium { background-color: #8b5cf6 !important; }
+.bg-purple-light { background-color: #c4b5fd !important; }
+
+.text-purple-dark { color: #2d1b69 !important; }
+.text-purple-medium { color: #8b5cf6 !important; }
+.text-purple-light { color: #c4b5fd !important; }
+
+.border-purple-dark { border-color: #2d1b69 !important; }
+.border-purple-medium { border-color: #8b5cf6 !important; }
+.border-purple-light { border-color: #c4b5fd !important; }
+
+/* Additional Purple Shades for Completeness */
 .bg-purple-50 { background-color: #faf5ff !important; }
 .bg-purple-100 { background-color: #f3e8ff !important; }
 .bg-purple-200 { background-color: #e9d5ff !important; }
@@ -200,47 +229,27 @@ textarea:focus,
 .border-purple-400 { border-color: #a78bfa !important; }
 .border-purple-500 { border-color: #8b5cf6 !important; }
 .border-purple-600 { border-color: #7c3aed !important; }
+.border-purple-700 { border-color: #6d28d9 !important; }
 
-/* Amber Color Classes */
-.bg-amber-50 { background-color: #fffbeb !important; }
-.bg-amber-100 { background-color: #fef3c7 !important; }
-.bg-amber-200 { background-color: #fde68a !important; }
-.bg-amber-300 { background-color: #fcd34d !important; }
-.bg-amber-400 { background-color: #fbbf24 !important; }
-.bg-amber-500 { background-color: #f59e0b !important; }
-.bg-amber-600 { background-color: #d97706 !important; }
-.bg-amber-700 { background-color: #b45309 !important; }
-.bg-amber-800 { background-color: #92400e !important; }
-.bg-amber-900 { background-color: #78350f !important; }
-
-.text-amber-50 { color: #fffbeb !important; }
-.text-amber-100 { color: #fef3c7 !important; }
-.text-amber-200 { color: #fde68a !important; }
-.text-amber-300 { color: #fcd34d !important; }
-.text-amber-400 { color: #fbbf24 !important; }
-.text-amber-500 { color: #f59e0b !important; }
-.text-amber-600 { color: #d97706 !important; }
-.text-amber-700 { color: #b45309 !important; }
-.text-amber-800 { color: #92400e !important; }
-.text-amber-900 { color: #78350f !important; }
-
-.border-amber-200 { border-color: #fde68a !important; }
-.border-amber-300 { border-color: #fcd34d !important; }
-.border-amber-400 { border-color: #fbbf24 !important; }
-.border-amber-500 { border-color: #f59e0b !important; }
-.border-amber-600 { border-color: #d97706 !important; }
-
-/* Gradient Classes */
-.bg-gradient-purple-amber {
-  background: linear-gradient(135deg, #7c3aed, #f59e0b) !important;
+/* Main Gradient Classes - Black & Purple */
+.bg-gradient-black-purple-dark {
+  background: linear-gradient(135deg, #000000, #2d1b69) !important;
 }
 
-.bg-gradient-purple {
-  background: linear-gradient(135deg, #7c3aed, #8b5cf6) !important;
+.bg-gradient-purple-dark-medium {
+  background: linear-gradient(135deg, #2d1b69, #8b5cf6) !important;
 }
 
-.bg-gradient-amber {
-  background: linear-gradient(135deg, #f59e0b, #fbbf24) !important;
+.bg-gradient-purple-medium-light {
+  background: linear-gradient(135deg, #8b5cf6, #c4b5fd) !important;
+}
+
+.bg-gradient-three-purple {
+  background: linear-gradient(135deg, #2d1b69, #8b5cf6, #c4b5fd) !important;
+}
+
+.bg-gradient-black-to-purple {
+  background: linear-gradient(135deg, #000000, #2d1b69, #8b5cf6) !important;
 }
 
 /* Keep green and red for sales indicators */
