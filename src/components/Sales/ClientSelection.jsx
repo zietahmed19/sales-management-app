@@ -304,8 +304,11 @@ const ClientSelection = ({
                 </div>
                 
                 <div className="text-sm text-gray-600 space-y-2 mb-4">
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-gray-400" />
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <MapPin className="w-4 h-4 text-gray-400" />
+                      <span>{client.City}, {client.Wilaya}</span>
+                    </div>
                     <button
                       onClick={() => {
                         const location = client.Location ? 
@@ -314,10 +317,11 @@ const ClientSelection = ({
                         const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
                         window.open(googleMapsUrl, '_blank');
                       }}
-                      className="text-right hover:text-indigo-600 hover:underline transition-colors"
+                      className="flex items-center gap-1 bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-800 px-2 py-1 rounded-md text-xs font-medium transition-colors"
                       title="فتح في خرائط جوجل"
                     >
-                      {client.City}, {client.Wilaya}
+                      <MapPin className="w-3 h-3" />
+                      <span>خريطة</span>
                     </button>
                   </div>
                   
@@ -329,18 +333,22 @@ const ClientSelection = ({
                   )}
                   
                   {client.Location && (
-                    <div className="flex items-start gap-2">
-                      <MapPin className="w-4 h-4 text-gray-400 mt-0.5" />
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-start gap-2 flex-1 ml-2">
+                        <MapPin className="w-4 h-4 text-gray-400 mt-0.5" />
+                        <span className="text-xs">{client.Location}</span>
+                      </div>
                       <button
                         onClick={() => {
                           const location = `${client.Location}, ${client.City}, ${client.Wilaya}`;
                           const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
                           window.open(googleMapsUrl, '_blank');
                         }}
-                        className="text-xs text-right hover:text-indigo-600 hover:underline transition-colors"
+                        className="flex items-center gap-1 bg-green-50 hover:bg-green-100 text-green-600 hover:text-green-800 px-2 py-1 rounded-md text-xs font-medium transition-colors whitespace-nowrap"
                         title="فتح العنوان الكامل في خرائط جوجل"
                       >
-                        📍 {client.Location}
+                        <MapPin className="w-3 h-3" />
+                        <span>عنوان</span>
                       </button>
                     </div>
                   )}

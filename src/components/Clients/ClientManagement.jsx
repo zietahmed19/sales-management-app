@@ -333,8 +333,11 @@ const ClientManagement = ({
                 </div>
                 
                 <div className="space-y-2 mb-4">
-                  <div className="flex items-center text-sm text-gray-600">
-                    <MapPin className="w-4 h-4 mr-2" />
+                  <div className="flex items-center justify-between text-sm text-gray-600">
+                    <div className="flex items-center">
+                      <MapPin className="w-4 h-4 mr-2" />
+                      <span>{client.City}, {client.Wilaya}</span>
+                    </div>
                     <button
                       onClick={() => {
                         const location = client.Location ? 
@@ -343,10 +346,11 @@ const ClientManagement = ({
                         const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
                         window.open(googleMapsUrl, '_blank');
                       }}
-                      className="text-left hover:text-indigo-600 hover:underline transition-colors"
+                      className="flex items-center space-x-1 bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-800 px-2 py-1 rounded-md text-xs font-medium transition-colors"
                       title="Open in Google Maps"
                     >
-                      {client.City}, {client.Wilaya}
+                      <MapPin className="w-3 h-3" />
+                      <span>Maps</span>
                     </button>
                   </div>
                   <div className="flex items-center text-sm text-gray-600">
@@ -354,17 +358,21 @@ const ClientManagement = ({
                     <span>{client.AllPhones}</span>
                   </div>
                   {client.Location && (
-                    <div className="text-sm text-gray-500">
+                    <div className="flex items-start justify-between text-sm text-gray-500">
+                      <div className="flex-1 mr-2">
+                        <span className="text-xs">{client.Location}</span>
+                      </div>
                       <button
                         onClick={() => {
                           const location = `${client.Location}, ${client.City}, ${client.Wilaya}`;
                           const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
                           window.open(googleMapsUrl, '_blank');
                         }}
-                        className="text-left hover:text-indigo-600 hover:underline transition-colors w-full"
+                        className="flex items-center space-x-1 bg-green-50 hover:bg-green-100 text-green-600 hover:text-green-800 px-2 py-1 rounded-md text-xs font-medium transition-colors whitespace-nowrap"
                         title="Open full address in Google Maps"
                       >
-                        📍 {client.Location}
+                        <MapPin className="w-3 h-3" />
+                        <span>Address</span>
                       </button>
                     </div>
                   )}

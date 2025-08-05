@@ -189,8 +189,10 @@ const handleCompleteSale = async () => {
               <div className="text-sm text-gray-600 space-y-2">
                 <p><span className="font-medium">{t('clientName')}:</span> {selectedClient.FullName}</p>
                 <p><span className="font-medium">الرقم:</span> {selectedClient.ClientID}</p>
-                <p>
-                  <span className="font-medium">{t('location')}:</span> 
+                <div className="flex items-center justify-between">
+                  <p>
+                    <span className="font-medium">{t('location')}:</span> {selectedClient.City}, {selectedClient.Wilaya}
+                  </p>
                   <button
                     onClick={() => {
                       const location = selectedClient.Location ? 
@@ -199,28 +201,38 @@ const handleCompleteSale = async () => {
                       const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
                       window.open(googleMapsUrl, '_blank');
                     }}
-                    className="mr-1 text-indigo-600 hover:text-indigo-800 hover:underline transition-colors"
+                    className="flex items-center gap-1 bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-800 px-2 py-1 rounded-md text-xs font-medium transition-colors"
                     title="فتح في خرائط جوجل"
                   >
-                    {selectedClient.City}, {selectedClient.Wilaya}
+                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                    </svg>
+                    <span>خريطة</span>
                   </button>
-                </p>
+                </div>
                 <p><span className="font-medium">{t('phone')}:</span> {selectedClient.AllPhones}</p>
                 {selectedClient.Location && (
-                  <p>
-                    <span className="font-medium">العنوان:</span> 
+                  <div className="flex items-start justify-between bg-gray-50 p-2 rounded-md">
+                    <div className="flex-1">
+                      <p className="text-xs text-gray-500">
+                        <span className="font-medium">العنوان الكامل:</span> {selectedClient.Location}
+                      </p>
+                    </div>
                     <button
                       onClick={() => {
                         const location = `${selectedClient.Location}, ${selectedClient.City}, ${selectedClient.Wilaya}`;
                         const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
                         window.open(googleMapsUrl, '_blank');
                       }}
-                      className="mr-1 text-indigo-600 hover:text-indigo-800 hover:underline transition-colors text-sm"
+                      className="flex items-center gap-1 bg-green-50 hover:bg-green-100 text-green-600 hover:text-green-800 px-2 py-1 rounded-md text-xs font-medium transition-colors whitespace-nowrap mr-2"
                       title="فتح العنوان الكامل في خرائط جوجل"
                     >
-                      📍 {selectedClient.Location}
+                      <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                      </svg>
+                      <span>عنوان كامل</span>
                     </button>
-                  </p>
+                  </div>
                 )}
               </div>
             </div>
