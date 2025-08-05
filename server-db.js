@@ -590,12 +590,17 @@ app.get('/api/admin/packs', authenticateToken, async (req, res) => {
 
 app.post('/api/admin/packs', authenticateToken, async (req, res) => {
   try {
+    console.log('POST /api/admin/packs - Request body:', req.body);
+    
     const { pack_name, total_price, articles, gift_id, description } = req.body;
 
     // Validate required fields
     if (!pack_name || !total_price) {
+      console.log('Validation failed: Missing pack_name or total_price');
       return res.status(400).json({ message: 'Pack name and total price are required' });
     }
+
+    console.log('Creating pack with:', { pack_name, total_price, gift_id, articles: articles?.length || 0 });
 
     // Insert pack
     const result = await promiseRun(`
@@ -604,9 +609,11 @@ app.post('/api/admin/packs', authenticateToken, async (req, res) => {
     `, [pack_name, total_price, gift_id || null]);
 
     const packId = result.lastID;
+    console.log('Pack created with ID:', packId);
 
     // Insert pack articles if provided
     if (articles && Array.isArray(articles)) {
+      console.log('Inserting articles:', articles);
       for (const article of articles) {
         await promiseRun(`
           INSERT INTO pack_articles (pack_id, article_id, quantity)
@@ -623,6 +630,7 @@ app.post('/api/admin/packs', authenticateToken, async (req, res) => {
       WHERE p.id = ?
     `, [packId]);
 
+    console.log('Pack created successfully:', createdPack[0]);
     res.status(201).json({ 
       message: 'Pack created successfully', 
       pack: createdPack[0],
@@ -630,7 +638,8 @@ app.post('/api/admin/packs', authenticateToken, async (req, res) => {
     });
   } catch (error) {
     console.error('Error creating pack:', error);
-    res.status(500).json({ message: 'Server error', error: error.message });
+    console.error('Error stack:', error.stack);
+    res.status(500).json({ message: 'Server error', error: error.message, details: error.stack });
   }
 });
 

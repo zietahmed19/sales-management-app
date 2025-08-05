@@ -115,15 +115,30 @@ const AdminPackManagement = ({ resetAppState, setCurrentScreen }) => {
       
       const method = editingPack ? 'PUT' : 'POST';
 
+      // Log the data being sent for debugging
+      console.log('Sending pack data:', formData);
+      console.log('URL:', url);
+      console.log('Method:', method);
+
       const response = await fetch(url, {
         method,
         headers,
         body: JSON.stringify(formData)
       });
 
+      console.log('Response status:', response.status);
+      console.log('Response headers:', response.headers);
+
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to save pack');
+        const errorText = await response.text();
+        console.error('Server error response:', errorText);
+        let errorData;
+        try {
+          errorData = JSON.parse(errorText);
+        } catch (e) {
+          throw new Error(`Server error (${response.status}): ${errorText}`);
+        }
+        throw new Error(errorData.message || `Server error (${response.status})`);
       }
 
       const result = await response.json();
