@@ -189,8 +189,39 @@ const handleCompleteSale = async () => {
               <div className="text-sm text-gray-600 space-y-2">
                 <p><span className="font-medium">{t('clientName')}:</span> {selectedClient.FullName}</p>
                 <p><span className="font-medium">الرقم:</span> {selectedClient.ClientID}</p>
-                <p><span className="font-medium">{t('location')}:</span> {selectedClient.City}, {selectedClient.Wilaya}</p>
+                <p>
+                  <span className="font-medium">{t('location')}:</span> 
+                  <button
+                    onClick={() => {
+                      const location = selectedClient.Location ? 
+                        `${selectedClient.Location}, ${selectedClient.City}, ${selectedClient.Wilaya}` : 
+                        `${selectedClient.City}, ${selectedClient.Wilaya}`;
+                      const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
+                      window.open(googleMapsUrl, '_blank');
+                    }}
+                    className="mr-1 text-indigo-600 hover:text-indigo-800 hover:underline transition-colors"
+                    title="فتح في خرائط جوجل"
+                  >
+                    {selectedClient.City}, {selectedClient.Wilaya}
+                  </button>
+                </p>
                 <p><span className="font-medium">{t('phone')}:</span> {selectedClient.AllPhones}</p>
+                {selectedClient.Location && (
+                  <p>
+                    <span className="font-medium">العنوان:</span> 
+                    <button
+                      onClick={() => {
+                        const location = `${selectedClient.Location}, ${selectedClient.City}, ${selectedClient.Wilaya}`;
+                        const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
+                        window.open(googleMapsUrl, '_blank');
+                      }}
+                      className="mr-1 text-indigo-600 hover:text-indigo-800 hover:underline transition-colors text-sm"
+                      title="فتح العنوان الكامل في خرائط جوجل"
+                    >
+                      📍 {selectedClient.Location}
+                    </button>
+                  </p>
+                )}
               </div>
             </div>
 

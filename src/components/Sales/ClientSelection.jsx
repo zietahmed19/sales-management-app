@@ -306,7 +306,19 @@ const ClientSelection = ({
                 <div className="text-sm text-gray-600 space-y-2 mb-4">
                   <div className="flex items-center gap-2">
                     <MapPin className="w-4 h-4 text-gray-400" />
-                    <span>{client.City}, {client.Wilaya}</span>
+                    <button
+                      onClick={() => {
+                        const location = client.Location ? 
+                          `${client.Location}, ${client.City}, ${client.Wilaya}` : 
+                          `${client.City}, ${client.Wilaya}`;
+                        const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
+                        window.open(googleMapsUrl, '_blank');
+                      }}
+                      className="text-right hover:text-indigo-600 hover:underline transition-colors"
+                      title="فتح في خرائط جوجل"
+                    >
+                      {client.City}, {client.Wilaya}
+                    </button>
                   </div>
                   
                   {client.AllPhones && (
@@ -319,7 +331,17 @@ const ClientSelection = ({
                   {client.Location && (
                     <div className="flex items-start gap-2">
                       <MapPin className="w-4 h-4 text-gray-400 mt-0.5" />
-                      <span className="text-xs">{client.Location}</span>
+                      <button
+                        onClick={() => {
+                          const location = `${client.Location}, ${client.City}, ${client.Wilaya}`;
+                          const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
+                          window.open(googleMapsUrl, '_blank');
+                        }}
+                        className="text-xs text-right hover:text-indigo-600 hover:underline transition-colors"
+                        title="فتح العنوان الكامل في خرائط جوجل"
+                      >
+                        📍 {client.Location}
+                      </button>
                     </div>
                   )}
                 </div>
