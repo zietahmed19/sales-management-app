@@ -10,9 +10,6 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
 
-// Initialize database backup system
-const dbBackup = new DatabaseBackup(dbPath);
-
 // Middleware
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
@@ -27,6 +24,9 @@ app.use(express.json());
 // Database setup
 const dbPath = path.join(__dirname, 'sales_management.db');
 const db = new sqlite3.Database(dbPath);
+
+// Initialize database backup system
+const dbBackup = new DatabaseBackup(dbPath);
 
 // Initialize database tables
 const initializeDatabase = () => {
