@@ -201,7 +201,7 @@ const handleCompleteSale = async () => {
                       const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
                       window.open(googleMapsUrl, '_blank');
                     }}
-                    className="flex items-center gap-1 bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-800 px-2 py-1 rounded-md text-xs font-medium transition-colors"
+                    className="flex items-center gap-1 bg-gradient-to-r from-purple-500 to-purple-700 hover:from-purple-600 hover:to-purple-800 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
                     title="فتح في خرائط جوجل"
                   >
                     <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
@@ -224,7 +224,7 @@ const handleCompleteSale = async () => {
                         const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
                         window.open(googleMapsUrl, '_blank');
                       }}
-                      className="flex items-center gap-1 bg-green-50 hover:bg-green-100 text-green-600 hover:text-green-800 px-2 py-1 rounded-md text-xs font-medium transition-colors whitespace-nowrap mr-2"
+                      className="flex items-center gap-1 bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 whitespace-nowrap mr-2"
                       title="فتح العنوان الكامل في خرائط جوجل"
                     >
                       <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
