@@ -772,6 +772,15 @@ app.delete('/api/admin/packs/:id', authenticateToken, async (req, res) => {
 // SALES ROUTES - Personal sales only
 app.get('/api/sales', authenticateToken, async (req, res) => {
   try {
+    console.log('\n📊 === SALES RETRIEVAL REQUEST ===');
+    console.log('👤 User requesting sales:', {
+      id: req.user.id,
+      username: req.user.username,
+      wilaya: req.user.wilaya,
+      rep_name: req.user.rep_name
+    });
+    console.log('🔍 Query: Fetching sales for representative ID:', req.user.id);
+
     // Only show sales made by the current delegate
     const sales = await promiseQuery(`
       SELECT 
@@ -804,6 +813,23 @@ app.get('/api/sales', authenticateToken, async (req, res) => {
       WHERE s.representative_id = ?
       ORDER BY s.sale_date DESC
     `, [req.user.id]);
+
+    console.log('📊 Database query executed for sales retrieval');
+    console.log('🔢 Total sales found:', sales.length);
+    
+    if (sales.length > 0) {
+      console.log('💰 Sales summary:', {
+        first_sale: sales[sales.length - 1].createDate,
+        latest_sale: sales[0].createDate,
+        total_revenue: sales.reduce((sum, sale) => sum + sale.totalPrice, 0)
+      });
+      console.log('🏪 Sales details preview (first 3):');
+      sales.slice(0, 3).forEach((sale, index) => {
+        console.log(`  ${index + 1}. Sale ID: ${sale.id}, Client: ${sale.client_name}, Pack: ${sale.pack_name}, Total: ${sale.totalPrice}`);
+      });
+    } else {
+      console.log('📭 No sales found for this representative');
+    }
 
     // Format the response to match frontend expectations
     const formattedSales = await Promise.all(
@@ -854,7 +880,15 @@ app.get('/api/sales', authenticateToken, async (req, res) => {
       })
     );
 
+    console.log('✅ Successfully formatted sales data for frontend');
+    console.log('📦 Formatted sales summary:', {
+      total_sales: formattedSales.length,
+      has_pack_articles: formattedSales.filter(s => s.pack.articles && s.pack.articles.length > 0).length,
+      has_gifts: formattedSales.filter(s => s.pack.Gift).length
+    });
     console.log(`📊 Delegate ${req.user.username} accessed ${formattedSales.length} personal sales`);
+    console.log('🚀 Sending response with formatted sales data\n');
+    
     res.json(formattedSales);
   } catch (error) {
     console.error('Error fetching sales:', error);
@@ -864,54 +898,151 @@ app.get('/api/sales', authenticateToken, async (req, res) => {
 
 app.post('/api/sales', authenticateToken, async (req, res) => {
   try {
+    console.log('\n🚀 === SALES CREATION REQUEST ===');
+    console.log('📥 Raw request body:', JSON.stringify(req.body, null, 2));
+    console.log('👤 User making request:', {
+      id: req.user.id,
+      username: req.user.username,
+      wilaya: req.user.wilaya,
+      rep_name: req.user.rep_name
+    });
+    
     const { client_id, rep_id, pack_id, total_amount } = req.body;
+    console.log('📋 Extracted fields:', { client_id, rep_id, pack_id, total_amount });
 
     // Get client internal ID and verify wilaya access
     let clientDbId = client_id;
     let clientWilaya = null;
+    let clientInfo = null;
     
+    console.log('🔍 Looking up client information...');
     if (typeof client_id === 'string' && client_id.startsWith('C')) {
-      const client = await promiseQuery('SELECT id, wilaya FROM clients WHERE client_id = ?', [client_id]);
+      console.log('📝 Client ID is string format (starts with C):', client_id);
+      const client = await promiseQuery('SELECT id, wilaya, full_name, city FROM clients WHERE client_id = ?', [client_id]);
+      console.log('🔎 Client lookup result:', client);
+      
       if (client.length === 0) {
+        console.log('❌ Client not found with ID:', client_id);
         return res.status(400).json({ message: 'Client not found' });
       }
       clientDbId = client[0].id;
       clientWilaya = client[0].wilaya;
+      clientInfo = client[0];
+      console.log('✅ Client found - DB ID:', clientDbId, 'Wilaya:', clientWilaya, 'Name:', clientInfo.full_name);
     } else {
-      const client = await promiseQuery('SELECT wilaya FROM clients WHERE id = ?', [client_id]);
+      console.log('📝 Client ID is numeric format:', client_id);
+      const client = await promiseQuery('SELECT id, wilaya, full_name, city FROM clients WHERE id = ?', [client_id]);
+      console.log('🔎 Client lookup result:', client);
+      
       if (client.length === 0) {
+        console.log('❌ Client not found with ID:', client_id);
         return res.status(400).json({ message: 'Client not found' });
       }
       clientWilaya = client[0].wilaya;
+      clientInfo = client[0];
+      console.log('✅ Client found - Wilaya:', clientWilaya, 'Name:', clientInfo.full_name);
     }
 
     // Verify client belongs to delegate's wilaya
+    console.log('🏛️ Territory validation - Client wilaya:', clientWilaya, 'Delegate wilaya:', req.user.wilaya);
     if (clientWilaya !== req.user.wilaya) {
+      console.log('❌ Territory access denied!');
       return res.status(403).json({ 
         message: `Access denied. Client is in ${clientWilaya}, you can only create sales in ${req.user.wilaya}` 
       });
     }
+    console.log('✅ Territory validation passed');
 
+    // Validate pack exists
+    console.log('📦 Validating pack ID:', pack_id);
+    const packInfo = await promiseQuery('SELECT id, pack_name, total_price FROM packs WHERE id = ?', [pack_id]);
+    console.log('🔎 Pack lookup result:', packInfo);
+    
+    if (packInfo.length === 0) {
+      console.log('❌ Pack not found with ID:', pack_id);
+      return res.status(400).json({ message: 'Pack not found' });
+    }
+    console.log('✅ Pack found:', packInfo[0].pack_name, 'Price:', packInfo[0].total_price);
+
+    // Prepare sale data
+    const saleData = {
+      client_id: clientDbId,
+      representative_id: req.user.id,
+      pack_id: pack_id,
+      total_price: total_amount
+    };
+    console.log('💾 Preparing to insert sale:', saleData);
+
+    // Insert the sale
+    console.log('🔄 Executing INSERT INTO sales...');
     const result = await promiseRun(`
       INSERT INTO sales (client_id, representative_id, pack_id, total_price)
       VALUES (?, ?, ?, ?)
     `, [clientDbId, req.user.id, pack_id, total_amount]);
 
-    console.log(`💰 Sale created by delegate ${req.user.username} in ${req.user.wilaya}: Client ${client_id}, Pack ${pack_id}, Price ${total_amount}`);
+    console.log('✅ Sale insertion result:', result);
+    console.log('🆔 New sale ID:', result.id);
+
+    // Verify the sale was actually saved
+    console.log('🔍 Verifying sale was saved...');
+    const savedSale = await promiseQuery(`
+      SELECT s.*, c.full_name as client_name, r.rep_name, p.pack_name
+      FROM sales s
+      JOIN clients c ON s.client_id = c.id
+      JOIN representatives r ON s.representative_id = r.id
+      JOIN packs p ON s.pack_id = p.id
+      WHERE s.id = ?
+    `, [result.id]);
+    
+    console.log('✅ Saved sale verification:', savedSale[0]);
+
+    // Count total sales for this user
+    const userSalesCount = await promiseQuery(`
+      SELECT COUNT(*) as count FROM sales WHERE representative_id = ?
+    `, [req.user.id]);
+    console.log('📊 Total sales for this representative:', userSalesCount[0].count);
+
+    // Count total sales in database
+    const totalSalesCount = await promiseQuery('SELECT COUNT(*) as count FROM sales');
+    console.log('� Total sales in database:', totalSalesCount[0].count);
+
+    console.log(`�💰 Sale created successfully by delegate ${req.user.username} in ${req.user.wilaya}`);
+    console.log(`📋 Sale details: Client "${clientInfo.full_name}" (${clientInfo.city}), Pack "${packInfo[0].pack_name}", Price ${total_amount} DA`);
+    console.log('🏁 === SALES CREATION COMPLETED ===\n');
 
     res.status(201).json({ 
       message: 'Sale created successfully', 
-      saleId: result.id 
+      saleId: result.id,
+      saleDetails: {
+        id: result.id,
+        client: clientInfo.full_name,
+        pack: packInfo[0].pack_name,
+        price: total_amount,
+        representative: req.user.rep_name
+      }
     });
   } catch (error) {
+    console.error('❌ === SALES CREATION ERROR ===');
     console.error('Error creating sale:', error);
-    res.status(500).json({ message: 'Server error' });
+    console.error('Error stack:', error.stack);
+    console.error('Request body was:', req.body);
+    console.error('User was:', req.user);
+    console.error('=== END ERROR ===\n');
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
 // Admin: Get all sales across all delegates
 app.get('/api/admin/sales', authenticateAdmin, async (req, res) => {
   try {
+    console.log('\n👑 === ADMIN SALES RETRIEVAL REQUEST ===');
+    console.log('👤 Admin requesting all sales:', {
+      id: req.user.id,
+      username: req.user.username,
+      role: req.user.role
+    });
+    console.log('🔍 Query: Fetching ALL sales across all representatives');
+
     const allSales = await promiseQuery(`
       SELECT 
         s.id,
@@ -934,6 +1065,51 @@ app.get('/api/admin/sales', authenticateAdmin, async (req, res) => {
       JOIN packs p ON s.pack_id = p.id
       ORDER BY s.sale_date DESC
     `);
+
+    console.log('📊 Database query executed for admin sales retrieval');
+    console.log('🔢 Total sales found across all representatives:', allSales.length);
+    
+    if (allSales.length > 0) {
+      // Calculate statistics
+      const totalRevenue = allSales.reduce((sum, sale) => sum + sale.totalPrice, 0);
+      const representativeStats = {};
+      const wilayaStats = {};
+      
+      allSales.forEach(sale => {
+        // Rep stats
+        if (!representativeStats[sale.rep_name]) {
+          representativeStats[sale.rep_name] = { count: 0, revenue: 0 };
+        }
+        representativeStats[sale.rep_name].count++;
+        representativeStats[sale.rep_name].revenue += sale.totalPrice;
+        
+        // Wilaya stats
+        if (!wilayaStats[sale.rep_wilaya]) {
+          wilayaStats[sale.rep_wilaya] = { count: 0, revenue: 0 };
+        }
+        wilayaStats[sale.rep_wilaya].count++;
+        wilayaStats[sale.rep_wilaya].revenue += sale.totalPrice;
+      });
+
+      console.log('💰 Admin sales overview:', {
+        total_sales: allSales.length,
+        total_revenue: totalRevenue,
+        first_sale: allSales[allSales.length - 1].createDate,
+        latest_sale: allSales[0].createDate,
+        unique_representatives: Object.keys(representativeStats).length,
+        unique_wilayas: Object.keys(wilayaStats).length
+      });
+      
+      console.log('🏆 Top performing representatives:');
+      Object.entries(representativeStats)
+        .sort((a, b) => b[1].revenue - a[1].revenue)
+        .slice(0, 3)
+        .forEach(([rep, stats], index) => {
+          console.log(`  ${index + 1}. ${rep}: ${stats.count} sales, ${stats.revenue} revenue`);
+        });
+    } else {
+      console.log('📭 No sales found in the system');
+    }
 
     const formattedSales = allSales.map(sale => ({
       id: sale.id,
@@ -961,7 +1137,10 @@ app.get('/api/admin/sales', authenticateAdmin, async (req, res) => {
       totalPrice: sale.totalPrice
     }));
 
-    console.log(`🔐 Admin accessed all sales: ${formattedSales.length} records`);
+    console.log('✅ Successfully formatted admin sales data');
+    console.log(`🔐 Admin ${req.user.username} accessed all sales: ${formattedSales.length} records`);
+    console.log('🚀 Sending complete sales database to admin\n');
+    
     res.json(formattedSales);
   } catch (error) {
     console.error('Error fetching admin sales:', error);
