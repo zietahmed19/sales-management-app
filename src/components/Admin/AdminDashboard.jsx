@@ -520,24 +520,24 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50" dir="rtl">
-      <div className="bg-white shadow-sm">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-amber-50" dir="rtl">
+      <div className="bg-gradient-to-r from-purple-600 via-purple-500 to-amber-500 shadow-xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
-            <h1 className="text-3xl font-bold text-gray-900">
+            <h1 className="text-3xl font-bold text-white drop-shadow-lg">
               لوحة تحكم المدير
             </h1>
             <div className="flex space-x-4">
               <button
                 onClick={() => setCurrentScreen && setCurrentScreen('admin-pack-management')}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors flex items-center"
+                className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg transition-all duration-300 flex items-center transform hover:scale-105 hover:shadow-lg"
               >
                 <Package className="w-4 h-4 ml-2" />
                 إدارة الحزم
               </button>
               <button
                 onClick={handleLogout}
-                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md transition-colors"
+                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
               >
                 تسجيل الخروج
               </button>
@@ -548,7 +548,7 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Filters and Export */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
+        <div className="bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-xl p-6 mb-8 border border-purple-200">
           <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
             <h2 className="text-xl font-semibold text-gray-900 flex items-center">
               <Filter className="w-5 h-5 ml-2" />
@@ -556,7 +556,7 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
             </h2>
             <button
               onClick={exportToExcel}
-              className="flex items-center space-x-2 bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700"
+              className="flex items-center space-x-2 bg-gradient-to-r from-purple-600 to-amber-500 text-white py-2 px-4 rounded-lg hover:from-purple-700 hover:to-amber-600 transition-all duration-300 transform hover:scale-105"
             >
               <Download className="w-4 h-4" />
               <span>تصدير Excel</span>

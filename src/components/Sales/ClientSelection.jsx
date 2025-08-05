@@ -141,10 +141,10 @@ const ClientSelection = ({
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center" dir="rtl">
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-amber-50 flex items-center justify-center" dir="rtl">
         <div className="text-center">
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">جاري تحميل العملاء...</h2>
-          <p className="text-gray-600">يرجى الانتظار</p>
+          <h2 className="text-xl font-semibold text-purple-800 mb-2">جاري تحميل العملاء...</h2>
+          <p className="text-purple-600">يرجى الانتظار</p>
         </div>
       </div>
     );
@@ -152,13 +152,13 @@ const ClientSelection = ({
 
   if (!clients || clients.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center" dir="rtl">
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-amber-50 flex items-center justify-center" dir="rtl">
         <div className="text-center">
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">{t('noClientsInTerritory')}</h2>
-          <p className="text-gray-600 mb-4">{t('loading')} {t('clients')} أو لا يوجد عملاء متاحون في منطقتك.</p>
+          <h2 className="text-xl font-semibold text-purple-800 mb-2">{t('noClientsInTerritory')}</h2>
+          <p className="text-purple-600 mb-4">{t('loading')} {t('clients')} أو لا يوجد عملاء متاحون في منطقتك.</p>
           <button
             onClick={() => setCurrentScreen('dashboard')}
-            className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700"
+            className="bg-gradient-to-r from-purple-600 to-amber-500 text-white px-4 py-2 rounded-lg hover:from-purple-700 hover:to-amber-600 transition-all duration-300 transform hover:scale-105"
           >
             {t('backToDashboard')}
           </button>
@@ -168,28 +168,28 @@ const ClientSelection = ({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50" dir="rtl">
-      <div className="bg-white shadow-sm border-b">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-amber-50" dir="rtl">
+      <div className="bg-gradient-to-r from-purple-600 via-purple-500 to-amber-500 shadow-xl border-b border-purple-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center">
             <button 
               onClick={() => setCurrentScreen('packs')}
-              className="ml-4 p-2 hover:bg-gray-100 rounded-full"
+              className="ml-4 p-2 hover:bg-white hover:bg-opacity-20 rounded-full transition-all duration-300 backdrop-blur-sm"
             >
-              <ArrowLeft className="w-5 h-5 transform rotate-180" />
+              <ArrowLeft className="w-5 h-5 transform rotate-180 text-white" />
             </button>
-            <h1 className="text-2xl font-bold text-gray-900">{t('selectClient')}</h1>
+            <h1 className="text-2xl font-bold text-white drop-shadow-lg">{t('selectClient')}</h1>
           </div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Enhanced Search and Filter Section */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div className="bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-xl p-6 mb-6 border border-purple-200">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-4">
             <div className="flex-1">
-              <h2 className="text-lg font-semibold text-gray-900 mb-2">اختر عميلاً لإتمام البيع</h2>
-              <p className="text-sm text-gray-500">
+              <h2 className="text-lg font-semibold text-purple-800 mb-2">اختر عميلاً لإتمام البيع</h2>
+              <p className="text-sm text-purple-600">
                 عرض {filteredClients.length} من أصل {clients.length} عميل
               </p>
             </div>
@@ -295,10 +295,10 @@ const ClientSelection = ({
         {filteredClients.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredClients.map(client => (
-              <div key={client.ClientID || client.id} className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 p-6">
+              <div key={client.ClientID || client.id} className="bg-white bg-opacity-80 backdrop-blur-sm rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 border border-purple-200 transform hover:-translate-y-1">
                 <div className="flex items-start justify-between mb-3">
                   <h3 className="text-lg font-semibold text-gray-900 flex-1">{client.FullName}</h3>
-                  <span className="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-full">
+                  <span className="bg-purple-100 text-purple-700 text-xs px-2 py-1 rounded-full font-medium">
                     #{client.ClientID}
                   </span>
                 </div>
@@ -356,7 +356,7 @@ const ClientSelection = ({
                 
                 <button
                   onClick={() => handleClientSelect(client)}
-                  className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 font-medium transition-colors duration-200 flex items-center justify-center gap-2"
+                  className="w-full bg-gradient-to-r from-purple-600 to-amber-500 text-white py-2 px-4 rounded-lg hover:from-purple-700 hover:to-amber-600 font-medium transition-all duration-300 flex items-center justify-center gap-2 transform hover:scale-105 hover:shadow-lg"
                 >
                   <Users className="w-4 h-4" />
                   {t('selectClient')}
