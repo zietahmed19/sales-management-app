@@ -600,26 +600,58 @@ app.post('/api/admin/packs', authenticateToken, async (req, res) => {
       return res.status(400).json({ message: 'Pack name and total price are required' });
     }
 
+    // Validate articles if provided
+    if (articles && Array.isArray(articles)) {
+      for (const article of articles) {
+        if (!article.id) {
+          console.log('Invalid article found (missing id):', article);
+          return res.status(400).json({ message: 'All articles must have a valid ID' });
+        }
+      }
+    }
+
     console.log('Creating pack with:', { pack_name, total_price, gift_id, articles: articles?.length || 0 });
 
-    // Insert pack
+    // Insert pack first
     const result = await promiseRun(`
       INSERT INTO packs (pack_name, total_price, gift_id, created_at, updated_at)
       VALUES (?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
     `, [pack_name, total_price, gift_id || null]);
 
     const packId = result.lastID;
+    console.log('Pack insertion result:', result);
     console.log('Pack created with ID:', packId);
+    
+    // Validate that pack was created successfully
+    if (!packId || packId === 0) {
+      throw new Error('Failed to create pack - no valid ID returned');
+    }
+
+    // Verify pack was actually inserted
+    const packExists = await promiseQuery('SELECT id FROM packs WHERE id = ?', [packId]);
+    if (!packExists || packExists.length === 0) {
+      throw new Error('Pack was not properly inserted into database');
+    }
 
     // Insert pack articles if provided
-    if (articles && Array.isArray(articles)) {
-      console.log('Inserting articles:', articles);
+    if (articles && Array.isArray(articles) && articles.length > 0) {
+      console.log('Inserting articles for pack ID:', packId);
       for (const article of articles) {
-        await promiseRun(`
-          INSERT INTO pack_articles (pack_id, article_id, quantity)
-          VALUES (?, ?, ?)
-        `, [packId, article.id, article.quantity || 1]);
+        console.log('Inserting article:', { packId, articleId: article.id, quantity: article.quantity || 1 });
+        
+        try {
+          await promiseRun(`
+            INSERT INTO pack_articles (pack_id, article_id, quantity)
+            VALUES (?, ?, ?)
+          `, [packId, article.id, article.quantity || 1]);
+          console.log('Article inserted successfully');
+        } catch (articleError) {
+          console.error('Error inserting specific article:', articleError);
+          throw new Error(`Failed to insert article ${article.id}: ${articleError.message}`);
+        }
       }
+    } else {
+      console.log('No articles to insert');
     }
 
     // Get the created pack with details
@@ -629,6 +661,10 @@ app.post('/api/admin/packs', authenticateToken, async (req, res) => {
       LEFT JOIN gifts g ON p.gift_id = g.id
       WHERE p.id = ?
     `, [packId]);
+
+    if (!createdPack || createdPack.length === 0) {
+      throw new Error('Failed to retrieve created pack');
+    }
 
     console.log('Pack created successfully:', createdPack[0]);
     res.status(201).json({ 
