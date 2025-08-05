@@ -612,13 +612,16 @@ app.post('/api/admin/packs', authenticateToken, async (req, res) => {
 
     console.log('Creating pack with:', { pack_name, total_price, gift_id, articles: articles?.length || 0 });
 
+    // Convert gift_id to number if it's a string
+    const giftId = gift_id ? parseInt(gift_id, 10) : null;
+    
     // Insert pack first
     const result = await promiseRun(`
       INSERT INTO packs (pack_name, total_price, gift_id, created_at, updated_at)
       VALUES (?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
-    `, [pack_name, total_price, gift_id || null]);
+    `, [pack_name, total_price, giftId]);
 
-    const packId = result.lastID;
+    const packId = result.id; // Changed from result.lastID to result.id
     console.log('Pack insertion result:', result);
     console.log('Pack created with ID:', packId);
     
