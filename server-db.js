@@ -4,10 +4,14 @@ const cors = require('cors');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const path = require('path');
+const DatabaseBackup = require('./database-backup');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+
+// Initialize database backup system
+const dbBackup = new DatabaseBackup(dbPath);
 
 // Middleware
 app.use(cors({
@@ -1713,12 +1717,90 @@ app.get('*', (req, res) => {
   }
 });
 
+// Database Backup & Restore Endpoints
+app.post('/api/admin/backup-database', authenticateAdmin, async (req, res) => {
+  try {
+    console.log('🚀 Admin requesting database backup...');
+    const result = await dbBackup.exportToJSON();
+    
+    res.json({
+      message: 'Database backup created successfully',
+      timestamp: result.backup.timestamp,
+      tables: Object.keys(result.backup.tables).map(tableName => ({
+        table: tableName,
+        records: result.backup.tables[tableName].length
+      })),
+      backupFile: path.basename(result.filepath)
+    });
+  } catch (error) {
+    console.error('❌ Error creating backup:', error);
+    res.status(500).json({ message: 'Failed to create backup', error: error.message });
+  }
+});
+
+app.post('/api/admin/restore-database', authenticateAdmin, async (req, res) => {
+  try {
+    console.log('🔄 Admin requesting database restore...');
+    const result = await dbBackup.restoreFromLatest();
+    
+    res.json({
+      message: 'Database restored successfully',
+      restored: result.restored,
+      total: result.total
+    });
+  } catch (error) {
+    console.error('❌ Error restoring database:', error);
+    res.status(500).json({ message: 'Failed to restore database', error: error.message });
+  }
+});
+
+app.get('/api/admin/backup-status', authenticateAdmin, async (req, res) => {
+  try {
+    const backups = dbBackup.getBackupStats();
+    res.json({
+      backups: backups,
+      latestBackup: backups.length > 0 ? backups[0] : null,
+      totalBackups: backups.length
+    });
+  } catch (error) {
+    console.error('❌ Error getting backup status:', error);
+    res.status(500).json({ message: 'Failed to get backup status', error: error.message });
+  }
+});
+
+// Automatic backup on startup (production only)
+if (process.env.NODE_ENV === 'production') {
+  setTimeout(async () => {
+    try {
+      console.log('🔄 Production startup - checking for backup restoration...');
+      const result = await dbBackup.restoreFromLatest();
+      if (result.restored > 0) {
+        console.log(`✅ Restored ${result.restored} sales records from backup`);
+      }
+    } catch (error) {
+      console.error('❌ Error during startup backup check:', error);
+    }
+  }, 5000); // Wait 5 seconds after startup
+}
+
 // Initialize database and start server
 initializeDatabase();
 
 app.listen(PORT, () => {
   console.log(`✅ Server running on http://localhost:${PORT}`);
   console.log(`📊 Database: ${dbPath}`);
+  
+  // Create initial backup in development
+  if (process.env.NODE_ENV !== 'production') {
+    setTimeout(async () => {
+      try {
+        await dbBackup.createDeploymentBackup();
+        console.log('💾 Initial backup created for development');
+      } catch (error) {
+        console.error('❌ Error creating initial backup:', error);
+      }
+    }, 2000);
+  }
 });
 
 module.exports = app;
