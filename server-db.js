@@ -931,16 +931,17 @@ app.post('/api/sales', authenticateToken, async (req, res) => {
       console.log('✅ Client found - DB ID:', clientDbId, 'Wilaya:', clientWilaya, 'Name:', clientInfo.full_name);
     } else {
       console.log('📝 Client ID is numeric format:', client_id);
-      const client = await promiseQuery('SELECT id, wilaya, full_name, city FROM clients WHERE id = ?', [client_id]);
+      const client = await promiseQuery('SELECT id, wilaya, full_name, city FROM clients WHERE client_id = ?', [client_id]);
       console.log('🔎 Client lookup result:', client);
       
       if (client.length === 0) {
         console.log('❌ Client not found with ID:', client_id);
         return res.status(400).json({ message: 'Client not found' });
       }
+      clientDbId = client[0].id;
       clientWilaya = client[0].wilaya;
       clientInfo = client[0];
-      console.log('✅ Client found - Wilaya:', clientWilaya, 'Name:', clientInfo.full_name);
+      console.log('✅ Client found - DB ID:', clientDbId, 'Wilaya:', clientWilaya, 'Name:', clientInfo.full_name);
     }
 
     // Verify client belongs to delegate's wilaya
