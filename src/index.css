@@ -2,44 +2,44 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Black & Purple Theme Variables */
+/* White & Purple Theme Variables */
 :root {
-  --bg-primary: #000000; /* Pure black */
-  --bg-secondary: #1a0d2e; /* Dark purple */
-  --bg-tertiary: #2d1b69; /* Medium purple */
-  --bg-accent: #4c1d95; /* Light purple */
-  --text-primary: #ffffff; /* White text */
-  --text-secondary: #e9d5ff; /* Light purple text */
-  --text-muted: #c4b5fd; /* Purple-300 */
+  --bg-primary: #ffffff; /* Pure white */
+  --bg-secondary: #f8fafc; /* Light gray/white */
+  --bg-tertiary: #f1f5f9; /* Very light gray */
+  --bg-accent: #ede9fe; /* Very light purple */
+  --text-primary: #1e1b4b; /* Dark purple text */
+  --text-secondary: #6d28d9; /* Purple-700 */
+  --text-muted: #8b5cf6; /* Purple-500 */
   --text-accent: #a78bfa; /* Purple-400 */
-  --border-color: #6d28d9; /* Purple-700 */
+  --border-color: #c4b5fd; /* Purple-300 */
   --border-accent: #8b5cf6; /* Purple-500 */
-  --shadow: rgba(167, 139, 250, 0.3); /* Purple shadow */
+  --shadow: rgba(139, 92, 246, 0.2); /* Light purple shadow */
   --accent-color: #8b5cf6; /* Purple-500 */
   --accent-hover: #7c3aed; /* Purple-600 */
-  --accent-light: #c4b5fd; /* Purple-300 */
+  --accent-light: #ede9fe; /* Purple-50 */
   --success-color: #10b981; /* Emerald-500 */
   --warning-color: #f59e0b; /* Amber-500 */
   --danger-color: #ef4444; /* Red-500 */
 }
 
-[data-theme="dark"], 
-.dark-theme,
-.dark-theme * {
-  --bg-primary: #000000 !important; /* Pure black */
-  --bg-secondary: #1a0d2e !important; /* Dark purple */
-  --bg-tertiary: #2d1b69 !important; /* Medium purple */
-  --bg-accent: #4c1d95 !important; /* Light purple */
-  --text-primary: #ffffff !important; /* White text */
-  --text-secondary: #e9d5ff !important; /* Light purple text */
-  --text-muted: #c4b5fd !important; /* Purple-300 */
+[data-theme="light"], 
+.light-theme,
+.light-theme * {
+  --bg-primary: #ffffff !important; /* Pure white */
+  --bg-secondary: #f8fafc !important; /* Light gray/white */
+  --bg-tertiary: #f1f5f9 !important; /* Very light gray */
+  --bg-accent: #ede9fe !important; /* Very light purple */
+  --text-primary: #1e1b4b !important; /* Dark purple text */
+  --text-secondary: #6d28d9 !important; /* Purple-700 */
+  --text-muted: #8b5cf6 !important; /* Purple-500 */
   --text-accent: #a78bfa !important; /* Purple-400 */
-  --border-color: #6d28d9 !important; /* Purple-700 */
+  --border-color: #c4b5fd !important; /* Purple-300 */
   --border-accent: #8b5cf6 !important; /* Purple-500 */
-  --shadow: rgba(167, 139, 250, 0.3) !important; /* Purple shadow */
+  --shadow: rgba(139, 92, 246, 0.2) !important; /* Light purple shadow */
   --accent-color: #8b5cf6 !important; /* Purple-500 */
   --accent-hover: #7c3aed !important; /* Purple-600 */
-  --accent-light: #c4b5fd !important; /* Purple-300 */
+  --accent-light: #ede9fe !important; /* Purple-50 */
   --success-color: #10b981 !important; /* Emerald-500 */
   --warning-color: #f59e0b !important; /* Amber-500 */
   --danger-color: #ef4444 !important; /* Red-500 */
@@ -132,42 +132,42 @@ textarea:focus,
   background-color: var(--accent-hover) !important;
 }
 
-/* Black & Purple Button Classes */
+/* White & Purple Button Classes */
 .btn-purple-dark {
-  background: linear-gradient(135deg, #000000, #2d1b69) !important;
-  color: white !important;
-  border: none !important;
+  background: linear-gradient(135deg, #ffffff, #8b5cf6) !important;
+  color: #1e1b4b !important;
+  border: 2px solid #8b5cf6 !important;
   transition: all 0.3s ease !important;
 }
 
 .btn-purple-dark:hover {
-  background: linear-gradient(135deg, #1a0d2e, #4c1d95) !important;
+  background: linear-gradient(135deg, #f3e8ff, #7c3aed) !important;
   transform: translateY(-2px) !important;
-  box-shadow: 0 8px 25px rgba(167, 139, 250, 0.4) !important;
+  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4) !important;
 }
 
 .btn-purple-medium {
-  background: linear-gradient(135deg, #2d1b69, #8b5cf6) !important;
+  background: linear-gradient(135deg, #8b5cf6, #a78bfa) !important;
   color: white !important;
   border: none !important;
   transition: all 0.3s ease !important;
 }
 
 .btn-purple-medium:hover {
-  background: linear-gradient(135deg, #4c1d95, #a78bfa) !important;
+  background: linear-gradient(135deg, #7c3aed, #8b5cf6) !important;
   transform: translateY(-2px) !important;
-  box-shadow: 0 8px 25px rgba(167, 139, 250, 0.4) !important;
+  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4) !important;
 }
 
 .btn-purple-light {
-  background: linear-gradient(135deg, #8b5cf6, #c4b5fd) !important;
-  color: #000000 !important;
-  border: none !important;
+  background: linear-gradient(135deg, #f3e8ff, #e9d5ff) !important;
+  color: #1e1b4b !important;
+  border: 2px solid #8b5cf6 !important;
   transition: all 0.3s ease !important;
 }
 
 .btn-purple-light:hover {
-  background: linear-gradient(135deg, #a78bfa, #e9d5ff) !important;
+  background: linear-gradient(135deg, #8b5cf6, #c4b5fd) !important;
   transform: translateY(-2px) !important;
   box-shadow: 0 8px 25px rgba(167, 139, 250, 0.4) !important;
 }
@@ -231,13 +231,13 @@ textarea:focus,
 .border-purple-600 { border-color: #7c3aed !important; }
 .border-purple-700 { border-color: #6d28d9 !important; }
 
-/* Main Gradient Classes - Black & Purple */
+/* Main Gradient Classes - White & Purple */
 .bg-gradient-black-purple-dark {
-  background: linear-gradient(135deg, #000000, #2d1b69) !important;
+  background: linear-gradient(135deg, #ffffff, #8b5cf6) !important;
 }
 
 .bg-gradient-purple-dark-medium {
-  background: linear-gradient(135deg, #2d1b69, #8b5cf6) !important;
+  background: linear-gradient(135deg, #f3e8ff, #8b5cf6) !important;
 }
 
 .bg-gradient-purple-medium-light {
@@ -245,11 +245,11 @@ textarea:focus,
 }
 
 .bg-gradient-three-purple {
-  background: linear-gradient(135deg, #2d1b69, #8b5cf6, #c4b5fd) !important;
+  background: linear-gradient(135deg, #ffffff, #8b5cf6, #c4b5fd) !important;
 }
 
 .bg-gradient-black-to-purple {
-  background: linear-gradient(135deg, #000000, #2d1b69, #8b5cf6) !important;
+  background: linear-gradient(135deg, #ffffff, #f3e8ff, #8b5cf6) !important;
 }
 
 /* Keep green and red for sales indicators */

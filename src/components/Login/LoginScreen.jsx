@@ -162,29 +162,29 @@ const LoginScreen = ({ setCurrentUser, setCurrentScreen, initializeData, trackUs
   };
 
   return (
-    <div className="min-h-screen bg-gradient-black-to-purple flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8" dir="rtl">
+    <div className="min-h-screen bg-gradient-to-br from-white to-purple-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8" dir="rtl">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <div className="mx-auto h-20 w-20 bg-gradient-purple-dark-medium rounded-full flex items-center justify-center mb-6 shadow-2xl">
+          <div className="mx-auto h-20 w-20 bg-gradient-to-br from-purple-500 to-purple-700 rounded-full flex items-center justify-center mb-6 shadow-2xl">
             <Shield className="h-10 w-10 text-white" />
           </div>
-          <h2 className="mt-6 text-3xl font-extrabold text-white drop-shadow-2xl">
+          <h2 className="mt-6 text-3xl font-extrabold text-purple-900 drop-shadow-lg">
             نظام إدارة المبيعات
           </h2>
-          <p className="mt-2 text-sm text-purple-light">
+          <p className="mt-2 text-sm text-purple-600">
             {isAdminLogin ? 'دخول المدير' : t('login')} إلى حسابك
           </p>
         </div>
 
         {/* Login Type Switcher */}
         <div className="mb-4">
-          <div className="flex rounded-lg bg-black bg-opacity-30 backdrop-blur-sm p-1 border border-purple-medium">
+          <div className="flex rounded-lg bg-white bg-opacity-90 backdrop-blur-sm p-1 border border-purple-300 shadow-lg">
             <button
               type="button"
               className={`flex-1 flex items-center justify-center py-2 px-4 rounded-md text-sm font-medium transition-all duration-300 ${
                 !isAdminLogin 
-                  ? 'bg-gradient-purple-dark-medium text-white shadow-lg transform scale-105' 
-                  : 'text-purple-light hover:text-white hover:bg-purple-dark hover:bg-opacity-30'
+                  ? 'bg-gradient-to-r from-purple-500 to-purple-700 text-white shadow-lg transform scale-105' 
+                  : 'text-purple-600 hover:text-purple-800 hover:bg-purple-100'
               }`}
               onClick={() => setIsAdminLogin(false)}
             >
@@ -195,8 +195,8 @@ const LoginScreen = ({ setCurrentUser, setCurrentScreen, initializeData, trackUs
               type="button"
               className={`flex-1 flex items-center justify-center py-2 px-4 rounded-md text-sm font-medium transition-all duration-300 ${
                 isAdminLogin 
-                  ? 'bg-gradient-purple-medium-light text-black shadow-lg transform scale-105' 
-                  : 'text-purple-light hover:text-white hover:bg-purple-dark hover:bg-opacity-30'
+                  ? 'bg-gradient-to-r from-purple-400 to-purple-600 text-white shadow-lg transform scale-105' 
+                  : 'text-purple-600 hover:text-purple-800 hover:bg-purple-100'
               }`}
               onClick={() => setIsAdminLogin(true)}
             >
@@ -206,16 +206,16 @@ const LoginScreen = ({ setCurrentUser, setCurrentScreen, initializeData, trackUs
           </div>
         </div>
         
-        <form className="mt-8 space-y-6 bg-black bg-opacity-50 backdrop-blur-lg rounded-xl p-6 shadow-2xl border border-purple-medium" onSubmit={handleLogin}>
+        <form className="mt-8 space-y-6 bg-white bg-opacity-95 backdrop-blur-lg rounded-xl p-6 shadow-2xl border border-purple-200" onSubmit={handleLogin}>
           <div className="space-y-4">
             <div>
               <label className="sr-only">{t('username')}</label>
               <div className="relative">
-                <User className="absolute right-3 top-3 h-5 w-5 text-purple-light" />
+                <User className="absolute right-3 top-3 h-5 w-5 text-purple-500" />
                 <input
                   type="text"
                   required
-                  className="appearance-none rounded-lg relative block w-full px-10 py-3 border-2 border-purple-medium placeholder-purple-light text-white bg-black bg-opacity-60 focus:outline-none focus:ring-2 focus:ring-purple-medium focus:border-purple-light text-right transition-all duration-300"
+                  className="appearance-none rounded-lg relative block w-full px-10 py-3 border-2 border-purple-300 placeholder-purple-400 text-purple-900 bg-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-right transition-all duration-300"
                   placeholder={isAdminLogin ? "mohcenacid" : t('username')}
                   value={credentials.username}
                   onChange={(e) => setCredentials({...credentials, username: e.target.value})}
@@ -226,11 +226,11 @@ const LoginScreen = ({ setCurrentUser, setCurrentScreen, initializeData, trackUs
             <div>
               <label className="sr-only">{t('password')}</label>
               <div className="relative">
-                <Lock className="absolute right-3 top-3 h-5 w-5 text-purple-light" />
+                <Lock className="absolute right-3 top-3 h-5 w-5 text-purple-500" />
                 <input
                   type="password"
                   required
-                  className="appearance-none rounded-lg relative block w-full px-10 py-3 border-2 border-purple-medium placeholder-purple-light text-white bg-black bg-opacity-60 focus:outline-none focus:ring-2 focus:ring-purple-medium focus:border-purple-light text-right transition-all duration-300"
+                  className="appearance-none rounded-lg relative block w-full px-10 py-3 border-2 border-purple-300 placeholder-purple-400 text-purple-900 bg-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-right transition-all duration-300"
                   placeholder={isAdminLogin ? "admin1234" : t('password')}
                   value={credentials.password}
                   onChange={(e) => setCredentials({...credentials, password: e.target.value})}
@@ -249,7 +249,7 @@ const LoginScreen = ({ setCurrentUser, setCurrentScreen, initializeData, trackUs
           <button
             type="submit"
             disabled={loading}
-            className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-gradient-black-purple-dark hover:bg-gradient-purple-dark-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-medium disabled:opacity-50 disabled:cursor-not-allowed transform transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+            className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed transform transition-all duration-300 hover:scale-105 hover:shadow-2xl"
           >
             {loading ? 'جاري تسجيل الدخول...' : (isAdminLogin ? 'دخول كمدير' : t('login'))}
           </button>
@@ -257,13 +257,13 @@ const LoginScreen = ({ setCurrentUser, setCurrentScreen, initializeData, trackUs
 
         {/* Quick Access - Only show admin credentials */}
         {isAdminLogin && (
-          <div className="text-center text-sm text-purple-light bg-black bg-opacity-50 backdrop-blur-lg rounded-xl p-4 shadow-2xl border border-purple-medium">
-            <p className="mb-3 font-semibold text-purple-medium">بيانات المديرين:</p>
+          <div className="text-center text-sm text-purple-700 bg-white bg-opacity-95 backdrop-blur-lg rounded-xl p-4 shadow-2xl border border-purple-200">
+            <p className="mb-3 font-semibold text-purple-800">بيانات المديرين:</p>
             <div className="grid gap-2">
               {adminUsers.map(admin => (
                 <button
                   key={admin}
-                  className="w-full py-2 px-3 bg-gradient-purple-medium-light text-black rounded-lg text-xs transition-all duration-300 transform hover:scale-105 hover:shadow-lg border border-purple-light hover:bg-gradient-purple-dark-medium hover:text-white"
+                  className="w-full py-2 px-3 bg-gradient-to-r from-purple-400 to-purple-600 text-white rounded-lg text-xs transition-all duration-300 transform hover:scale-105 hover:shadow-lg border border-purple-300 hover:from-purple-500 hover:to-purple-700"
                   onClick={() => fillCredentials(admin, adminPassword)}
                 >
                   {admin}
@@ -274,9 +274,9 @@ const LoginScreen = ({ setCurrentUser, setCurrentScreen, initializeData, trackUs
         )}
 
         {!isAdminLogin && (
-          <div className="text-center text-sm text-purple-light bg-black bg-opacity-50 backdrop-blur-lg rounded-xl p-4 shadow-2xl border border-purple-medium">
-            <p className="font-semibold text-white">بيانات المندوبين محفوظة في قاعدة البيانات</p>
-            <p className="text-purple-medium">استخدم بيانات اعتمادك الحقيقية</p>
+          <div className="text-center text-sm text-purple-700 bg-white bg-opacity-95 backdrop-blur-lg rounded-xl p-4 shadow-2xl border border-purple-200">
+            <p className="font-semibold text-purple-900">بيانات المندوبين محفوظة في قاعدة البيانات</p>
+            <p className="text-purple-600">استخدم بيانات اعتمادك الحقيقية</p>
           </div>
         )}
       </div>
