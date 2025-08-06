@@ -1768,14 +1768,35 @@ app.get('/api/admin/backup-status', authenticateAdmin, async (req, res) => {
   }
 });
 
-// Automatic backup on startup (production only)
+// Smart backup on startup (production only) - only restore if database is empty
 if (process.env.NODE_ENV === 'production') {
   setTimeout(async () => {
     try {
-      console.log('🔄 Production startup - checking for backup restoration...');
-      const result = await dbBackup.restoreFromLatest();
-      if (result.restored > 0) {
-        console.log(`✅ Restored ${result.restored} sales records from backup`);
+      console.log('🔄 Production startup - checking database state...');
+      
+      // First check if we have existing sales data
+      const salesCount = await new Promise((resolve, reject) => {
+        db.get('SELECT COUNT(*) as count FROM sales', [], (err, row) => {
+          if (err) reject(err);
+          else resolve(row.count);
+        });
+      });
+      
+      console.log(`📊 Current sales records in database: ${salesCount}`);
+      
+      // Only restore from backup if database is completely empty
+      if (salesCount === 0) {
+        console.log('🔄 Database is empty - attempting to restore from backup...');
+        const result = await dbBackup.restoreFromLatest();
+        if (result.restored > 0) {
+          console.log(`✅ Restored ${result.restored} sales records from backup`);
+        } else {
+          console.log('ℹ️ No backup data to restore');
+        }
+      } else {
+        console.log('✅ Database has existing data - skipping automatic restore');
+        console.log('💾 Creating new backup of current state...');
+        await dbBackup.createDeploymentBackup();
       }
     } catch (error) {
       console.error('❌ Error during startup backup check:', error);
