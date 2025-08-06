@@ -11,7 +11,8 @@ const SaleConfirmation = ({
   setSelectedPacks, 
   setSelectedClient, 
   data, 
-  setData 
+  setData,
+  refreshSalesData // Add the refresh function
 }) => {
   console.log('🚀 SaleConfirmation - Function component starting');
   console.log('🚀 SaleConfirmation - React:', typeof React);
@@ -124,6 +125,12 @@ const handleCompleteSale = async () => {
 
     const responseData = await response.json();
     console.log('✅ Sale saved successfully:', responseData);
+
+    // Refresh sales data to show the new sale
+    if (refreshSalesData) {
+      console.log('🔄 Refreshing sales data after successful sale...');
+      await refreshSalesData();
+    }
 
     setSaleCompleted(true);
   } catch (error) {
