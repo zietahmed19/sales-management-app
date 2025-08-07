@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 // Temporarily remove lucide-react imports to test
 // import { ArrowLeft, CheckCircle } from 'lucide-react';
 import { t } from '../../translations/arabic';
@@ -14,33 +14,33 @@ const SaleConfirmation = ({
   setData,
   refreshSalesData // Add the refresh function
 }) => {
-  console.log('🚀 SaleConfirmation - Function component starting');
-  console.log('🚀 SaleConfirmation - React:', typeof React);
-  console.log('🚀 SaleConfirmation - useState:', typeof useState);
-  // console.log('🚀 SaleConfirmation - ArrowLeft:', typeof ArrowLeft);
-  // console.log('🚀 SaleConfirmation - CheckCircle:', typeof CheckCircle);
-  console.log('🚀 SaleConfirmation - t function:', typeof t);
+  console.log('ðŸš€ SaleConfirmation - Function component starting');
+  console.log('ðŸš€ SaleConfirmation - React:', typeof React);
+  console.log('ðŸš€ SaleConfirmation - useState:', typeof useState);
+  // console.log('ðŸš€ SaleConfirmation - ArrowLeft:', typeof ArrowLeft);
+  // console.log('ðŸš€ SaleConfirmation - CheckCircle:', typeof CheckCircle);
+  console.log('ðŸš€ SaleConfirmation - t function:', typeof t);
   
   const [isProcessing, setIsProcessing] = useState(false);
   const [saleCompleted, setSaleCompleted] = useState(false);
 
   // Debug logging on component mount
-  console.log('🔍 SaleConfirmation - Component rendered');
-  console.log('🔍 SaleConfirmation - selectedPacks:', selectedPacks);
-  console.log('🔍 SaleConfirmation - selectedClient:', selectedClient);
-  console.log('🔍 SaleConfirmation - currentUser:', currentUser);
-  console.log('🔍 SaleConfirmation - selectedPacks length:', selectedPacks?.length);
-  console.log('🔍 SaleConfirmation - selectedClient exists:', !!selectedClient);
+  console.log('ðŸ” SaleConfirmation - Component rendered');
+  console.log('ðŸ” SaleConfirmation - selectedPacks:', selectedPacks);
+  console.log('ðŸ” SaleConfirmation - selectedClient:', selectedClient);
+  console.log('ðŸ” SaleConfirmation - currentUser:', currentUser);
+  console.log('ðŸ” SaleConfirmation - selectedPacks length:', selectedPacks?.length);
+  console.log('ðŸ” SaleConfirmation - selectedClient exists:', !!selectedClient);
 
   // Validate required functions exist
   if (typeof setCurrentScreen !== 'function') {
-    console.error('❌ SaleConfirmation - setCurrentScreen is not a function');
+    console.error('âŒ SaleConfirmation - setCurrentScreen is not a function');
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center" dir="rtl">
         <div className="text-center bg-white rounded-lg shadow-md p-8 max-w-md w-full mx-4">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">خطأ في النظام</h2>
-          <p className="text-gray-600 mb-4">حدث خطأ في تحميل الصفحة</p>
-          <button onClick={() => window.location.reload()}>إعادة تحميل</button>
+          <h2 className="text-xl font-bold text-gray-900 mb-4">Ø®Ø·Ø£ ÙÙŠ Ø§Ù„Ù†Ø¸Ø§Ù…</h2>
+          <p className="text-gray-600 mb-4">Ø­Ø¯Ø« Ø®Ø·Ø£ ÙÙŠ ØªØ­Ù…ÙŠÙ„ Ø§Ù„ØµÙØ­Ø©</p>
+          <button onClick={() => window.location.reload()}>Ø¥Ø¹Ø§Ø¯Ø© ØªØ­Ù…ÙŠÙ„</button>
         </div>
       </div>
     );
@@ -48,17 +48,17 @@ const SaleConfirmation = ({
 
   // Safety check - if missing required data, show error state
   if (!selectedPacks || selectedPacks.length === 0) {
-    console.log('❌ SaleConfirmation - No selected packs, returning to pack selection');
+    console.log('âŒ SaleConfirmation - No selected packs, returning to pack selection');
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center" dir="rtl">
         <div className="text-center bg-white rounded-lg shadow-md p-8 max-w-md w-full mx-4">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">خطأ في البيانات</h2>
-          <p className="text-gray-600 mb-4">لم يتم اختيار أي حزم. يرجى العودة واختيار حزمة أولاً.</p>
+          <h2 className="text-xl font-bold text-gray-900 mb-4">Ø®Ø·Ø£ ÙÙŠ Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª</h2>
+          <p className="text-gray-600 mb-4">Ù„Ù… ÙŠØªÙ… Ø§Ø®ØªÙŠØ§Ø± Ø£ÙŠ Ø­Ø²Ù…. ÙŠØ±Ø¬Ù‰ Ø§Ù„Ø¹ÙˆØ¯Ø© ÙˆØ§Ø®ØªÙŠØ§Ø± Ø­Ø²Ù…Ø© Ø£ÙˆÙ„Ø§Ù‹.</p>
           <button
             onClick={() => setCurrentScreen('packs')}
             className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 font-medium"
           >
-            العودة لاختيار الحزم
+            Ø§Ù„Ø¹ÙˆØ¯Ø© Ù„Ø§Ø®ØªÙŠØ§Ø± Ø§Ù„Ø­Ø²Ù…
           </button>
         </div>
       </div>
@@ -66,17 +66,17 @@ const SaleConfirmation = ({
   }
 
   if (!selectedClient) {
-    console.log('❌ SaleConfirmation - No selected client, returning to client selection');
+    console.log('âŒ SaleConfirmation - No selected client, returning to client selection');
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center" dir="rtl">
         <div className="text-center bg-white rounded-lg shadow-md p-8 max-w-md w-full mx-4">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">خطأ في البيانات</h2>
-          <p className="text-gray-600 mb-4">لم يتم اختيار عميل. يرجى العودة واختيار عميل.</p>
+          <h2 className="text-xl font-bold text-gray-900 mb-4">Ø®Ø·Ø£ ÙÙŠ Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª</h2>
+          <p className="text-gray-600 mb-4">Ù„Ù… ÙŠØªÙ… Ø§Ø®ØªÙŠØ§Ø± Ø¹Ù…ÙŠÙ„. ÙŠØ±Ø¬Ù‰ Ø§Ù„Ø¹ÙˆØ¯Ø© ÙˆØ§Ø®ØªÙŠØ§Ø± Ø¹Ù…ÙŠÙ„.</p>
           <button
             onClick={() => setCurrentScreen('clients')}
             className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 font-medium"
           >
-            العودة لاختيار العميل
+            Ø§Ù„Ø¹ÙˆØ¯Ø© Ù„Ø§Ø®ØªÙŠØ§Ø± Ø§Ù„Ø¹Ù…ÙŠÙ„
           </button>
         </div>
       </div>
@@ -101,15 +101,15 @@ const handleCompleteSale = async () => {
       total_amount: getTotalPrice()
     };
 
-    console.log('💰 SaleConfirmation - Starting sale completion...');
-    console.log('💰 SaleConfirmation - Sale data:', newSale);
-    console.log('💰 SaleConfirmation - Selected client:', selectedClient);
-    console.log('💰 SaleConfirmation - Selected packs:', selectedPacks);
+    console.log('ðŸ’° SaleConfirmation - Starting sale completion...');
+    console.log('ðŸ’° SaleConfirmation - Sale data:', newSale);
+    console.log('ðŸ’° SaleConfirmation - Selected client:', selectedClient);
+    console.log('ðŸ’° SaleConfirmation - Selected packs:', selectedPacks);
 
     // Send to database API
     const token = localStorage.getItem('token');
-    console.log('🔑 SaleConfirmation - Token exists:', !!token);
-    console.log('🔑 SaleConfirmation - Token preview:', token ? token.substring(0, 50) + '...' : 'No token');
+    console.log('ðŸ”‘ SaleConfirmation - Token exists:', !!token);
+    console.log('ðŸ”‘ SaleConfirmation - Token preview:', token ? token.substring(0, 50) + '...' : 'No token');
     
     if (!token || token === 'demo-token') {
       throw new Error('No valid authentication token found. Please log in again.');
@@ -119,8 +119,8 @@ const handleCompleteSale = async () => {
     const apiBase = baseURL.replace('/api', '');
     const apiUrl = `${apiBase}/api/sales`;
     
-    console.log('🌐 SaleConfirmation - API URL:', apiUrl);
-    console.log('🌐 SaleConfirmation - Making API request...');
+    console.log('ðŸŒ SaleConfirmation - API URL:', apiUrl);
+    console.log('ðŸŒ SaleConfirmation - Making API request...');
     
     const response = await fetch(apiUrl, {
       method: 'POST',
@@ -131,29 +131,29 @@ const handleCompleteSale = async () => {
       body: JSON.stringify(newSale),
     });
     
-    console.log('📡 SaleConfirmation - API Response status:', response.status);
-    console.log('📡 SaleConfirmation - API Response ok:', response.ok);
+    console.log('ðŸ“¡ SaleConfirmation - API Response status:', response.status);
+    console.log('ðŸ“¡ SaleConfirmation - API Response ok:', response.ok);
     
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({ message: 'Unknown error' }));
-      console.error('❌ SaleConfirmation - Server response error:', errorData);
+      console.error('âŒ SaleConfirmation - Server response error:', errorData);
       throw new Error(errorData.message || `Failed to save sale: ${response.status} ${response.statusText}`);
     }
 
     const responseData = await response.json();
-    console.log('✅ SaleConfirmation - Sale saved successfully:', responseData);
-    console.log('🎉 SaleConfirmation - Sale ID:', responseData.saleId);
+    console.log('âœ… SaleConfirmation - Sale saved successfully:', responseData);
+    console.log('ðŸŽ‰ SaleConfirmation - Sale ID:', responseData.saleId);
 
     // Refresh sales data to show the new sale
     if (refreshSalesData) {
-      console.log('🔄 SaleConfirmation - Refreshing sales data after successful sale...');
+      console.log('ðŸ”„ SaleConfirmation - Refreshing sales data after successful sale...');
       await refreshSalesData();
     }
 
     setSaleCompleted(true);
   } catch (error) {
-    console.error('❌ SaleConfirmation - Error saving sale:', error);
-    console.error('❌ SaleConfirmation - Error details:', error.message);
+    console.error('âŒ SaleConfirmation - Error saving sale:', error);
+    console.error('âŒ SaleConfirmation - Error details:', error.message);
     alert(`Failed to complete sale: ${error.message}\n\nPlease check the console for details and try logging in again.`);
   } finally {
     setIsProcessing(false);
@@ -173,7 +173,7 @@ const handleCompleteSale = async () => {
         <div className="text-center bg-white rounded-lg shadow-md p-8 max-w-md w-full mx-4">
           <div className="mb-6">
             {/* <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" /> */}
-            <div className="w-16 h-16 text-green-500 mx-auto mb-4 flex items-center justify-center text-4xl">✅</div>
+            <div className="w-16 h-16 text-green-500 mx-auto mb-4 flex items-center justify-center text-4xl">âœ…</div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">{t('saleCompleted')}</h2>
             <p className="text-gray-600">{t('saleRecordedSuccessfully')}</p>
           </div>
@@ -198,7 +198,7 @@ const handleCompleteSale = async () => {
               className="ml-4 p-2 hover:bg-gray-100 rounded-full"
             >
               {/* <ArrowLeft className="w-5 h-5 transform rotate-180" /> */}
-              <span className="text-xl">←</span>
+              <span className="text-xl">â†</span>
             </button>
             <h1 className="text-2xl font-bold text-gray-900">{t('confirmSale')}</h1>
           </div>
@@ -211,10 +211,10 @@ const handleCompleteSale = async () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">معلومات العميل</h3>
+              <h3 className="font-semibold text-gray-900 mb-3">Ù…Ø¹Ù„ÙˆÙ…Ø§Øª Ø§Ù„Ø¹Ù…ÙŠÙ„</h3>
               <div className="text-sm text-gray-600 space-y-2">
                 <p><span className="font-medium">{t('clientName')}:</span> {selectedClient.FullName}</p>
-                <p><span className="font-medium">الرقم:</span> {selectedClient.ClientID}</p>
+                <p><span className="font-medium">Ø§Ù„Ø±Ù‚Ù…:</span> {selectedClient.ClientID}</p>
                 <div className="flex items-center justify-between">
                   <p>
                     <span className="font-medium">{t('location')}:</span> {selectedClient.City}, {selectedClient.Wilaya}
@@ -227,13 +227,13 @@ const handleCompleteSale = async () => {
                       const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
                       window.open(googleMapsUrl, '_blank');
                     }}
-                    className="flex items-center gap-1 bg-gradient-to-r from-purple-500 to-purple-700 hover:from-purple-600 hover:to-purple-800 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
-                    title="فتح في خرائط جوجل"
+                    className="flex items-center gap-1 bg-purple-600 hover:bg-purple-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                    title="ÙØªØ­ ÙÙŠ Ø®Ø±Ø§Ø¦Ø· Ø¬ÙˆØ¬Ù„"
                   >
                     <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                     </svg>
-                    <span>خريطة</span>
+                    <span>Ø®Ø±ÙŠØ·Ø©</span>
                   </button>
                 </div>
                 <p><span className="font-medium">{t('phone')}:</span> {selectedClient.AllPhones}</p>
@@ -241,7 +241,7 @@ const handleCompleteSale = async () => {
                   <div className="flex items-start justify-between bg-gray-50 p-2 rounded-md">
                     <div className="flex-1">
                       <p className="text-xs text-gray-500">
-                        <span className="font-medium">العنوان الكامل:</span> {selectedClient.Location}
+                        <span className="font-medium">Ø§Ù„Ø¹Ù†ÙˆØ§Ù† Ø§Ù„ÙƒØ§Ù…Ù„:</span> {selectedClient.Location}
                       </p>
                     </div>
                     <button
@@ -250,13 +250,13 @@ const handleCompleteSale = async () => {
                         const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
                         window.open(googleMapsUrl, '_blank');
                       }}
-                      className="flex items-center gap-1 bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 whitespace-nowrap mr-2"
-                      title="فتح العنوان الكامل في خرائط جوجل"
+                      className="flex items-center gap-1 bg-purple-600 hover:bg-purple-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 whitespace-nowrap mr-2"
+                      title="ÙØªØ­ Ø§Ù„Ø¹Ù†ÙˆØ§Ù† Ø§Ù„ÙƒØ§Ù…Ù„ ÙÙŠ Ø®Ø±Ø§Ø¦Ø· Ø¬ÙˆØ¬Ù„"
                     >
                       <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                       </svg>
-                      <span>عنوان كامل</span>
+                      <span>Ø¹Ù†ÙˆØ§Ù† ÙƒØ§Ù…Ù„</span>
                     </button>
                   </div>
                 )}
@@ -264,16 +264,16 @@ const handleCompleteSale = async () => {
             </div>
 
             <div>
-              <h3 className="font-semibold text-gray-900 mb-3">المندوب</h3>
+              <h3 className="font-semibold text-gray-900 mb-3">Ø§Ù„Ù…Ù†Ø¯ÙˆØ¨</h3>
               <div className="text-sm text-gray-600 space-y-2">
-                <p><span className="font-medium">الاسم:</span> {currentUser.rep_name}</p>
+                <p><span className="font-medium">Ø§Ù„Ø§Ø³Ù…:</span> {currentUser.rep_name}</p>
                 <p><span className="font-medium">{t('wilaya')}:</span> {currentUser.wilaya}</p>
               </div>
             </div>
           </div>
 
           <div className="mb-8">
-            <h3 className="font-semibold text-gray-900 mb-3">الحزم المختارة</h3>
+            <h3 className="font-semibold text-gray-900 mb-3">Ø§Ù„Ø­Ø²Ù… Ø§Ù„Ù…Ø®ØªØ§Ø±Ø©</h3>
             <div className="space-y-3">
               {selectedPacks.map(pack => {
                 const packId = pack.Id || pack.id;

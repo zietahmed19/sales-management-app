@@ -4,7 +4,7 @@ import { t } from '../../translations/arabic';
 
 const Header = ({ currentUser, onLogout, title, setCurrentScreen }) => {
   return (
-    <div className="bg-gradient-three-purple shadow-2xl border-b border-purple-medium" dir="rtl">
+    <div className="bg-purple-600 shadow-2xl border-b border-purple-300" dir="rtl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-reverse space-x-4">

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Pack Selection Component
  * Allows representatives to select product packs for sale
  * Supports multiple pack selection and displays running totals
@@ -33,9 +33,9 @@ const PackSelection = ({
         setLoading(true);
         const packsData = await apiRequest('/api/packs');
         setPacks(packsData || []);
-        console.log('✅ PackSelection - Loaded packs:', packsData);
+        console.log('âœ… PackSelection - Loaded packs:', packsData);
       } catch (error) {
-        console.error('❌ PackSelection - Error loading packs:', error);
+        console.error('âŒ PackSelection - Error loading packs:', error);
         setPacks([]);
       } finally {
         setLoading(false);
@@ -106,7 +106,7 @@ const PackSelection = ({
   // Show loading state
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white flex items-center justify-center" dir="rtl">
+      <div className="min-h-screen bg-white flex items-center justify-center" dir="rtl">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
           <p className="text-gray-600">{t('loading')} {t('packs')}...</p>
@@ -116,8 +116,8 @@ const PackSelection = ({
   }
 
   // Debug logging
-  console.log('🔍 PackSelection - Loaded packs:', packs);
-  console.log('🔍 PackSelection - Packs length:', packs?.length);
+  console.log('ðŸ” PackSelection - Loaded packs:', packs);
+  console.log('ðŸ” PackSelection - Packs length:', packs?.length);
 
   // Safety check for data - removed since we load our own data now
 
@@ -170,10 +170,10 @@ const PackSelection = ({
     const price = pack.TotalPackPrice || pack.total_price || 0;
     const articlesCount = (pack.articles || []).length;
     
-    if (price > 600000) return { text: 'حزمة مميزة', color: 'bg-purple-100 text-purple-800' };
-    if (articlesCount >= 5) return { text: 'عرض متنوع', color: 'bg-purple-100 text-purple-800' };
-    if (pack.Gift || pack.gift) return { text: 'مع هدية', color: 'bg-green-100 text-green-800' };
-    return { text: 'عرض عادي', color: 'bg-gray-100 text-gray-800' };
+    if (price > 600000) return { text: 'Ø­Ø²Ù…Ø© Ù…Ù…ÙŠØ²Ø©', color: 'bg-purple-100 text-purple-800' };
+    if (articlesCount >= 5) return { text: 'Ø¹Ø±Ø¶ Ù…ØªÙ†ÙˆØ¹', color: 'bg-purple-100 text-purple-800' };
+    if (pack.Gift || pack.gift) return { text: 'Ù…Ø¹ Ù‡Ø¯ÙŠØ©', color: 'bg-green-100 text-green-800' };
+    return { text: 'Ø¹Ø±Ø¶ Ø¹Ø§Ø¯ÙŠ', color: 'bg-gray-100 text-gray-800' };
   };
   
   // Check if pack is selected
@@ -182,8 +182,8 @@ const PackSelection = ({
   };
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white" dir="rtl">
-      <div className="bg-gradient-to-r from-purple-600 via-purple-500 to-white0 shadow-xl border-b border-purple-300">
+    <div className="min-h-screen bg-white" dir="rtl">
+      <div className="bg-purple-600 shadow-xl border-b border-purple-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-reverse space-x-4">
@@ -196,23 +196,23 @@ const PackSelection = ({
               <div>
                 <h1 className="text-2xl font-bold text-white drop-shadow-lg">{t('selectPacks')}</h1>
                 <p className="text-sm text-purple-100">
-                  {selectedPacks.length > 0 && `محدد ${selectedPacks.length} حزمة • `}
-                  عرض {filteredAndSortedPacks.length} من أصل {packs?.length || 0} حزمة
+                  {selectedPacks.length > 0 && `Ù…Ø­Ø¯Ø¯ ${selectedPacks.length} Ø­Ø²Ù…Ø© â€¢ `}
+                  Ø¹Ø±Ø¶ {filteredAndSortedPacks.length} Ù…Ù† Ø£ØµÙ„ {packs?.length || 0} Ø­Ø²Ù…Ø©
                 </p>
               </div>
             </div>
             {selectedPacks.length > 0 && (
               <button
                 onClick={() => {
-                  console.log('🔵 PackSelection - Navigate to clients clicked');
-                  console.log('🔵 Current selectedPacks:', selectedPacks);
-                  console.log('🔵 selectedPacks length:', selectedPacks.length);
+                  console.log('ðŸ”µ PackSelection - Navigate to clients clicked');
+                  console.log('ðŸ”µ Current selectedPacks:', selectedPacks);
+                  console.log('ðŸ”µ selectedPacks length:', selectedPacks.length);
                   setCurrentScreen('clients');
                 }}
-                className="bg-gradient-to-r from-purple-500 to-purple-600 text-white px-6 py-3 rounded-lg hover:from-purple-600 hover:to-purple-700 flex items-center gap-2 font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+                className="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 flex items-center gap-2 font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
               >
                 <ShoppingCart className="w-5 h-5" />
-                الانتقال لاختيار العميل
+                Ø§Ù„Ø§Ù†ØªÙ‚Ø§Ù„ Ù„Ø§Ø®ØªÙŠØ§Ø± Ø§Ù„Ø¹Ù…ÙŠÙ„
                 <span className="bg-purple-800 text-white px-2 py-1 rounded-full text-xs">
                   {selectedPacks.length}
                 </span>
@@ -232,7 +232,7 @@ const PackSelection = ({
                 <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                 <input
                   type="text"
-                  placeholder="البحث بالحزمة، المقالات..."
+                  placeholder="Ø§Ù„Ø¨Ø­Ø« Ø¨Ø§Ù„Ø­Ø²Ù…Ø©ØŒ Ø§Ù„Ù…Ù‚Ø§Ù„Ø§Øª..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full pr-10 pl-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-right"
@@ -253,31 +253,31 @@ const PackSelection = ({
                 className="border border-gray-300 rounded-md px-3 py-2 text-right"
                 dir="rtl"
               >
-                <option value="all">كل الأسعار</option>
-                <option value="low">أقل من 300,000 د.ج</option>
-                <option value="medium">300,000 - 600,000 د.ج</option>
-                <option value="high">أكثر من 600,000 د.ج</option>
+                <option value="all">ÙƒÙ„ Ø§Ù„Ø£Ø³Ø¹Ø§Ø±</option>
+                <option value="low">Ø£Ù‚Ù„ Ù…Ù† 300,000 Ø¯.Ø¬</option>
+                <option value="medium">300,000 - 600,000 Ø¯.Ø¬</option>
+                <option value="high">Ø£ÙƒØ«Ø± Ù…Ù† 600,000 Ø¯.Ø¬</option>
               </select>
             </div>
             
             {/* Sort Options */}
             <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-500">ترتيب حسب:</span>
+              <span className="text-sm text-gray-500">ØªØ±ØªÙŠØ¨ Ø­Ø³Ø¨:</span>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
                 className="border border-gray-300 rounded-md px-3 py-2 text-right"
                 dir="rtl"
               >
-                <option value="name">اسم الحزمة</option>
-                <option value="price">السعر</option>
-                <option value="articles">عدد المقالات</option>
+                <option value="name">Ø§Ø³Ù… Ø§Ù„Ø­Ø²Ù…Ø©</option>
+                <option value="price">Ø§Ù„Ø³Ø¹Ø±</option>
+                <option value="articles">Ø¹Ø¯Ø¯ Ø§Ù„Ù…Ù‚Ø§Ù„Ø§Øª</option>
               </select>
               
               <button
                 onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
                 className="p-2 border border-gray-300 rounded-md hover:bg-gray-50"
-                title={sortOrder === 'asc' ? 'تصاعدي' : 'تنازلي'}
+                title={sortOrder === 'asc' ? 'ØªØµØ§Ø¹Ø¯ÙŠ' : 'ØªÙ†Ø§Ø²Ù„ÙŠ'}
               >
                 {sortOrder === 'asc' ? <SortAsc className="w-4 h-4" /> : <SortDesc className="w-4 h-4" />}
               </button>
@@ -292,7 +292,7 @@ const PackSelection = ({
                 }}
                 className="px-3 py-2 text-sm text-purple-600 hover:text-purple-800"
               >
-                مسح الفلاتر
+                Ù…Ø³Ø­ Ø§Ù„ÙÙ„Ø§ØªØ±
               </button>
             )}
           </div>
@@ -300,11 +300,11 @@ const PackSelection = ({
 
         {/* Selected Packs Summary */}
         {selectedPacks.length > 0 && (
-          <div className="mb-8 bg-gradient-to-r from-purple-600 via-purple-500 to-white0 text-white rounded-xl shadow-xl p-6 border border-purple-300">
+          <div className="mb-8 bg-purple-600 text-white rounded-xl shadow-xl p-6 border border-purple-300">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-semibold flex items-center gap-2">
                 <ShoppingCart className="w-6 h-6" />
-                الحزم المختارة ({selectedPacks.length})
+                Ø§Ù„Ø­Ø²Ù… Ø§Ù„Ù…Ø®ØªØ§Ø±Ø© ({selectedPacks.length})
               </h2>
               <div className="text-2xl font-bold">
                 {getTotalPrice().toLocaleString('ar-DZ')} {t('currency')}
@@ -321,12 +321,12 @@ const PackSelection = ({
                     <div className="flex justify-between items-center">
                       <span className="font-medium text-sm">{packName}</span>
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-semibold">{totalPrice?.toLocaleString('ar-DZ')} د.ج</span>
+                        <span className="text-sm font-semibold">{totalPrice?.toLocaleString('ar-DZ')} Ø¯.Ø¬</span>
                         <button 
                           onClick={() => handleRemovePack(packId)}
                           className="text-white hover:text-red-200 text-lg font-bold"
                         >
-                          ✕
+                          âœ•
                         </button>
                       </div>
                     </div>
@@ -343,26 +343,26 @@ const PackSelection = ({
             <div className="bg-purple-50 rounded-lg p-4 text-center">
               <Package className="w-6 h-6 text-purple-600 mx-auto mb-2" />
               <div className="text-2xl font-bold text-purple-900">{filteredAndSortedPacks.length}</div>
-              <div className="text-sm text-purple-600">حزم متاحة</div>
+              <div className="text-sm text-purple-600">Ø­Ø²Ù… Ù…ØªØ§Ø­Ø©</div>
             </div>
             <div className="bg-green-50 rounded-lg p-4 text-center">
               <TrendingUp className="w-6 h-6 text-green-600 mx-auto mb-2" />
               <div className="text-2xl font-bold text-green-900">
                 {Math.round(filteredAndSortedPacks.reduce((sum, pack) => sum + (pack.TotalPackPrice || pack.total_price || 0), 0) / filteredAndSortedPacks.length).toLocaleString('ar-DZ')}
               </div>
-              <div className="text-sm text-green-600">متوسط السعر</div>
+              <div className="text-sm text-green-600">Ù…ØªÙˆØ³Ø· Ø§Ù„Ø³Ø¹Ø±</div>
             </div>
             <div className="bg-purple-50 rounded-lg p-4 text-center">
               <Star className="w-6 h-6 text-purple-600 mx-auto mb-2" />
               <div className="text-2xl font-bold text-purple-900">
                 {filteredAndSortedPacks.filter(pack => pack.Gift || pack.gift).length}
               </div>
-              <div className="text-sm text-purple-600">حزم بهدايا</div>
+              <div className="text-sm text-purple-600">Ø­Ø²Ù… Ø¨Ù‡Ø¯Ø§ÙŠØ§</div>
             </div>
             <div className="bg-orange-50 rounded-lg p-4 text-center">
               <Gift className="w-6 h-6 text-orange-600 mx-auto mb-2" />
               <div className="text-2xl font-bold text-orange-900">{selectedPacks.length}</div>
-              <div className="text-sm text-orange-600">محددة حالياً</div>
+              <div className="text-sm text-orange-600">Ù…Ø­Ø¯Ø¯Ø© Ø­Ø§Ù„ÙŠØ§Ù‹</div>
             </div>
           </div>
         )}
@@ -390,10 +390,10 @@ const PackSelection = ({
                       </span>
                     </div>
                     <div className="text-right">
-                      <div className="text-xl font-bold text-green-600">{totalPrice?.toLocaleString('ar-DZ')} د.ج</div>
-                      <div className="text-xs text-gray-500">{articles.length} مقالة</div>
+                      <div className="text-xl font-bold text-green-600">{totalPrice?.toLocaleString('ar-DZ')} Ø¯.Ø¬</div>
+                      <div className="text-xs text-gray-500">{articles.length} Ù…Ù‚Ø§Ù„Ø©</div>
                       <div className={`text-xs font-medium ${pack.quantity > 10 ? 'text-green-600' : pack.quantity > 0 ? 'text-yellow-600' : 'text-red-600'}`}>
-                        المتاح: {pack.quantity || 0} وحدة
+                        Ø§Ù„Ù…ØªØ§Ø­: {pack.quantity || 0} ÙˆØ­Ø¯Ø©
                       </div>
                     </div>
                   </div>
@@ -401,19 +401,19 @@ const PackSelection = ({
                   {/* Quick Preview */}
                   <div className="mb-4">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-gray-700">المحتويات:</span>
+                      <span className="text-sm font-medium text-gray-700">Ø§Ù„Ù…Ø­ØªÙˆÙŠØ§Øª:</span>
                       <button
                         onClick={() => toggleDetails(packId)}
                         className="text-xs text-purple-600 hover:text-purple-800"
                       >
-                        {detailsShown ? 'إخفاء التفاصيل' : 'عرض التفاصيل'}
+                        {detailsShown ? 'Ø¥Ø®ÙØ§Ø¡ Ø§Ù„ØªÙØ§ØµÙŠÙ„' : 'Ø¹Ø±Ø¶ Ø§Ù„ØªÙØ§ØµÙŠÙ„'}
                       </button>
                     </div>
                     
                     {detailsShown ? (
                       <div className="text-sm text-gray-600 space-y-2">
                         <div className="bg-gray-50 rounded-md p-3">
-                          <h4 className="font-medium text-gray-800 mb-2">المنتجات المضمنة:</h4>
+                          <h4 className="font-medium text-gray-800 mb-2">Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª Ø§Ù„Ù…Ø¶Ù…Ù†Ø©:</h4>
                           {articles.map(article => {
                             const articleId = article.Id || article.id;
                             const articleName = article.Name || article.name;
@@ -422,16 +422,16 @@ const PackSelection = ({
                               <div key={articleId} className="flex justify-between items-center py-1 border-b border-gray-200 last:border-b-0">
                                 <div className="flex-1">
                                   <span className="font-medium">{articleName}</span>
-                                  <span className="text-xs text-gray-500 mr-2">(الكمية: {article.quantity || 1})</span>
+                                  <span className="text-xs text-gray-500 mr-2">(Ø§Ù„ÙƒÙ…ÙŠØ©: {article.quantity || 1})</span>
                                 </div>
-                                <span className="font-medium text-green-600">{articlePrice?.toLocaleString('ar-DZ')} د.ج</span>
+                                <span className="font-medium text-green-600">{articlePrice?.toLocaleString('ar-DZ')} Ø¯.Ø¬</span>
                               </div>
                             );
                           })}
                           <div className="mt-2 pt-2 border-t border-gray-300">
                             <div className="flex justify-between items-center font-bold">
-                              <span>إجمالي الحزمة:</span>
-                              <span className="text-green-600">{totalPrice?.toLocaleString('ar-DZ')} د.ج</span>
+                              <span>Ø¥Ø¬Ù…Ø§Ù„ÙŠ Ø§Ù„Ø­Ø²Ù…Ø©:</span>
+                              <span className="text-green-600">{totalPrice?.toLocaleString('ar-DZ')} Ø¯.Ø¬</span>
                             </div>
                           </div>
                         </div>
@@ -439,17 +439,17 @@ const PackSelection = ({
                     ) : (
                       <div className="text-sm text-gray-600">
                         <div className="mb-2">
-                          <span className="font-medium text-gray-700">المنتجات ({articles.length}):</span>
+                          <span className="font-medium text-gray-700">Ø§Ù„Ù…Ù†ØªØ¬Ø§Øª ({articles.length}):</span>
                         </div>
                         {articles.slice(0, 3).map(article => (
                           <div key={article.Id || article.id} className="flex justify-between items-center mb-1">
-                            <span>• {article.Name || article.name}</span>
-                            <span className="text-xs text-gray-500">{(article.Price || article.price)?.toLocaleString('ar-DZ')} د.ج</span>
+                            <span>â€¢ {article.Name || article.name}</span>
+                            <span className="text-xs text-gray-500">{(article.Price || article.price)?.toLocaleString('ar-DZ')} Ø¯.Ø¬</span>
                           </div>
                         ))}
                         {articles.length > 3 && (
                           <div className="text-xs text-purple-600 mt-1">
-                            و {articles.length - 3} منتج أخرى...
+                            Ùˆ {articles.length - 3} Ù…Ù†ØªØ¬ Ø£Ø®Ø±Ù‰...
                           </div>
                         )}
                       </div>
@@ -460,7 +460,7 @@ const PackSelection = ({
                     <div className="mb-4 p-3 bg-yellow-50 rounded-md">
                       <div className="flex items-center gap-2 mb-1">
                         <Gift className="w-4 h-4 text-yellow-600" />
-                        <span className="text-sm font-medium text-yellow-800">هدية مجانية</span>
+                        <span className="text-sm font-medium text-yellow-800">Ù‡Ø¯ÙŠØ© Ù…Ø¬Ø§Ù†ÙŠØ©</span>
                       </div>
                       <p className="text-sm text-yellow-700">
                         {gift.GiftName || gift.gift_name}
@@ -481,12 +481,12 @@ const PackSelection = ({
                     {isSelected ? (
                       <>
                         <Star className="w-4 h-4" />
-                        محدد
+                        Ù…Ø­Ø¯Ø¯
                       </>
                     ) : (
                       <>
                         <Package className="w-4 h-4" />
-                        اختيار الحزمة
+                        Ø§Ø®ØªÙŠØ§Ø± Ø§Ù„Ø­Ø²Ù…Ø©
                       </>
                     )}
                   </button>
@@ -497,11 +497,11 @@ const PackSelection = ({
         ) : (
           <div className="bg-white rounded-lg shadow-md p-12 text-center">
             <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">لا توجد حزم متاحة</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Ù„Ø§ ØªÙˆØ¬Ø¯ Ø­Ø²Ù… Ù…ØªØ§Ø­Ø©</h3>
             <p className="text-gray-600 mb-4">
               {searchTerm || filterByPrice !== 'all' 
-                ? 'لم يتم العثور على حزم تطابق معايير البحث' 
-                : 'لا توجد حزم متوفرة حالياً'}
+                ? 'Ù„Ù… ÙŠØªÙ… Ø§Ù„Ø¹Ø«ÙˆØ± Ø¹Ù„Ù‰ Ø­Ø²Ù… ØªØ·Ø§Ø¨Ù‚ Ù…Ø¹Ø§ÙŠÙŠØ± Ø§Ù„Ø¨Ø­Ø«' 
+                : 'Ù„Ø§ ØªÙˆØ¬Ø¯ Ø­Ø²Ù… Ù…ØªÙˆÙØ±Ø© Ø­Ø§Ù„ÙŠØ§Ù‹'}
             </p>
             {(searchTerm || filterByPrice !== 'all') && (
               <button
@@ -511,7 +511,7 @@ const PackSelection = ({
                 }}
                 className="text-purple-600 hover:text-purple-800 font-medium"
               >
-                مسح الفلاتر وإظهار كل الحزم
+                Ù…Ø³Ø­ Ø§Ù„ÙÙ„Ø§ØªØ± ÙˆØ¥Ø¸Ù‡Ø§Ø± ÙƒÙ„ Ø§Ù„Ø­Ø²Ù…
               </button>
             )}
           </div>

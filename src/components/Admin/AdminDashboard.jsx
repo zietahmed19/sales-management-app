@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+﻿import React, { useState, useEffect, useMemo } from 'react';
 import { Download, DollarSign, Users, TrendingUp, BarChart3, Filter, Package } from 'lucide-react';
 import * as XLSX from 'xlsx';
 
@@ -17,7 +17,7 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
   const [sortOrder, setSortOrder] = useState('desc');
 
   useEffect(() => {
-    console.log('🔧 AdminDashboard: Component mounted');
+    console.log('ðŸ”§ AdminDashboard: Component mounted');
     fetchAdminData();
   }, []);
 
@@ -28,7 +28,7 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
     const apiBase = baseURL.replace('/api', '');
     
     try {
-      console.log('📡 AdminDashboard: Fetching real data from database...');
+      console.log('ðŸ“¡ AdminDashboard: Fetching real data from database...');
       
       const headers = {
         'Content-Type': 'application/json',
@@ -45,7 +45,7 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
       }
       
       const delegatesData = await delegatesResponse.json();
-      console.log('👥 AdminDashboard: Delegates data received:', delegatesData.length, 'delegates');
+      console.log('ðŸ‘¥ AdminDashboard: Delegates data received:', delegatesData.length, 'delegates');
 
       // Fetch admin statistics
       const statsResponse = await fetch(`${apiBase}/api/admin/statistics`, {
@@ -57,7 +57,7 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
       }
       
       const statsData = await statsResponse.json();
-      console.log('📊 AdminDashboard: Statistics data received:', statsData.overview);
+      console.log('ðŸ“Š AdminDashboard: Statistics data received:', statsData.overview);
 
       // Transform delegates data to match component expectations
       const transformedDelegates = delegatesData.map(delegate => ({
@@ -76,11 +76,11 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
       setStatistics(statsData);
       setLoading(false);
       setError(null);
-      console.log('✅ AdminDashboard: Real data loaded successfully');
+      console.log('âœ… AdminDashboard: Real data loaded successfully');
       
     } catch (error) {
-      console.error('❌ AdminDashboard: Error fetching data:', error);
-      console.log('🔄 AdminDashboard: Admin endpoints failed, using fallback...');
+      console.error('âŒ AdminDashboard: Error fetching data:', error);
+      console.log('ðŸ”„ AdminDashboard: Admin endpoints failed, using fallback...');
       
       // Fallback: try to get basic stats from regular endpoints
       try {
@@ -114,7 +114,7 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
           const realTotalRepresentatives = represData.length;
           const realTotalPacks = packsData.length;
 
-          console.log('📊 AdminDashboard Fallback Stats:', {
+          console.log('ðŸ“Š AdminDashboard Fallback Stats:', {
             totalSales: realTotalSales,
             totalRevenue: realTotalRevenue,
             totalClients: realTotalClients,
@@ -130,7 +130,7 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
             { id: 4, name: `Total: ${realTotalRepresentatives} Representatives`, region: 'System', sales: 0, revenue: 0, code: 'INFO' }
           ];
 
-          console.log('🔧 Setting delegates and realStats:', {
+          console.log('ðŸ”§ Setting delegates and realStats:', {
             delegates: fakeDelegatesWithRealTotals,
             realStats: {
               totalSales: realTotalSales,
@@ -151,11 +151,11 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
           });
           setError(null); // Clear error since fallback worked
           setLoading(false); // Stop loading
-          console.log('✅ AdminDashboard: Real statistics loaded as fallback');
+          console.log('âœ… AdminDashboard: Real statistics loaded as fallback');
           return;
         }
       } catch (fallbackError) {
-        console.error('❌ AdminDashboard: Fallback also failed:', fallbackError);
+        console.error('âŒ AdminDashboard: Fallback also failed:', fallbackError);
       }
       
       // Final fallback to empty data instead of fake data
@@ -275,23 +275,23 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
       
       // === SUMMARY SHEET ===
       const summaryData = [
-        ['تقرير المندوبين - Delegates Performance Report'],
+        ['ØªÙ‚Ø±ÙŠØ± Ø§Ù„Ù…Ù†Ø¯ÙˆØ¨ÙŠÙ† - Delegates Performance Report'],
         [''],
-        ['معلومات التقرير - Report Information'],
-        ['تاريخ التصدير', new Date().toLocaleDateString('ar-DZ')],
-        ['وقت التصدير', new Date().toLocaleTimeString('ar-DZ')],
-        ['المستخدم', 'إدارة النظام'],
-        ['النظام', 'نظام إدارة المبيعات'],
+        ['Ù…Ø¹Ù„ÙˆÙ…Ø§Øª Ø§Ù„ØªÙ‚Ø±ÙŠØ± - Report Information'],
+        ['ØªØ§Ø±ÙŠØ® Ø§Ù„ØªØµØ¯ÙŠØ±', new Date().toLocaleDateString('ar-DZ')],
+        ['ÙˆÙ‚Øª Ø§Ù„ØªØµØ¯ÙŠØ±', new Date().toLocaleTimeString('ar-DZ')],
+        ['Ø§Ù„Ù…Ø³ØªØ®Ø¯Ù…', 'Ø¥Ø¯Ø§Ø±Ø© Ø§Ù„Ù†Ø¸Ø§Ù…'],
+        ['Ø§Ù„Ù†Ø¸Ø§Ù…', 'Ù†Ø¸Ø§Ù… Ø¥Ø¯Ø§Ø±Ø© Ø§Ù„Ù…Ø¨ÙŠØ¹Ø§Øª'],
         [''],
-        ['الإحصائيات العامة - General Statistics'],
-        ['إجمالي المندوبين', filteredDelegates.length],
-        ['إجمالي المبيعات', analyticsData.totalSales],
-        ['إجمالي الإيرادات (دج)', analyticsData.totalRevenue],
-        ['متوسط الإيرادات (دج)', Math.round(analyticsData.averageRevenue)],
-        ['عدد المناطق', new Set(filteredDelegates.map(d => d.region)).size],
+        ['Ø§Ù„Ø¥Ø­ØµØ§Ø¦ÙŠØ§Øª Ø§Ù„Ø¹Ø§Ù…Ø© - General Statistics'],
+        ['Ø¥Ø¬Ù…Ø§Ù„ÙŠ Ø§Ù„Ù…Ù†Ø¯ÙˆØ¨ÙŠÙ†', filteredDelegates.length],
+        ['Ø¥Ø¬Ù…Ø§Ù„ÙŠ Ø§Ù„Ù…Ø¨ÙŠØ¹Ø§Øª', analyticsData.totalSales],
+        ['Ø¥Ø¬Ù…Ø§Ù„ÙŠ Ø§Ù„Ø¥ÙŠØ±Ø§Ø¯Ø§Øª (Ø¯Ø¬)', analyticsData.totalRevenue],
+        ['Ù…ØªÙˆØ³Ø· Ø§Ù„Ø¥ÙŠØ±Ø§Ø¯Ø§Øª (Ø¯Ø¬)', Math.round(analyticsData.averageRevenue)],
+        ['Ø¹Ø¯Ø¯ Ø§Ù„Ù…Ù†Ø§Ø·Ù‚', new Set(filteredDelegates.map(d => d.region)).size],
         [''],
-        ['أداء المناطق - Regional Performance'],
-        ['المنطقة', 'المبيعات', 'الإيرادات', 'المندوبين'],
+        ['Ø£Ø¯Ø§Ø¡ Ø§Ù„Ù…Ù†Ø§Ø·Ù‚ - Regional Performance'],
+        ['Ø§Ù„Ù…Ù†Ø·Ù‚Ø©', 'Ø§Ù„Ù…Ø¨ÙŠØ¹Ø§Øª', 'Ø§Ù„Ø¥ÙŠØ±Ø§Ø¯Ø§Øª', 'Ø§Ù„Ù…Ù†Ø¯ÙˆØ¨ÙŠÙ†'],
       ];
       
       // Add regional statistics
@@ -306,21 +306,21 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
         { width: 25 }, { width: 20 }, { width: 15 }, { width: 15 }
       ];
       
-      XLSX.utils.book_append_sheet(workbook, summarySheet, 'ملخص التقرير');
+      XLSX.utils.book_append_sheet(workbook, summarySheet, 'Ù…Ù„Ø®Øµ Ø§Ù„ØªÙ‚Ø±ÙŠØ±');
       
       // === DELEGATES DETAILS SHEET ===
       const detailsHeaders = [
-        'اسم المندوب',
-        'كود المندوب', 
-        'المنطقة/الولاية',
-        'المدينة',
-        'رقم الهاتف',
-        'عدد المبيعات',
-        'إجمالي الإيرادات (دج)',
-        'عدد العملاء',
-        'تقييم الأداء',
-        'النسبة من الإجمالي (%)',
-        'ترتيب الأداء'
+        'Ø§Ø³Ù… Ø§Ù„Ù…Ù†Ø¯ÙˆØ¨',
+        'ÙƒÙˆØ¯ Ø§Ù„Ù…Ù†Ø¯ÙˆØ¨', 
+        'Ø§Ù„Ù…Ù†Ø·Ù‚Ø©/Ø§Ù„ÙˆÙ„Ø§ÙŠØ©',
+        'Ø§Ù„Ù…Ø¯ÙŠÙ†Ø©',
+        'Ø±Ù‚Ù… Ø§Ù„Ù‡Ø§ØªÙ',
+        'Ø¹Ø¯Ø¯ Ø§Ù„Ù…Ø¨ÙŠØ¹Ø§Øª',
+        'Ø¥Ø¬Ù…Ø§Ù„ÙŠ Ø§Ù„Ø¥ÙŠØ±Ø§Ø¯Ø§Øª (Ø¯Ø¬)',
+        'Ø¹Ø¯Ø¯ Ø§Ù„Ø¹Ù…Ù„Ø§Ø¡',
+        'ØªÙ‚ÙŠÙŠÙ… Ø§Ù„Ø£Ø¯Ø§Ø¡',
+        'Ø§Ù„Ù†Ø³Ø¨Ø© Ù…Ù† Ø§Ù„Ø¥Ø¬Ù…Ø§Ù„ÙŠ (%)',
+        'ØªØ±ØªÙŠØ¨ Ø§Ù„Ø£Ø¯Ø§Ø¡'
       ];
       
       const detailsData = [detailsHeaders];
@@ -329,18 +329,18 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
       const rankedDelegates = [...filteredDelegates].sort((a, b) => (b.revenue || 0) - (a.revenue || 0));
       
       rankedDelegates.forEach((delegate, index) => {
-        const performanceRating = (delegate.sales || 0) >= 15 ? 'ممتاز' : 
-                                (delegate.sales || 0) >= 10 ? 'جيد' : 'يحتاج تحسين';
+        const performanceRating = (delegate.sales || 0) >= 15 ? 'Ù…Ù…ØªØ§Ø²' : 
+                                (delegate.sales || 0) >= 10 ? 'Ø¬ÙŠØ¯' : 'ÙŠØ­ØªØ§Ø¬ ØªØ­Ø³ÙŠÙ†';
         
         const revenuePercentage = analyticsData.totalRevenue > 0 ? 
           ((delegate.revenue || 0) / analyticsData.totalRevenue * 100).toFixed(2) : '0.00';
         
         detailsData.push([
-          delegate.name || 'غير محدد',
+          delegate.name || 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯',
           delegate.code || 'N/A',
-          delegate.region || 'غير محدد',
-          delegate.city || 'غير محدد',
-          delegate.phone || 'غير متوفر',
+          delegate.region || 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯',
+          delegate.city || 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯',
+          delegate.phone || 'ØºÙŠØ± Ù…ØªÙˆÙØ±',
           delegate.sales || 0,
           delegate.revenue || 0,
           delegate.clients || 0,
@@ -367,23 +367,23 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
         { width: 12 }  // Rank
       ];
       
-      XLSX.utils.book_append_sheet(workbook, detailsSheet, 'تفاصيل المندوبين');
+      XLSX.utils.book_append_sheet(workbook, detailsSheet, 'ØªÙØ§ØµÙŠÙ„ Ø§Ù„Ù…Ù†Ø¯ÙˆØ¨ÙŠÙ†');
       
       // === TOP PERFORMERS SHEET ===
       const topPerformersData = [
-        ['أفضل المندوبين - Top Performers'],
+        ['Ø£ÙØ¶Ù„ Ø§Ù„Ù…Ù†Ø¯ÙˆØ¨ÙŠÙ† - Top Performers'],
         [''],
-        ['الترتيب', 'اسم المندوب', 'المنطقة', 'المبيعات', 'الإيرادات (دج)', 'تقييم الأداء'],
+        ['Ø§Ù„ØªØ±ØªÙŠØ¨', 'Ø§Ø³Ù… Ø§Ù„Ù…Ù†Ø¯ÙˆØ¨', 'Ø§Ù„Ù…Ù†Ø·Ù‚Ø©', 'Ø§Ù„Ù…Ø¨ÙŠØ¹Ø§Øª', 'Ø§Ù„Ø¥ÙŠØ±Ø§Ø¯Ø§Øª (Ø¯Ø¬)', 'ØªÙ‚ÙŠÙŠÙ… Ø§Ù„Ø£Ø¯Ø§Ø¡'],
       ];
       
       analyticsData.topPerformers.forEach((delegate, index) => {
-        const performanceRating = (delegate.sales || 0) >= 15 ? 'ممتاز' : 
-                                (delegate.sales || 0) >= 10 ? 'جيد' : 'يحتاج تحسين';
+        const performanceRating = (delegate.sales || 0) >= 15 ? 'Ù…Ù…ØªØ§Ø²' : 
+                                (delegate.sales || 0) >= 10 ? 'Ø¬ÙŠØ¯' : 'ÙŠØ­ØªØ§Ø¬ ØªØ­Ø³ÙŠÙ†';
         
         topPerformersData.push([
           index + 1,
-          delegate.name || 'غير محدد',
-          delegate.region || 'غير محدد',
+          delegate.name || 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯',
+          delegate.region || 'ØºÙŠØ± Ù…Ø­Ø¯Ø¯',
           delegate.sales || 0,
           delegate.revenue || 0,
           performanceRating
@@ -397,14 +397,14 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
         { width: 10 }, { width: 20 }, { width: 15 }, { width: 12 }, { width: 18 }, { width: 15 }
       ];
       
-      XLSX.utils.book_append_sheet(workbook, topPerformersSheet, 'أفضل المندوبين');
+      XLSX.utils.book_append_sheet(workbook, topPerformersSheet, 'Ø£ÙØ¶Ù„ Ø§Ù„Ù…Ù†Ø¯ÙˆØ¨ÙŠÙ†');
       
       // === ANALYTICS SHEET ===
       const analyticsSheetData = [
-        ['تحليلات متقدمة - Advanced Analytics'],
+        ['ØªØ­Ù„ÙŠÙ„Ø§Øª Ù…ØªÙ‚Ø¯Ù…Ø© - Advanced Analytics'],
         [''],
-        ['التحليل حسب الأداء - Performance Analysis'],
-        ['تصنيف الأداء', 'عدد المندوبين', 'النسبة (%)'],
+        ['Ø§Ù„ØªØ­Ù„ÙŠÙ„ Ø­Ø³Ø¨ Ø§Ù„Ø£Ø¯Ø§Ø¡ - Performance Analysis'],
+        ['ØªØµÙ†ÙŠÙ Ø§Ù„Ø£Ø¯Ø§Ø¡', 'Ø¹Ø¯Ø¯ Ø§Ù„Ù…Ù†Ø¯ÙˆØ¨ÙŠÙ†', 'Ø§Ù„Ù†Ø³Ø¨Ø© (%)'],
       ];
       
       const excellentCount = filteredDelegates.filter(d => (d.sales || 0) >= 15).length;
@@ -413,19 +413,19 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
       const total = filteredDelegates.length;
       
       analyticsSheetData.push(
-        ['ممتاز', excellentCount, total > 0 ? (excellentCount / total * 100).toFixed(2) : '0.00'],
-        ['جيد', goodCount, total > 0 ? (goodCount / total * 100).toFixed(2) : '0.00'],
-        ['يحتاج تحسين', needsImprovementCount, total > 0 ? (needsImprovementCount / total * 100).toFixed(2) : '0.00'],
+        ['Ù…Ù…ØªØ§Ø²', excellentCount, total > 0 ? (excellentCount / total * 100).toFixed(2) : '0.00'],
+        ['Ø¬ÙŠØ¯', goodCount, total > 0 ? (goodCount / total * 100).toFixed(2) : '0.00'],
+        ['ÙŠØ­ØªØ§Ø¬ ØªØ­Ø³ÙŠÙ†', needsImprovementCount, total > 0 ? (needsImprovementCount / total * 100).toFixed(2) : '0.00'],
         [''],
-        ['إحصائيات الإيرادات - Revenue Statistics'],
-        ['أعلى إيرادات', Math.max(...filteredDelegates.map(d => d.revenue || 0))],
-        ['أقل إيرادات', Math.min(...filteredDelegates.map(d => d.revenue || 0))],
-        ['متوسط الإيرادات', Math.round(analyticsData.averageRevenue)],
+        ['Ø¥Ø­ØµØ§Ø¦ÙŠØ§Øª Ø§Ù„Ø¥ÙŠØ±Ø§Ø¯Ø§Øª - Revenue Statistics'],
+        ['Ø£Ø¹Ù„Ù‰ Ø¥ÙŠØ±Ø§Ø¯Ø§Øª', Math.max(...filteredDelegates.map(d => d.revenue || 0))],
+        ['Ø£Ù‚Ù„ Ø¥ÙŠØ±Ø§Ø¯Ø§Øª', Math.min(...filteredDelegates.map(d => d.revenue || 0))],
+        ['Ù…ØªÙˆØ³Ø· Ø§Ù„Ø¥ÙŠØ±Ø§Ø¯Ø§Øª', Math.round(analyticsData.averageRevenue)],
         [''],
-        ['إحصائيات المبيعات - Sales Statistics'],
-        ['أعلى مبيعات', Math.max(...filteredDelegates.map(d => d.sales || 0))],
-        ['أقل مبيعات', Math.min(...filteredDelegates.map(d => d.sales || 0))],
-        ['متوسط المبيعات', total > 0 ? (analyticsData.totalSales / total).toFixed(2) : '0.00']
+        ['Ø¥Ø­ØµØ§Ø¦ÙŠØ§Øª Ø§Ù„Ù…Ø¨ÙŠØ¹Ø§Øª - Sales Statistics'],
+        ['Ø£Ø¹Ù„Ù‰ Ù…Ø¨ÙŠØ¹Ø§Øª', Math.max(...filteredDelegates.map(d => d.sales || 0))],
+        ['Ø£Ù‚Ù„ Ù…Ø¨ÙŠØ¹Ø§Øª', Math.min(...filteredDelegates.map(d => d.sales || 0))],
+        ['Ù…ØªÙˆØ³Ø· Ø§Ù„Ù…Ø¨ÙŠØ¹Ø§Øª', total > 0 ? (analyticsData.totalSales / total).toFixed(2) : '0.00']
       );
       
       const analyticsSheet = XLSX.utils.aoa_to_sheet(analyticsSheetData);
@@ -435,33 +435,33 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
         { width: 20 }, { width: 15 }, { width: 15 }
       ];
       
-      XLSX.utils.book_append_sheet(workbook, analyticsSheet, 'التحليلات');
+      XLSX.utils.book_append_sheet(workbook, analyticsSheet, 'Ø§Ù„ØªØ­Ù„ÙŠÙ„Ø§Øª');
       
       // Generate filename with timestamp
       const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
-      const filename = `تقرير_المندوبين_Delegates_Report_${timestamp}.xlsx`;
+      const filename = `ØªÙ‚Ø±ÙŠØ±_Ø§Ù„Ù…Ù†Ø¯ÙˆØ¨ÙŠÙ†_Delegates_Report_${timestamp}.xlsx`;
       
       // Write and download the Excel file
       XLSX.writeFile(workbook, filename);
       
       // Show success message
-      console.log(`📊 Professional Excel report exported: ${filteredDelegates.length} delegates, ${analyticsData.totalSales} total sales`);
+      console.log(`ðŸ“Š Professional Excel report exported: ${filteredDelegates.length} delegates, ${analyticsData.totalSales} total sales`);
       
       // Optional: Show user notification
       if (window.confirm) {
         setTimeout(() => {
-          alert(`تم تصدير التقرير بنجاح!\nExcel report exported successfully!\n\nالملف: ${filename}\nFile: ${filename}`);
+          alert(`ØªÙ… ØªØµØ¯ÙŠØ± Ø§Ù„ØªÙ‚Ø±ÙŠØ± Ø¨Ù†Ø¬Ø§Ø­!\nExcel report exported successfully!\n\nØ§Ù„Ù…Ù„Ù: ${filename}\nFile: ${filename}`);
         }, 500);
       }
       
     } catch (error) {
-      console.error('❌ Error exporting Excel file:', error);
-      alert('حدث خطأ في تصدير الملف. يرجى المحاولة مرة أخرى.\nError exporting file. Please try again.');
+      console.error('âŒ Error exporting Excel file:', error);
+      alert('Ø­Ø¯Ø« Ø®Ø·Ø£ ÙÙŠ ØªØµØ¯ÙŠØ± Ø§Ù„Ù…Ù„Ù. ÙŠØ±Ø¬Ù‰ Ø§Ù„Ù…Ø­Ø§ÙˆÙ„Ø© Ù…Ø±Ø© Ø£Ø®Ø±Ù‰.\nError exporting file. Please try again.');
     }
   };
 
   const handleLogout = () => {
-    console.log('🚪 AdminDashboard: Logout clicked');
+    console.log('ðŸšª AdminDashboard: Logout clicked');
     // Clear token and user data
     localStorage.removeItem('token');
     localStorage.removeItem('currentUser');
@@ -482,7 +482,7 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-xl text-gray-600">تحميل بيانات المندوبين من قاعدة البيانات...</p>
+          <p className="mt-4 text-xl text-gray-600">ØªØ­Ù…ÙŠÙ„ Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„Ù…Ù†Ø¯ÙˆØ¨ÙŠÙ† Ù…Ù† Ù‚Ø§Ø¹Ø¯Ø© Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª...</p>
         </div>
       </div>
     );
@@ -492,14 +492,14 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="text-red-500 text-6xl mb-4">⚠️</div>
-          <p className="text-xl text-gray-800 mb-2">خطأ في تحميل البيانات</p>
+          <div className="text-red-500 text-6xl mb-4">âš ï¸</div>
+          <p className="text-xl text-gray-800 mb-2">Ø®Ø·Ø£ ÙÙŠ ØªØ­Ù…ÙŠÙ„ Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª</p>
           <p className="text-gray-600 mb-4">{error}</p>
           <button
             onClick={fetchAdminData}
             className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-md transition-colors"
           >
-            إعادة المحاولة
+            Ø¥Ø¹Ø§Ø¯Ø© Ø§Ù„Ù…Ø­Ø§ÙˆÙ„Ø©
           </button>
         </div>
       </div>
@@ -511,7 +511,7 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
   const totalRevenue = realStats ? realStats.totalRevenue : delegates.reduce((sum, delegate) => sum + (delegate.revenue || 0), 0);
   const activeDelegates = delegates.length;
 
-  console.log('🔍 AdminDashboard - Final calculations:', {
+  console.log('ðŸ” AdminDashboard - Final calculations:', {
     realStats: realStats,
     totalSales: totalSales,
     totalRevenue: totalRevenue,
@@ -520,12 +520,12 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white" dir="rtl">
-      <div className="bg-gradient-to-r from-purple-600 via-purple-500 to-white0 shadow-xl">
+    <div className="min-h-screen bg-white" dir="rtl">
+      <div className="bg-purple-600 shadow-xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <h1 className="text-3xl font-bold text-white drop-shadow-lg">
-              لوحة تحكم المدير
+              Ù„ÙˆØ­Ø© ØªØ­ÙƒÙ… Ø§Ù„Ù…Ø¯ÙŠØ±
             </h1>
             <div className="flex space-x-4">
               <button
@@ -533,13 +533,13 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
                 className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-all duration-300 flex items-center transform hover:scale-105 hover:shadow-lg"
               >
                 <Package className="w-4 h-4 ml-2" />
-                إدارة الحزم
+                Ø¥Ø¯Ø§Ø±Ø© Ø§Ù„Ø­Ø²Ù…
               </button>
               <button
                 onClick={handleLogout}
                 className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
               >
-                تسجيل الخروج
+                ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø®Ø±ÙˆØ¬
               </button>
             </div>
           </div>
@@ -552,26 +552,26 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
           <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
             <h2 className="text-xl font-semibold text-gray-900 flex items-center">
               <Filter className="w-5 h-5 ml-2" />
-              المرشحات والتصدير
+              Ø§Ù„Ù…Ø±Ø´Ø­Ø§Øª ÙˆØ§Ù„ØªØµØ¯ÙŠØ±
             </h2>
             <button
               onClick={exportToExcel}
-              className="flex items-center space-x-2 bg-gradient-to-r from-purple-600 to-white0 text-white py-2 px-4 rounded-lg hover:from-purple-700 hover:to-purple-600 transition-all duration-300 transform hover:scale-105"
+              className="flex items-center space-x-2 bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-all duration-300 transform hover:scale-105"
             >
               <Download className="w-4 h-4" />
-              <span>تصدير Excel</span>
+              <span>ØªØµØ¯ÙŠØ± Excel</span>
             </button>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">المندوب</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Ø§Ù„Ù…Ù†Ø¯ÙˆØ¨</label>
               <select
                 value={delegateFilter}
                 onChange={(e) => setDelegateFilter(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
               >
-                <option value="all">جميع المندوبين</option>
+                <option value="all">Ø¬Ù…ÙŠØ¹ Ø§Ù„Ù…Ù†Ø¯ÙˆØ¨ÙŠÙ†</option>
                 {delegates.map(delegate => (
                   <option key={delegate.id} value={delegate.id}>
                     {delegate.name} ({delegate.code})
@@ -581,28 +581,28 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">ترتيب حسب</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">ØªØ±ØªÙŠØ¨ Ø­Ø³Ø¨</label>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
               >
-                <option value="sales">المبيعات</option>
-                <option value="revenue">الإيرادات</option>
-                <option value="name">الاسم</option>
-                <option value="region">المنطقة</option>
+                <option value="sales">Ø§Ù„Ù…Ø¨ÙŠØ¹Ø§Øª</option>
+                <option value="revenue">Ø§Ù„Ø¥ÙŠØ±Ø§Ø¯Ø§Øª</option>
+                <option value="name">Ø§Ù„Ø§Ø³Ù…</option>
+                <option value="region">Ø§Ù„Ù…Ù†Ø·Ù‚Ø©</option>
               </select>
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">الترتيب</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Ø§Ù„ØªØ±ØªÙŠØ¨</label>
               <select
                 value={sortOrder}
                 onChange={(e) => setSortOrder(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
               >
-                <option value="desc">تنازلي</option>
-                <option value="asc">تصاعدي</option>
+                <option value="desc">ØªÙ†Ø§Ø²Ù„ÙŠ</option>
+                <option value="asc">ØªØµØ§Ø¹Ø¯ÙŠ</option>
               </select>
             </div>
             
@@ -611,7 +611,7 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
                 onClick={fetchAdminData}
                 className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md transition-colors"
               >
-                تحديث البيانات
+                ØªØ­Ø¯ÙŠØ« Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª
               </button>
             </div>
           </div>
@@ -625,7 +625,7 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
                 <Users className="w-6 h-6 text-purple-600" />
               </div>
               <div className="mr-4">
-                <p className="text-sm font-medium text-gray-600">المندوبون النشطون</p>
+                <p className="text-sm font-medium text-gray-600">Ø§Ù„Ù…Ù†Ø¯ÙˆØ¨ÙˆÙ† Ø§Ù„Ù†Ø´Ø·ÙˆÙ†</p>
                 <p className="text-2xl font-bold text-gray-900">{analyticsData.activeDelegates}</p>
               </div>
             </div>
@@ -637,7 +637,7 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
                 <BarChart3 className="w-6 h-6 text-green-600" />
               </div>
               <div className="mr-4">
-                <p className="text-sm font-medium text-gray-600">إجمالي المبيعات</p>
+                <p className="text-sm font-medium text-gray-600">Ø¥Ø¬Ù…Ø§Ù„ÙŠ Ø§Ù„Ù…Ø¨ÙŠØ¹Ø§Øª</p>
                 <p className="text-2xl font-bold text-gray-900">{analyticsData.totalSales}</p>
               </div>
             </div>
@@ -649,8 +649,8 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
                 <DollarSign className="w-6 h-6 text-yellow-600" />
               </div>
               <div className="mr-4">
-                <p className="text-sm font-medium text-gray-600">إجمالي الإيرادات</p>
-                <p className="text-2xl font-bold text-gray-900">{analyticsData.totalRevenue?.toLocaleString('ar-DZ')} دج</p>
+                <p className="text-sm font-medium text-gray-600">Ø¥Ø¬Ù…Ø§Ù„ÙŠ Ø§Ù„Ø¥ÙŠØ±Ø§Ø¯Ø§Øª</p>
+                <p className="text-2xl font-bold text-gray-900">{analyticsData.totalRevenue?.toLocaleString('ar-DZ')} Ø¯Ø¬</p>
               </div>
             </div>
           </div>
@@ -661,9 +661,9 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
                 <TrendingUp className="w-6 h-6 text-purple-600" />
               </div>
               <div className="mr-4">
-                <p className="text-sm font-medium text-gray-600">متوسط الإيرادات</p>
+                <p className="text-sm font-medium text-gray-600">Ù…ØªÙˆØ³Ø· Ø§Ù„Ø¥ÙŠØ±Ø§Ø¯Ø§Øª</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {Math.round(analyticsData.averageRevenue).toLocaleString('ar-DZ')} دج
+                  {Math.round(analyticsData.averageRevenue).toLocaleString('ar-DZ')} Ø¯Ø¬
                 </p>
               </div>
             </div>
@@ -674,14 +674,14 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           {/* Performance by Region */}
           <div className="bg-white rounded-lg shadow-sm p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">الأداء حسب المنطقة</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Ø§Ù„Ø£Ø¯Ø§Ø¡ Ø­Ø³Ø¨ Ø§Ù„Ù…Ù†Ø·Ù‚Ø©</h3>
             <div className="space-y-4">
               {analyticsData.regionStats.slice(0, 5).map(([region, data]) => (
                 <div key={region} className="flex items-center justify-between">
                   <div className="flex-1">
                     <div className="flex justify-between text-sm">
                       <span className="font-medium">{region}</span>
-                      <span>{data.sales} مبيعة</span>
+                      <span>{data.sales} Ù…Ø¨ÙŠØ¹Ø©</span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
                       <div 
@@ -692,7 +692,7 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
                       ></div>
                     </div>
                     <div className="text-xs text-gray-500 mt-1">
-                      {data.revenue.toLocaleString('ar-DZ')} دج ({data.delegates} مندوب)
+                      {data.revenue.toLocaleString('ar-DZ')} Ø¯Ø¬ ({data.delegates} Ù…Ù†Ø¯ÙˆØ¨)
                     </div>
                   </div>
                 </div>
@@ -702,7 +702,7 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
 
           {/* Top Performers */}
           <div className="bg-white rounded-lg shadow-sm p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">أفضل المندوبين</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Ø£ÙØ¶Ù„ Ø§Ù„Ù…Ù†Ø¯ÙˆØ¨ÙŠÙ†</h3>
             <div className="space-y-4">
               {analyticsData.topPerformers.map((delegate, index) => (
                 <div key={delegate.id} className="flex items-center justify-between">
@@ -715,7 +715,7 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
                     <div className="flex-1">
                       <div className="flex justify-between text-sm">
                         <span className="font-medium">{delegate.name}</span>
-                        <span>{delegate.sales || 0} مبيعة</span>
+                        <span>{delegate.sales || 0} Ù…Ø¨ÙŠØ¹Ø©</span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
                         <div 
@@ -726,7 +726,7 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
                         ></div>
                       </div>
                       <div className="text-xs text-gray-500 mt-1">
-                        {(delegate.revenue || 0).toLocaleString('ar-DZ')} دج - {delegate.region}
+                        {(delegate.revenue || 0).toLocaleString('ar-DZ')} Ø¯Ø¬ - {delegate.region}
                       </div>
                     </div>
                   </div>
@@ -739,21 +739,21 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
         {/* Delegates Table */}
         <div className="bg-white rounded-lg shadow-sm p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">
-            قائمة المندوبين ({filteredDelegates.length} مندوب)
+            Ù‚Ø§Ø¦Ù…Ø© Ø§Ù„Ù…Ù†Ø¯ÙˆØ¨ÙŠÙ† ({filteredDelegates.length} Ù…Ù†Ø¯ÙˆØ¨)
           </h3>
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الاسم</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الكود</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">المنطقة</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">المدينة</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">المبيعات</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الإيرادات</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">العملاء</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الهاتف</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الأداء</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ø§Ù„Ø§Ø³Ù…</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ø§Ù„ÙƒÙˆØ¯</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ø§Ù„Ù…Ù†Ø·Ù‚Ø©</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ø§Ù„Ù…Ø¯ÙŠÙ†Ø©</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ø§Ù„Ù…Ø¨ÙŠØ¹Ø§Øª</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ø§Ù„Ø¥ÙŠØ±Ø§Ø¯Ø§Øª</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ø§Ù„Ø¹Ù…Ù„Ø§Ø¡</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ø§Ù„Ù‡Ø§ØªÙ</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ø§Ù„Ø£Ø¯Ø§Ø¡</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -775,7 +775,7 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
                       {delegate.sales || 0}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {(delegate.revenue || 0).toLocaleString('ar-DZ')} دج
+                      {(delegate.revenue || 0).toLocaleString('ar-DZ')} Ø¯Ø¬
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {delegate.clients || 0}
@@ -791,7 +791,7 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
                           ? 'bg-yellow-100 text-yellow-800'
                           : 'bg-red-100 text-red-800'
                       }`}>
-                        {(delegate.sales || 0) >= 15 ? 'ممتاز' : (delegate.sales || 0) >= 10 ? 'جيد' : 'يحتاج تحسين'}
+                        {(delegate.sales || 0) >= 15 ? 'Ù…Ù…ØªØ§Ø²' : (delegate.sales || 0) >= 10 ? 'Ø¬ÙŠØ¯' : 'ÙŠØ­ØªØ§Ø¬ ØªØ­Ø³ÙŠÙ†'}
                       </span>
                     </td>
                   </tr>
@@ -800,7 +800,7 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
             </table>
             {filteredDelegates.length === 0 && (
               <div className="px-6 py-4 text-sm text-gray-500 text-center">
-                لا توجد بيانات مندوبين متاحة
+                Ù„Ø§ ØªÙˆØ¬Ø¯ Ø¨ÙŠØ§Ù†Ø§Øª Ù…Ù†Ø¯ÙˆØ¨ÙŠÙ† Ù…ØªØ§Ø­Ø©
               </div>
             )}
           </div>

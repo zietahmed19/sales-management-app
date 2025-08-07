@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Package, Users, ShoppingCart, TrendingUp, Plus, BarChart3, Calendar, Award } from 'lucide-react';
 import Header from '../Common/Header';
 import { t } from '../../translations/arabic';
@@ -33,13 +33,13 @@ const Dashboard = ({
           clients: clientsData || []
         });
         
-        console.log('✅ Dashboard - Data loaded:', {
+        console.log('âœ… Dashboard - Data loaded:', {
           packs: packsData?.length,
           articles: articlesData?.length,
           clients: clientsData?.length
         });
       } catch (error) {
-        console.error('❌ Dashboard - Error loading data:', error);
+        console.error('âŒ Dashboard - Error loading data:', error);
         setDashboardData({
           packs: [],
           articles: [],
@@ -73,12 +73,12 @@ const Dashboard = ({
       if (response.ok) {
         const stats = await response.json();
         setStatistics(stats);
-        console.log(`🎯 PERSONAL STATISTICS LOADED FOR: ${stats.delegate.username}`);
-        console.log(`📍 Territory: ${stats.delegate.wilaya}`);
-        console.log(`📊 Personal Sales: ${stats.delegate.personalStats.totalSales}`);
-        console.log(`� Personal Revenue: ${stats.delegate.personalStats.totalRevenue} DA`);
-        console.log(`👥 Territory Clients: ${stats.delegate.personalStats.wilayaClients}`);
-        console.log('📈 Full Statistics Object:', stats);
+        console.log(`ðŸŽ¯ PERSONAL STATISTICS LOADED FOR: ${stats.delegate.username}`);
+        console.log(`ðŸ“ Territory: ${stats.delegate.wilaya}`);
+        console.log(`ðŸ“Š Personal Sales: ${stats.delegate.personalStats.totalSales}`);
+        console.log(`ï¿½ Personal Revenue: ${stats.delegate.personalStats.totalRevenue} DA`);
+        console.log(`ðŸ‘¥ Territory Clients: ${stats.delegate.personalStats.wilayaClients}`);
+        console.log('ðŸ“ˆ Full Statistics Object:', stats);
       } else {
         console.error('Failed to load statistics:', response.statusText);
       }
@@ -104,17 +104,17 @@ const Dashboard = ({
   }, [dashboardData]);
   
   // Debug logging
-  console.log('🏠 Dashboard - Received data:', data);
-  console.log('🏠 Dashboard - Dashboard data:', dashboardData);
-  console.log('🏠 Dashboard - Clients data:', dashboardData?.clients);
-  console.log('🏠 Dashboard - Packs data:', dashboardData?.packs);
-  console.log('🏠 Dashboard - Sales data:', data?.sales);
+  console.log('ðŸ  Dashboard - Received data:', data);
+  console.log('ðŸ  Dashboard - Dashboard data:', dashboardData);
+  console.log('ðŸ  Dashboard - Clients data:', dashboardData?.clients);
+  console.log('ðŸ  Dashboard - Packs data:', dashboardData?.packs);
+  console.log('ðŸ  Dashboard - Sales data:', data?.sales);
 
   // Safety check for data loading
   if (!dashboardData && !statistics) {
-    console.log('⚠️ Dashboard - No data available, showing loading screen');
+    console.log('âš ï¸ Dashboard - No data available, showing loading screen');
     return (
-      <div className="min-h-screen bg-gradient-black-to-purple flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-medium mx-auto mb-4"></div>
           <p className="text-white font-medium">Loading dashboard...</p>
@@ -139,15 +139,15 @@ const Dashboard = ({
   };
 
   const statCards = [
-    { title: t('personalSales'), value: stats.totalSales, icon: ShoppingCart, color: 'bg-gradient-black-purple-dark' },
-    { title: `${t('clientsInTerritory')} ${statistics?.delegate.wilaya || 'المنطقة'}`, value: stats.totalClients, icon: Users, color: 'bg-gradient-purple-dark-medium' },
-    { title: t('availablePacks'), value: stats.totalPacks, icon: Package, color: 'bg-gradient-purple-medium-light' },
-    { title: 'إجمالي المخزون', value: stats.totalPackStock, icon: Package, color: 'bg-gradient-three-purple' },
-    { title: t('personalRevenue'), value: `${stats.totalRevenue.toLocaleString('ar-DZ')} ${t('currency')}`, icon: TrendingUp, color: 'bg-gradient-black-to-purple' }
+    { title: t('personalSales'), value: stats.totalSales, icon: ShoppingCart, color: 'bg-purple-600' },
+    { title: `${t('clientsInTerritory')} ${statistics?.delegate.wilaya || 'المنطقة'}`, value: stats.totalClients, icon: Users, color: 'bg-purple-500' },
+    { title: t('availablePacks'), value: stats.totalPacks, icon: Package, color: 'bg-purple-400' },
+    { title: 'إجمالي المخزون', value: stats.totalPackStock, icon: Package, color: 'bg-purple-700' },
+    { title: t('personalRevenue'), value: `${stats.totalRevenue.toLocaleString('ar-DZ')} ${t('currency')}`, icon: TrendingUp, color: 'bg-white' }
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-black-to-purple" dir="rtl">
+    <div className="min-h-screen bg-white" dir="rtl">
       <Header 
         currentUser={currentUser} 
         onLogout={resetAppState}
@@ -158,14 +158,14 @@ const Dashboard = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Personal Delegate Info Banner */}
         {statistics && (
-          <div className="bg-gradient-three-purple text-white rounded-xl p-6 mb-8 shadow-2xl border border-purple-medium">
+          <div className="bg-purple-600 text-white rounded-xl p-6 mb-8 shadow-2xl border border-purple-300">
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-2xl font-bold">
                   {t('welcome')}, {currentUser?.rep_name || currentUser?.username}!
                 </h2>
                 <p className="text-purple-light mt-1">
-                  📍 {t('territory')}: <span className="font-semibold text-white">{statistics.delegate.wilaya}</span>
+                  ðŸ“ {t('territory')}: <span className="font-semibold text-white">{statistics.delegate.wilaya}</span>
                 </p>
                 <p className="text-purple-light text-sm mt-1">
                   {t('showsPersonalData')}
@@ -203,15 +203,15 @@ const Dashboard = ({
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <button
               onClick={() => {
-                console.log('🔵 Dashboard - New Sale button clicked');
-                console.log('🔵 Dashboard - Current data state:', data);
-                console.log('🔵 Dashboard - Dashboard data state:', dashboardData);
-                console.log('🔵 Dashboard - Data exists:', !!data);
-                console.log('🔵 Dashboard - Packs exists:', !!dashboardData?.packs);
-                console.log('🔵 Dashboard - Packs length:', dashboardData?.packs?.length);
-                console.log('🔵 Dashboard - Packs content:', dashboardData?.packs);
-                console.log('🔵 Dashboard - Clients length:', dashboardData?.clients?.length);
-                console.log('🔵 Dashboard - About to navigate to packs screen');
+                console.log('ðŸ”µ Dashboard - New Sale button clicked');
+                console.log('ðŸ”µ Dashboard - Current data state:', data);
+                console.log('ðŸ”µ Dashboard - Dashboard data state:', dashboardData);
+                console.log('ðŸ”µ Dashboard - Data exists:', !!data);
+                console.log('ðŸ”µ Dashboard - Packs exists:', !!dashboardData?.packs);
+                console.log('ðŸ”µ Dashboard - Packs length:', dashboardData?.packs?.length);
+                console.log('ðŸ”µ Dashboard - Packs content:', dashboardData?.packs);
+                console.log('ðŸ”µ Dashboard - Clients length:', dashboardData?.clients?.length);
+                console.log('ðŸ”µ Dashboard - About to navigate to packs screen');
                 
                 trackUserAction('CLICK_NEW_SALE', { 
                   user: currentUser?.username,

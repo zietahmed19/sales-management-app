@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { User, Lock, AlertCircle, Shield, Users } from 'lucide-react';
 import { t } from '../../translations/arabic';
 
@@ -20,7 +20,7 @@ const LoginScreen = ({ setCurrentUser, setCurrentScreen, initializeData, trackUs
     trackUserAction('LOGIN_ATTEMPT', { username: credentials.username, isAdmin: isAdminLogin });
 
     try {
-      console.log('🔐 LoginScreen - Attempting login with:', credentials.username);
+      console.log('ðŸ” LoginScreen - Attempting login with:', credentials.username);
       
       if (isAdminLogin) {
         // Admin login validation (use real API)
@@ -33,11 +33,11 @@ const LoginScreen = ({ setCurrentUser, setCurrentScreen, initializeData, trackUs
           body: JSON.stringify(credentials),
         });
 
-        console.log('🔐 LoginScreen - Admin API Response status:', response.status);
+        console.log('ðŸ” LoginScreen - Admin API Response status:', response.status);
 
         if (!response.ok) {
           const errorText = await response.text();
-          console.error('🔐 LoginScreen - Admin login failed:', errorText);
+          console.error('ðŸ” LoginScreen - Admin login failed:', errorText);
           trackUserAction('LOGIN_FAILED', { username: credentials.username, error: errorText, isAdmin: true });
           throw new Error('Invalid admin credentials');
         }
@@ -46,7 +46,7 @@ const LoginScreen = ({ setCurrentUser, setCurrentScreen, initializeData, trackUs
         
         // Verify this is actually an admin user (rep_code = 'ADMIN')
         if (user.rep_code !== 'ADMIN') {
-          console.error('🔐 LoginScreen - User is not an admin:', user);
+          console.error('ðŸ” LoginScreen - User is not an admin:', user);
           throw new Error('Admin access required');
         }
 
@@ -60,8 +60,8 @@ const LoginScreen = ({ setCurrentUser, setCurrentScreen, initializeData, trackUs
           rep_name: user.rep_name || 'Administrator'
         };
 
-        console.log('✅ LoginScreen - Admin login successful');
-        console.log('👤 Admin user object:', adminUser);
+        console.log('âœ… LoginScreen - Admin login successful');
+        console.log('ðŸ‘¤ Admin user object:', adminUser);
         
         trackUserAction('LOGIN_SUCCESS', { 
           username: credentials.username, 
@@ -77,11 +77,11 @@ const LoginScreen = ({ setCurrentUser, setCurrentScreen, initializeData, trackUs
         
         await new Promise(resolve => setTimeout(resolve, 50));
         
-        console.log('🔄 Setting currentUser...');
+        console.log('ðŸ”„ Setting currentUser...');
         setCurrentUser(adminUser);
-        console.log('🚀 Setting currentScreen to admin...');
+        console.log('ðŸš€ Setting currentScreen to admin...');
         setCurrentScreen('admin');
-        console.log('📱 Admin login process complete');
+        console.log('ðŸ“± Admin login process complete');
         
         trackUserAction('NAVIGATE_TO_ADMIN', { user: adminUser });
         
@@ -101,20 +101,20 @@ const LoginScreen = ({ setCurrentUser, setCurrentScreen, initializeData, trackUs
           body: JSON.stringify(credentials),
         });
 
-        console.log('🔐 LoginScreen - Response status:', response.status);
+        console.log('ðŸ” LoginScreen - Response status:', response.status);
 
         if (!response.ok) {
           const errorText = await response.text();
-          console.error('🔐 LoginScreen - Login failed:', errorText);
+          console.error('ðŸ” LoginScreen - Login failed:', errorText);
           trackUserAction('LOGIN_FAILED', { username: credentials.username, error: errorText });
           throw new Error('Invalid credentials');
         }
 
         const { token, user } = await response.json();
         
-        console.log('✅ LoginScreen - Delegate login successful');
-        console.log('🔑 LoginScreen - Token received:', !!token);
-        console.log('👤 LoginScreen - User received:', user);
+        console.log('âœ… LoginScreen - Delegate login successful');
+        console.log('ðŸ”‘ LoginScreen - Token received:', !!token);
+        console.log('ðŸ‘¤ LoginScreen - User received:', user);
         
         trackUserAction('LOGIN_SUCCESS', { 
           username: credentials.username, 
@@ -128,7 +128,7 @@ const LoginScreen = ({ setCurrentUser, setCurrentScreen, initializeData, trackUs
         localStorage.setItem('userRole', 'delegate');
         localStorage.setItem('territory', user.territory);
         
-        console.log('💾 LoginScreen - Data stored in localStorage');
+        console.log('ðŸ’¾ LoginScreen - Data stored in localStorage');
         
         // Small delay to ensure localStorage is committed
         await new Promise(resolve => setTimeout(resolve, 50));
@@ -140,7 +140,7 @@ const LoginScreen = ({ setCurrentUser, setCurrentScreen, initializeData, trackUs
         
         // Trigger manual data loading after successful login
         if (initializeData) {
-          console.log('🔄 LoginScreen - Triggering data initialization...');
+          console.log('ðŸ”„ LoginScreen - Triggering data initialization...');
           trackUserAction('INITIALIZE_DATA_TRIGGER', { user: user });
           setTimeout(() => {
             initializeData(user);
@@ -149,9 +149,9 @@ const LoginScreen = ({ setCurrentUser, setCurrentScreen, initializeData, trackUs
       }
       
     } catch (error) {
-      console.error('❌ LoginScreen - Login error:', error);
+      console.error('âŒ LoginScreen - Login error:', error);
       trackUserAction('LOGIN_ERROR', { username: credentials.username, error: error.message });
-      setError(isAdminLogin ? 'بيانات اعتماد المدير غير صحيحة' : 'بيانات الاعتماد غير صحيحة');
+      setError(isAdminLogin ? 'Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ø¹ØªÙ…Ø§Ø¯ Ø§Ù„Ù…Ø¯ÙŠØ± ØºÙŠØ± ØµØ­ÙŠØ­Ø©' : 'Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„Ø§Ø¹ØªÙ…Ø§Ø¯ ØºÙŠØ± ØµØ­ÙŠØ­Ø©');
     } finally {
       setLoading(false);
     }
@@ -162,17 +162,17 @@ const LoginScreen = ({ setCurrentUser, setCurrentScreen, initializeData, trackUs
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white to-purple-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8" dir="rtl">
+    <div className="min-h-screen bg-white flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8" dir="rtl">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <div className="mx-auto h-20 w-20 bg-gradient-to-br from-purple-500 to-purple-700 rounded-full flex items-center justify-center mb-6 shadow-2xl">
+          <div className="mx-auto h-20 w-20 bg-purple-600 rounded-full flex items-center justify-center mb-6 shadow-2xl">
             <Shield className="h-10 w-10 text-white" />
           </div>
           <h2 className="mt-6 text-3xl font-extrabold text-purple-900 drop-shadow-lg">
-            نظام إدارة المبيعات
+            Ù†Ø¸Ø§Ù… Ø¥Ø¯Ø§Ø±Ø© Ø§Ù„Ù…Ø¨ÙŠØ¹Ø§Øª
           </h2>
           <p className="mt-2 text-sm text-purple-600">
-            {isAdminLogin ? 'دخول المدير' : t('login')} إلى حسابك
+            {isAdminLogin ? 'Ø¯Ø®ÙˆÙ„ Ø§Ù„Ù…Ø¯ÙŠØ±' : t('login')} Ø¥Ù„Ù‰ Ø­Ø³Ø§Ø¨Ùƒ
           </p>
         </div>
 
@@ -183,25 +183,25 @@ const LoginScreen = ({ setCurrentUser, setCurrentScreen, initializeData, trackUs
               type="button"
               className={`flex-1 flex items-center justify-center py-2 px-4 rounded-md text-sm font-medium transition-all duration-300 ${
                 !isAdminLogin 
-                  ? 'bg-gradient-to-r from-purple-500 to-purple-700 text-white shadow-lg transform scale-105' 
+                  ? 'bg-purple-600 text-white shadow-lg transform scale-105' 
                   : 'text-purple-600 hover:text-purple-800 hover:bg-purple-100'
               }`}
               onClick={() => setIsAdminLogin(false)}
             >
               <Users className="w-4 h-4 mr-2" />
-              دخول المندوب
+              Ø¯Ø®ÙˆÙ„ Ø§Ù„Ù…Ù†Ø¯ÙˆØ¨
             </button>
             <button
               type="button"
               className={`flex-1 flex items-center justify-center py-2 px-4 rounded-md text-sm font-medium transition-all duration-300 ${
                 isAdminLogin 
-                  ? 'bg-gradient-to-r from-purple-400 to-purple-600 text-white shadow-lg transform scale-105' 
+                  ? 'bg-purple-500 text-white shadow-lg transform scale-105' 
                   : 'text-purple-600 hover:text-purple-800 hover:bg-purple-100'
               }`}
               onClick={() => setIsAdminLogin(true)}
             >
               <Shield className="w-4 h-4 mr-2" />
-              دخول المدير
+              Ø¯Ø®ÙˆÙ„ Ø§Ù„Ù…Ø¯ÙŠØ±
             </button>
           </div>
         </div>
@@ -249,21 +249,21 @@ const LoginScreen = ({ setCurrentUser, setCurrentScreen, initializeData, trackUs
           <button
             type="submit"
             disabled={loading}
-            className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed transform transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+            className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed transform transition-all duration-300 hover:scale-105 hover:shadow-2xl"
           >
-            {loading ? 'جاري تسجيل الدخول...' : (isAdminLogin ? 'دخول كمدير' : t('login'))}
+            {loading ? 'Ø¬Ø§Ø±ÙŠ ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø¯Ø®ÙˆÙ„...' : (isAdminLogin ? 'Ø¯Ø®ÙˆÙ„ ÙƒÙ…Ø¯ÙŠØ±' : t('login'))}
           </button>
         </form>
 
         {/* Quick Access - Only show admin credentials */}
         {isAdminLogin && (
           <div className="text-center text-sm text-purple-700 bg-white bg-opacity-95 backdrop-blur-lg rounded-xl p-4 shadow-2xl border border-purple-200">
-            <p className="mb-3 font-semibold text-purple-800">بيانات المديرين:</p>
+            <p className="mb-3 font-semibold text-purple-800">Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„Ù…Ø¯ÙŠØ±ÙŠÙ†:</p>
             <div className="grid gap-2">
               {adminUsers.map(admin => (
                 <button
                   key={admin}
-                  className="w-full py-2 px-3 bg-gradient-to-r from-purple-400 to-purple-600 text-white rounded-lg text-xs transition-all duration-300 transform hover:scale-105 hover:shadow-lg border border-purple-300 hover:from-purple-500 hover:to-purple-700"
+                  className="w-full py-2 px-3 bg-purple-500 text-white rounded-lg text-xs transition-all duration-300 transform hover:scale-105 hover:shadow-lg border border-purple-300 hover:bg-purple-600"
                   onClick={() => fillCredentials(admin, adminPassword)}
                 >
                   {admin}
@@ -275,8 +275,8 @@ const LoginScreen = ({ setCurrentUser, setCurrentScreen, initializeData, trackUs
 
         {!isAdminLogin && (
           <div className="text-center text-sm text-purple-700 bg-white bg-opacity-95 backdrop-blur-lg rounded-xl p-4 shadow-2xl border border-purple-200">
-            <p className="font-semibold text-purple-900">بيانات المندوبين محفوظة في قاعدة البيانات</p>
-            <p className="text-purple-600">استخدم بيانات اعتمادك الحقيقية</p>
+            <p className="font-semibold text-purple-900">Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„Ù…Ù†Ø¯ÙˆØ¨ÙŠÙ† Ù…Ø­ÙÙˆØ¸Ø© ÙÙŠ Ù‚Ø§Ø¹Ø¯Ø© Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª</p>
+            <p className="text-purple-600">Ø§Ø³ØªØ®Ø¯Ù… Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ø¹ØªÙ…Ø§Ø¯Ùƒ Ø§Ù„Ø­Ù‚ÙŠÙ‚ÙŠØ©</p>
           </div>
         )}
       </div>

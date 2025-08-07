@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+﻿import React, { useState, useMemo, useEffect } from 'react';
 import { ArrowLeft, Search, MapPin, Phone, Users, Filter, SortAsc, SortDesc } from 'lucide-react';
 import { t } from '../../translations/arabic';
 
@@ -20,18 +20,18 @@ const ClientSelection = ({
     const loadClients = async () => {
       try {
         setLoading(true);
-        console.log('🔄 ClientSelection - Loading clients...');
+        console.log('ðŸ”„ ClientSelection - Loading clients...');
         
         const response = await apiRequest('/api/clients');
         if (response && response.length) {
           setClients(response);
-          console.log('✅ ClientSelection - Loaded clients:', response.length);
+          console.log('âœ… ClientSelection - Loaded clients:', response.length);
         } else {
-          console.warn('⚠️ ClientSelection - No clients data received');
+          console.warn('âš ï¸ ClientSelection - No clients data received');
           setClients([]);
         }
       } catch (error) {
-        console.error('❌ ClientSelection - Error loading clients:', error);
+        console.error('âŒ ClientSelection - Error loading clients:', error);
         setClients([]);
       } finally {
         setLoading(false);
@@ -43,36 +43,36 @@ const ClientSelection = ({
     }
   }, [apiRequest]);
   const handleClientSelect = (client) => {
-    console.log('🔵 ClientSelection - handleClientSelect called');
-    console.log('🔵 Selected client:', client);
+    console.log('ðŸ”µ ClientSelection - handleClientSelect called');
+    console.log('ðŸ”µ Selected client:', client);
     
     try {
       // Validate client object
       if (!client) {
-        console.error('❌ ClientSelection - No client provided');
-        alert('خطأ: لم يتم اختيار عميل صحيح');
+        console.error('âŒ ClientSelection - No client provided');
+        alert('Ø®Ø·Ø£: Ù„Ù… ÙŠØªÙ… Ø§Ø®ØªÙŠØ§Ø± Ø¹Ù…ÙŠÙ„ ØµØ­ÙŠØ­');
         return;
       }
       
       // Check if packs are selected first
       if (!selectedPacks || selectedPacks.length === 0) {
-        console.warn('⚠️ ClientSelection - No packs selected, redirecting to pack selection');
-        alert('يرجى اختيار الباقات أولاً قبل اختيار العميل');
+        console.warn('âš ï¸ ClientSelection - No packs selected, redirecting to pack selection');
+        alert('ÙŠØ±Ø¬Ù‰ Ø§Ø®ØªÙŠØ§Ø± Ø§Ù„Ø¨Ø§Ù‚Ø§Øª Ø£ÙˆÙ„Ø§Ù‹ Ù‚Ø¨Ù„ Ø§Ø®ØªÙŠØ§Ø± Ø§Ù„Ø¹Ù…ÙŠÙ„');
         setCurrentScreen('packs');
         return;
       }
       
-      console.log('🔵 Setting client state...');
+      console.log('ðŸ”µ Setting client state...');
       setSelectedClient(client);
       
-      console.log('🔵 Client state updated, navigating to confirmation...');
+      console.log('ðŸ”µ Client state updated, navigating to confirmation...');
       setCurrentScreen('confirmation');
       
-      console.log('✅ ClientSelection - Navigation to confirmation completed successfully');
+      console.log('âœ… ClientSelection - Navigation to confirmation completed successfully');
     } catch (error) {
-      console.error('❌ Error in handleClientSelect:', error);
-      console.error('❌ Error stack:', error.stack);
-      alert('خطأ تقني في اختيار العميل: ' + error.message);
+      console.error('âŒ Error in handleClientSelect:', error);
+      console.error('âŒ Error stack:', error.stack);
+      alert('Ø®Ø·Ø£ ØªÙ‚Ù†ÙŠ ÙÙŠ Ø§Ø®ØªÙŠØ§Ø± Ø§Ù„Ø¹Ù…ÙŠÙ„: ' + error.message);
     }
   };
 
@@ -141,10 +141,10 @@ const ClientSelection = ({
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white flex items-center justify-center" dir="rtl">
+      <div className="min-h-screen bg-white flex items-center justify-center" dir="rtl">
         <div className="text-center">
-          <h2 className="text-xl font-semibold text-purple-800 mb-2">جاري تحميل العملاء...</h2>
-          <p className="text-purple-600">يرجى الانتظار</p>
+          <h2 className="text-xl font-semibold text-purple-800 mb-2">Ø¬Ø§Ø±ÙŠ ØªØ­Ù…ÙŠÙ„ Ø§Ù„Ø¹Ù…Ù„Ø§Ø¡...</h2>
+          <p className="text-purple-600">ÙŠØ±Ø¬Ù‰ Ø§Ù„Ø§Ù†ØªØ¸Ø§Ø±</p>
         </div>
       </div>
     );
@@ -152,13 +152,13 @@ const ClientSelection = ({
 
   if (!clients || clients.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white flex items-center justify-center" dir="rtl">
+      <div className="min-h-screen bg-white flex items-center justify-center" dir="rtl">
         <div className="text-center">
           <h2 className="text-xl font-semibold text-purple-800 mb-2">{t('noClientsInTerritory')}</h2>
-          <p className="text-purple-600 mb-4">{t('loading')} {t('clients')} أو لا يوجد عملاء متاحون في منطقتك.</p>
+          <p className="text-purple-600 mb-4">{t('loading')} {t('clients')} Ø£Ùˆ Ù„Ø§ ÙŠÙˆØ¬Ø¯ Ø¹Ù…Ù„Ø§Ø¡ Ù…ØªØ§Ø­ÙˆÙ† ÙÙŠ Ù…Ù†Ø·Ù‚ØªÙƒ.</p>
           <button
             onClick={() => setCurrentScreen('dashboard')}
-            className="bg-gradient-to-r from-purple-600 to-white0 text-white px-4 py-2 rounded-lg hover:from-purple-700 hover:to-purple-600 transition-all duration-300 transform hover:scale-105"
+            className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-all duration-300 transform hover:scale-105"
           >
             {t('backToDashboard')}
           </button>
@@ -168,8 +168,8 @@ const ClientSelection = ({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white" dir="rtl">
-      <div className="bg-gradient-to-r from-purple-600 via-purple-500 to-white0 shadow-xl border-b border-purple-300">
+    <div className="min-h-screen bg-white" dir="rtl">
+      <div className="bg-purple-600 shadow-xl border-b border-purple-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center">
             <button 
@@ -188,9 +188,9 @@ const ClientSelection = ({
         <div className="bg-white bg-opacity-90 backdrop-blur-sm rounded-xl shadow-xl p-6 mb-6 border border-purple-200">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-4">
             <div className="flex-1">
-              <h2 className="text-lg font-semibold text-purple-800 mb-2">اختر عميلاً لإتمام البيع</h2>
+              <h2 className="text-lg font-semibold text-purple-800 mb-2">Ø§Ø®ØªØ± Ø¹Ù…ÙŠÙ„Ø§Ù‹ Ù„Ø¥ØªÙ…Ø§Ù… Ø§Ù„Ø¨ÙŠØ¹</h2>
               <p className="text-sm text-purple-600">
-                عرض {filteredClients.length} من أصل {clients.length} عميل
+                Ø¹Ø±Ø¶ {filteredClients.length} Ù…Ù† Ø£ØµÙ„ {clients.length} Ø¹Ù…ÙŠÙ„
               </p>
             </div>
             
@@ -200,7 +200,7 @@ const ClientSelection = ({
                 <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                 <input
                   type="text"
-                  placeholder="البحث بالاسم، المدينة، الهاتف..."
+                  placeholder="Ø§Ù„Ø¨Ø­Ø« Ø¨Ø§Ù„Ø§Ø³Ù…ØŒ Ø§Ù„Ù…Ø¯ÙŠÙ†Ø©ØŒ Ø§Ù„Ù‡Ø§ØªÙ..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full pr-10 pl-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-right"
@@ -221,7 +221,7 @@ const ClientSelection = ({
                 className="border border-gray-300 rounded-md px-3 py-2 text-right"
                 dir="rtl"
               >
-                <option value="all">كل الولايات</option>
+                <option value="all">ÙƒÙ„ Ø§Ù„ÙˆÙ„Ø§ÙŠØ§Øª</option>
                 {uniqueWilayas.map(wilaya => (
                   <option key={wilaya} value={wilaya}>{wilaya}</option>
                 ))}
@@ -230,22 +230,22 @@ const ClientSelection = ({
             
             {/* Sort Options */}
             <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-500">ترتيب حسب:</span>
+              <span className="text-sm text-gray-500">ØªØ±ØªÙŠØ¨ Ø­Ø³Ø¨:</span>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
                 className="border border-gray-300 rounded-md px-3 py-2 text-right"
                 dir="rtl"
               >
-                <option value="name">الاسم</option>
-                <option value="city">المدينة</option>
-                <option value="id">رقم العميل</option>
+                <option value="name">Ø§Ù„Ø§Ø³Ù…</option>
+                <option value="city">Ø§Ù„Ù…Ø¯ÙŠÙ†Ø©</option>
+                <option value="id">Ø±Ù‚Ù… Ø§Ù„Ø¹Ù…ÙŠÙ„</option>
               </select>
               
               <button
                 onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
                 className="p-2 border border-gray-300 rounded-md hover:bg-gray-50"
-                title={sortOrder === 'asc' ? 'تصاعدي' : 'تنازلي'}
+                title={sortOrder === 'asc' ? 'ØªØµØ§Ø¹Ø¯ÙŠ' : 'ØªÙ†Ø§Ø²Ù„ÙŠ'}
               >
                 {sortOrder === 'asc' ? <SortAsc className="w-4 h-4" /> : <SortDesc className="w-4 h-4" />}
               </button>
@@ -260,7 +260,7 @@ const ClientSelection = ({
                 }}
                 className="px-3 py-2 text-sm text-purple-600 hover:text-purple-800"
               >
-                مسح الفلاتر
+                Ù…Ø³Ø­ Ø§Ù„ÙÙ„Ø§ØªØ±
               </button>
             )}
           </div>
@@ -272,21 +272,21 @@ const ClientSelection = ({
             <div className="bg-purple-50 rounded-lg p-4 text-center">
               <Users className="w-6 h-6 text-purple-600 mx-auto mb-2" />
               <div className="text-2xl font-bold text-purple-900">{filteredClients.length}</div>
-              <div className="text-sm text-purple-600">عملاء متاحون</div>
+              <div className="text-sm text-purple-600">Ø¹Ù…Ù„Ø§Ø¡ Ù…ØªØ§Ø­ÙˆÙ†</div>
             </div>
             <div className="bg-green-50 rounded-lg p-4 text-center">
               <MapPin className="w-6 h-6 text-green-600 mx-auto mb-2" />
               <div className="text-2xl font-bold text-green-900">
                 {new Set(filteredClients.map(c => c.City)).size}
               </div>
-              <div className="text-sm text-green-600">مدن مختلفة</div>
+              <div className="text-sm text-green-600">Ù…Ø¯Ù† Ù…Ø®ØªÙ„ÙØ©</div>
             </div>
             <div className="bg-purple-50 rounded-lg p-4 text-center">
               <Filter className="w-6 h-6 text-purple-600 mx-auto mb-2" />
               <div className="text-2xl font-bold text-purple-900">
                 {new Set(filteredClients.map(c => c.Wilaya)).size}
               </div>
-              <div className="text-sm text-purple-600">ولايات مختلفة</div>
+              <div className="text-sm text-purple-600">ÙˆÙ„Ø§ÙŠØ§Øª Ù…Ø®ØªÙ„ÙØ©</div>
             </div>
           </div>
         )}
@@ -317,11 +317,11 @@ const ClientSelection = ({
                         const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
                         window.open(googleMapsUrl, '_blank');
                       }}
-                      className="flex items-center gap-1 bg-gradient-to-r from-purple-500 to-purple-700 hover:from-purple-600 hover:to-purple-800 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
-                      title="فتح في خرائط جوجل"
+                      className="flex items-center gap-1 bg-purple-600 hover:bg-purple-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                      title="ÙØªØ­ ÙÙŠ Ø®Ø±Ø§Ø¦Ø· Ø¬ÙˆØ¬Ù„"
                     >
                       <MapPin className="w-3 h-3" />
-                      <span>خريطة</span>
+                      <span>Ø®Ø±ÙŠØ·Ø©</span>
                     </button>
                   </div>
                   
@@ -344,11 +344,11 @@ const ClientSelection = ({
                           const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
                           window.open(googleMapsUrl, '_blank');
                         }}
-                        className="flex items-center gap-1 bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 whitespace-nowrap"
-                        title="فتح العنوان الكامل في خرائط جوجل"
+                        className="flex items-center gap-1 bg-purple-600 hover:bg-purple-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 whitespace-nowrap"
+                        title="ÙØªØ­ Ø§Ù„Ø¹Ù†ÙˆØ§Ù† Ø§Ù„ÙƒØ§Ù…Ù„ ÙÙŠ Ø®Ø±Ø§Ø¦Ø· Ø¬ÙˆØ¬Ù„"
                       >
                         <MapPin className="w-3 h-3" />
-                        <span>عنوان</span>
+                        <span>Ø¹Ù†ÙˆØ§Ù†</span>
                       </button>
                     </div>
                   )}
@@ -356,7 +356,7 @@ const ClientSelection = ({
                 
                 <button
                   onClick={() => handleClientSelect(client)}
-                  className="w-full bg-gradient-to-r from-purple-600 to-white0 text-white py-2 px-4 rounded-lg hover:from-purple-700 hover:to-purple-600 font-medium transition-all duration-300 flex items-center justify-center gap-2 transform hover:scale-105 hover:shadow-lg"
+                  className="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 font-medium transition-all duration-300 flex items-center justify-center gap-2 transform hover:scale-105 hover:shadow-lg"
                 >
                   <Users className="w-4 h-4" />
                   {t('selectClient')}
@@ -367,11 +367,11 @@ const ClientSelection = ({
         ) : (
           <div className="bg-white rounded-lg shadow-md p-12 text-center">
             <Users className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">لا توجد نتائج</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Ù„Ø§ ØªÙˆØ¬Ø¯ Ù†ØªØ§Ø¦Ø¬</h3>
             <p className="text-gray-600 mb-4">
               {searchTerm || selectedWilaya !== 'all' 
-                ? 'لم يتم العثور على عملاء يطابقون معايير البحث' 
-                : 'لا يوجد عملاء متاحون في منطقتك'}
+                ? 'Ù„Ù… ÙŠØªÙ… Ø§Ù„Ø¹Ø«ÙˆØ± Ø¹Ù„Ù‰ Ø¹Ù…Ù„Ø§Ø¡ ÙŠØ·Ø§Ø¨Ù‚ÙˆÙ† Ù…Ø¹Ø§ÙŠÙŠØ± Ø§Ù„Ø¨Ø­Ø«' 
+                : 'Ù„Ø§ ÙŠÙˆØ¬Ø¯ Ø¹Ù…Ù„Ø§Ø¡ Ù…ØªØ§Ø­ÙˆÙ† ÙÙŠ Ù…Ù†Ø·Ù‚ØªÙƒ'}
             </p>
             {(searchTerm || selectedWilaya !== 'all') && (
               <button
@@ -381,7 +381,7 @@ const ClientSelection = ({
                 }}
                 className="text-purple-600 hover:text-purple-800 font-medium"
               >
-                مسح الفلاتر وإظهار كل العملاء
+                Ù…Ø³Ø­ Ø§Ù„ÙÙ„Ø§ØªØ± ÙˆØ¥Ø¸Ù‡Ø§Ø± ÙƒÙ„ Ø§Ù„Ø¹Ù…Ù„Ø§Ø¡
               </button>
             )}
           </div>

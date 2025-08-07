@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Search, Plus, Edit, MapPin, Phone, Users } from 'lucide-react';
 import Header from '../Common/Header';
 
@@ -39,10 +39,10 @@ const ClientManagement = ({
         
         setClients(clientsData || []);
         setSales(salesData || []);
-        console.log('✅ ClientManagement - Loaded clients:', clientsData?.length);
-        console.log('✅ ClientManagement - Loaded sales:', salesData?.length);
+        console.log('âœ… ClientManagement - Loaded clients:', clientsData?.length);
+        console.log('âœ… ClientManagement - Loaded sales:', salesData?.length);
       } catch (error) {
-        console.error('❌ ClientManagement - Error loading data:', error);
+        console.error('âŒ ClientManagement - Error loading data:', error);
         setClients([]);
         setSales([]);
       } finally {
@@ -135,9 +135,9 @@ const ClientManagement = ({
       });
       setShowAddForm(false);
       
-      console.log('✅ Client saved successfully');
+      console.log('âœ… Client saved successfully');
     } catch (error) {
-      console.error('❌ Error saving client:', error);
+      console.error('âŒ Error saving client:', error);
       alert('Error saving client: ' + error.message);
     }
   };
@@ -346,7 +346,7 @@ const ClientManagement = ({
                         const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
                         window.open(googleMapsUrl, '_blank');
                       }}
-                      className="flex items-center space-x-1 bg-gradient-to-r from-purple-500 to-purple-700 hover:from-purple-600 hover:to-purple-800 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                      className="flex items-center space-x-1 bg-purple-600 hover:bg-purple-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
                       title="Open in Google Maps"
                     >
                       <MapPin className="w-3 h-3" />
@@ -368,7 +368,7 @@ const ClientManagement = ({
                           const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
                           window.open(googleMapsUrl, '_blank');
                         }}
-                        className="flex items-center space-x-1 bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 whitespace-nowrap"
+                        className="flex items-center space-x-1 bg-purple-600 hover:bg-purple-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 whitespace-nowrap"
                         title="Open full address in Google Maps"
                       >
                         <MapPin className="w-3 h-3" />
@@ -432,3 +432,4 @@ const ClientManagement = ({
 };
 
 export default ClientManagement;
+
