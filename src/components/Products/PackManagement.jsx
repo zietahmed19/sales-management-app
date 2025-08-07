@@ -418,7 +418,7 @@ const PackManagement = ({
                   </div>
                   <button
                     onClick={() => handleEditPack(pack)}
-                    className="p-2 text-gray-400 hover:text-purple-600 hover:bg-indigo-50 rounded-full"
+                    className="p-2 text-gray-400 hover:text-purple-600 hover:bg-purple-50 rounded-full"
                   >
                     <Edit className="w-4 h-4" />
                   </button>
