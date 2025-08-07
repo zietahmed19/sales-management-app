@@ -206,7 +206,7 @@ const Settings = ({
                     onClick={() => setActiveTab(tab.id)}
                     className={`flex items-center space-x-2 px-6 py-4 text-sm font-medium border-b-2 ${
                       activeTab === tab.id
-                        ? 'border-indigo-500 text-indigo-600'
+                        ? 'border-indigo-500 text-purple-600'
                         : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                     }`}
                   >
@@ -233,7 +233,7 @@ const Settings = ({
                       type="text"
                       value={profileData.RepresentName}
                       onChange={(e) => setProfileData({ ...profileData, RepresentName: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                     />
                   </div>
                   
@@ -258,7 +258,7 @@ const Settings = ({
                       type="text"
                       value={profileData.Phone}
                       onChange={(e) => setProfileData({ ...profileData, Phone: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                     />
                   </div>
                   
@@ -283,7 +283,7 @@ const Settings = ({
                       type="text"
                       value={profileData.City}
                       onChange={(e) => setProfileData({ ...profileData, City: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                     />
                   </div>
                   
@@ -295,7 +295,7 @@ const Settings = ({
                       type="text"
                       value={profileData.Wilaya}
                       onChange={(e) => setProfileData({ ...profileData, Wilaya: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                     />
                   </div>
                 </div>
@@ -303,7 +303,7 @@ const Settings = ({
                 <div className="mt-6">
                   <button
                     onClick={handleSaveProfile}
-                    className="flex items-center space-x-2 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700"
+                    className="flex items-center space-x-2 bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700"
                   >
                     <Save className="w-4 h-4" />
                     <span>Save Profile</span>
@@ -325,7 +325,7 @@ const Settings = ({
                       type="password"
                       value={passwordData.currentPassword}
                       onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                     />
                   </div>
                   
@@ -337,7 +337,7 @@ const Settings = ({
                       type="password"
                       value={passwordData.newPassword}
                       onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                     />
                   </div>
                   
@@ -349,7 +349,7 @@ const Settings = ({
                       type="password"
                       value={passwordData.confirmPassword}
                       onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                     />
                   </div>
                   
@@ -374,7 +374,7 @@ const Settings = ({
                       <h4 className="text-sm font-medium text-gray-900">Sale Notifications</h4>
                       <p className="text-sm text-gray-500">Get notified when a sale is completed</p>
                     </div>
-                    <input type="checkbox" defaultChecked className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
+                    <input type="checkbox" defaultChecked className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded" />
                   </div>
                   
                   <div className="flex items-center justify-between">
@@ -382,7 +382,7 @@ const Settings = ({
                       <h4 className="text-sm font-medium text-gray-900">Client Updates</h4>
                       <p className="text-sm text-gray-500">Get notified about client information changes</p>
                     </div>
-                    <input type="checkbox" defaultChecked className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
+                    <input type="checkbox" defaultChecked className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded" />
                   </div>
                   
                   <div className="flex items-center justify-between">
@@ -390,7 +390,7 @@ const Settings = ({
                       <h4 className="text-sm font-medium text-gray-900">Weekly Reports</h4>
                       <p className="text-sm text-gray-500">Receive weekly sales performance reports</p>
                     </div>
-                    <input type="checkbox" className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
+                    <input type="checkbox" className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded" />
                   </div>
                 </div>
               </div>
@@ -408,7 +408,7 @@ const Settings = ({
                     <select 
                       value={appSettings.language}
                       onChange={(e) => handleLanguageChange(e.target.value)}
-                      className="w-40 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      className="w-40 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                     >
                       <option value="ar">العربية</option>
                       <option value="fr">Français</option>
@@ -424,7 +424,7 @@ const Settings = ({
                     <select 
                       value={appSettings.currency}
                       onChange={(e) => setAppSettings({ ...appSettings, currency: e.target.value })}
-                      className="w-40 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      className="w-40 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                     >
                       <option value="DA">DA (د.ج)</option>
                       <option value="USD">USD ($)</option>
@@ -439,7 +439,7 @@ const Settings = ({
                     <select 
                       value={appSettings.theme}
                       onChange={(e) => handleThemeChange(e.target.value)}
-                      className="w-40 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      className="w-40 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                     >
                       <option value="light">Light Mode</option>
                       <option value="dark">Dark Mode</option>
@@ -453,7 +453,7 @@ const Settings = ({
                       id="notifications"
                       checked={appSettings.notifications}
                       onChange={(e) => setAppSettings({ ...appSettings, notifications: e.target.checked })}
-                      className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                      className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
                     />
                     <label htmlFor="notifications" className="text-sm font-medium text-gray-700">
                       Enable notifications
@@ -463,7 +463,7 @@ const Settings = ({
                   <div className="mt-6">
                     <button
                       onClick={handleSaveAppSettings}
-                      className="flex items-center space-x-2 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700"
+                      className="flex items-center space-x-2 bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700"
                     >
                       <Save className="w-4 h-4" />
                       <span>Save All Preferences</span>

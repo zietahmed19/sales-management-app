@@ -231,7 +231,7 @@ const AdminPackManagement = ({ resetAppState, setCurrentScreen }) => {
           <p className="text-gray-600 mb-4">{error}</p>
           <button
             onClick={fetchData}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md transition-colors"
+            className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-md transition-colors"
           >
             Try Again
           </button>
@@ -286,8 +286,8 @@ const AdminPackManagement = ({ resetAppState, setCurrentScreen }) => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="bg-white rounded-lg shadow-sm p-6">
             <div className="flex items-center">
-              <div className="p-3 bg-blue-100 rounded-full">
-                <Package className="w-6 h-6 text-blue-600" />
+              <div className="p-3 bg-purple-100 rounded-full">
+                <Package className="w-6 h-6 text-purple-600" />
               </div>
               <div className="mr-4">
                 <p className="text-sm font-medium text-gray-600">إجمالي الحزم</p>
@@ -358,7 +358,7 @@ const AdminPackManagement = ({ resetAppState, setCurrentScreen }) => {
                     type="text"
                     value={formData.pack_name}
                     onChange={(e) => setFormData({...formData, pack_name: e.target.value})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                     required
                   />
                 </div>
@@ -371,7 +371,7 @@ const AdminPackManagement = ({ resetAppState, setCurrentScreen }) => {
                     type="number"
                     value={formData.total_price}
                     onChange={(e) => setFormData({...formData, total_price: parseFloat(e.target.value) || ''})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                     required
                     min="0"
                     step="0.01"
@@ -386,7 +386,7 @@ const AdminPackManagement = ({ resetAppState, setCurrentScreen }) => {
                 <select
                   value={formData.gift_id || ''}
                   onChange={(e) => setFormData({...formData, gift_id: e.target.value || null})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                 >
                   <option value="">بدون هدية</option>
                   {gifts.map(gift => (
@@ -448,7 +448,7 @@ const AdminPackManagement = ({ resetAppState, setCurrentScreen }) => {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center"
+                  className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors flex items-center"
                 >
                   <Save className="w-4 h-4 ml-2" />
                   {editingPack ? 'حفظ التغييرات' : 'إضافة الحزمة'}
@@ -514,7 +514,7 @@ const AdminPackManagement = ({ resetAppState, setCurrentScreen }) => {
                       <div className="flex space-x-2">
                         <button
                           onClick={() => handleEdit(pack)}
-                          className="text-blue-600 hover:text-blue-900"
+                          className="text-purple-600 hover:text-purple-900"
                         >
                           <Edit className="w-4 h-4" />
                         </button>

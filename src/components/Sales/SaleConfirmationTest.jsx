@@ -25,7 +25,7 @@ const SaleConfirmationTest = ({
           </button>
           <button
             onClick={() => setCurrentScreen('dashboard')}
-            className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 font-medium"
+            className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 font-medium"
           >
             العودة للوحة التحكم
           </button>

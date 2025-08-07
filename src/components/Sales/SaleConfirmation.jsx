@@ -56,7 +56,7 @@ const SaleConfirmation = ({
           <p className="text-gray-600 mb-4">لم يتم اختيار أي حزم. يرجى العودة واختيار حزمة أولاً.</p>
           <button
             onClick={() => setCurrentScreen('packs')}
-            className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 font-medium"
+            className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 font-medium"
           >
             العودة لاختيار الحزم
           </button>
@@ -74,7 +74,7 @@ const SaleConfirmation = ({
           <p className="text-gray-600 mb-4">لم يتم اختيار عميل. يرجى العودة واختيار عميل.</p>
           <button
             onClick={() => setCurrentScreen('clients')}
-            className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 font-medium"
+            className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 font-medium"
           >
             العودة لاختيار العميل
           </button>
@@ -160,7 +160,7 @@ const handleCompleteSale = async () => {
           </div>
           <button
             onClick={handleNewSale}
-            className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 font-medium"
+            className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 font-medium"
           >
             {t('makeAnotherSale')}
           </button>

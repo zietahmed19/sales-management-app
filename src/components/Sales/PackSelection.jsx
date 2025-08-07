@@ -171,7 +171,7 @@ const PackSelection = ({
     const articlesCount = (pack.articles || []).length;
     
     if (price > 600000) return { text: 'حزمة مميزة', color: 'bg-purple-100 text-purple-800' };
-    if (articlesCount >= 5) return { text: 'عرض متنوع', color: 'bg-blue-100 text-blue-800' };
+    if (articlesCount >= 5) return { text: 'عرض متنوع', color: 'bg-purple-100 text-purple-800' };
     if (pack.Gift || pack.gift) return { text: 'مع هدية', color: 'bg-green-100 text-green-800' };
     return { text: 'عرض عادي', color: 'bg-gray-100 text-gray-800' };
   };
@@ -235,7 +235,7 @@ const PackSelection = ({
                   placeholder="البحث بالحزمة، المقالات..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pr-10 pl-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-right"
+                  className="w-full pr-10 pl-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-right"
                   dir="rtl"
                 />
               </div>
@@ -290,7 +290,7 @@ const PackSelection = ({
                   setSearchTerm('');
                   setFilterByPrice('all');
                 }}
-                className="px-3 py-2 text-sm text-indigo-600 hover:text-indigo-800"
+                className="px-3 py-2 text-sm text-purple-600 hover:text-purple-800"
               >
                 مسح الفلاتر
               </button>
@@ -340,10 +340,10 @@ const PackSelection = ({
         {/* Pack Stats */}
         {filteredAndSortedPacks.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-            <div className="bg-blue-50 rounded-lg p-4 text-center">
-              <Package className="w-6 h-6 text-blue-600 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-blue-900">{filteredAndSortedPacks.length}</div>
-              <div className="text-sm text-blue-600">حزم متاحة</div>
+            <div className="bg-purple-50 rounded-lg p-4 text-center">
+              <Package className="w-6 h-6 text-purple-600 mx-auto mb-2" />
+              <div className="text-2xl font-bold text-purple-900">{filteredAndSortedPacks.length}</div>
+              <div className="text-sm text-purple-600">حزم متاحة</div>
             </div>
             <div className="bg-green-50 rounded-lg p-4 text-center">
               <TrendingUp className="w-6 h-6 text-green-600 mx-auto mb-2" />
@@ -404,7 +404,7 @@ const PackSelection = ({
                       <span className="text-sm font-medium text-gray-700">المحتويات:</span>
                       <button
                         onClick={() => toggleDetails(packId)}
-                        className="text-xs text-indigo-600 hover:text-indigo-800"
+                        className="text-xs text-purple-600 hover:text-purple-800"
                       >
                         {detailsShown ? 'إخفاء التفاصيل' : 'عرض التفاصيل'}
                       </button>
@@ -448,7 +448,7 @@ const PackSelection = ({
                           </div>
                         ))}
                         {articles.length > 3 && (
-                          <div className="text-xs text-indigo-600 mt-1">
+                          <div className="text-xs text-purple-600 mt-1">
                             و {articles.length - 3} منتج أخرى...
                           </div>
                         )}
@@ -475,7 +475,7 @@ const PackSelection = ({
                     className={`w-full py-3 px-4 rounded-md font-medium transition-colors duration-200 flex items-center justify-center gap-2 ${
                       isSelected
                         ? 'bg-green-600 text-white cursor-default'
-                        : 'bg-indigo-600 text-white hover:bg-indigo-700'
+                        : 'bg-purple-600 text-white hover:bg-purple-700'
                     }`}
                   >
                     {isSelected ? (
@@ -509,7 +509,7 @@ const PackSelection = ({
                   setSearchTerm('');
                   setFilterByPrice('all');
                 }}
-                className="text-indigo-600 hover:text-indigo-800 font-medium"
+                className="text-purple-600 hover:text-purple-800 font-medium"
               >
                 مسح الفلاتر وإظهار كل الحزم
               </button>

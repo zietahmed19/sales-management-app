@@ -244,7 +244,7 @@ const SalesReport = ({
               <select
                 value={dateFilter}
                 onChange={(e) => setDateFilter(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
               >
                 <option value="all">All Time</option>
                 <option value="today">Today</option>
@@ -260,7 +260,7 @@ const SalesReport = ({
               <select
                 value={representFilter}
                 onChange={(e) => setRepresentFilter(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
               >
                 <option value="all">All Representatives</option>
                 {representatives.map(rep => (
@@ -276,7 +276,7 @@ const SalesReport = ({
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
               >
                 <option value="date">Date</option>
                 <option value="amount">Amount</option>
@@ -290,7 +290,7 @@ const SalesReport = ({
               <select
                 value={sortOrder}
                 onChange={(e) => setSortOrder(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
               >
                 <option value="desc">Descending</option>
                 <option value="asc">Ascending</option>
@@ -315,7 +315,7 @@ const SalesReport = ({
           
           <div className="bg-white rounded-lg shadow-md p-6">
             <div className="flex items-center">
-              <div className="bg-blue-500 p-3 rounded-full text-white mr-4">
+              <div className="bg-purple-500 p-3 rounded-full text-white mr-4">
                 <BarChart3 className="w-6 h-6" />
               </div>
               <div>
@@ -339,7 +339,7 @@ const SalesReport = ({
           
           <div className="bg-white rounded-lg shadow-md p-6">
             <div className="flex items-center">
-              <div className="bg-indigo-500 p-3 rounded-full text-white mr-4">
+              <div className="bg-purple-500 p-3 rounded-full text-white mr-4">
                 <TrendingUp className="w-6 h-6" />
               </div>
               <div>
@@ -365,7 +365,7 @@ const SalesReport = ({
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
                       <div 
-                        className="bg-blue-600 h-2 rounded-full" 
+                        className="bg-purple-600 h-2 rounded-full" 
                         style={{ 
                           width: `${(data.revenue / stats.totalRevenue) * 100}%` 
                         }}
@@ -417,7 +417,7 @@ const SalesReport = ({
               <div key={day.date} className="flex-1 flex flex-col items-center">
                 <div className="flex-1 flex items-end w-full">
                   <div 
-                    className="w-full bg-blue-500 rounded-t"
+                    className="w-full bg-purple-500 rounded-t"
                     style={{ 
                       height: `${Math.max((day.revenue / Math.max(...stats.dailyTrend.map(d => d.revenue))) * 100, 5)}%` 
                     }}

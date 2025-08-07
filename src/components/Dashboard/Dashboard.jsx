@@ -220,7 +220,7 @@ const Dashboard = ({
                 });
                 setCurrentScreen('packs');
               }}
-              className="flex items-center justify-center space-x-reverse space-x-2 bg-indigo-600 text-white py-3 px-4 rounded-md hover:bg-indigo-700"
+              className="flex items-center justify-center space-x-reverse space-x-2 bg-purple-600 text-white py-3 px-4 rounded-md hover:bg-purple-700"
             >
               <Plus className="w-5 h-5" />
               <span>{t('newSale')}</span>
@@ -233,7 +233,7 @@ const Dashboard = ({
                 });
                 setCurrentScreen('client-management');
               }}
-              className="flex items-center justify-center space-x-reverse space-x-2 bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700">
+              className="flex items-center justify-center space-x-reverse space-x-2 bg-purple-600 text-white py-3 px-4 rounded-md hover:bg-purple-700">
               <Users className="w-5 h-5" />
               <span>{t('manageClients')}</span>
             </button>
@@ -270,7 +270,7 @@ const Dashboard = ({
             {/* Monthly Sales Chart */}
             <div className="bg-white rounded-lg shadow-md p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                <BarChart3 className="w-5 h-5 ml-2 text-indigo-600" />
+                <BarChart3 className="w-5 h-5 ml-2 text-purple-600" />
                 {t('monthlySalesPerformance')}
               </h3>
               {statistics.monthlySales && statistics.monthlySales.length > 0 ? (
@@ -301,7 +301,7 @@ const Dashboard = ({
                   {statistics.topPacks.map((pack, index) => (
                     <div key={index} className="flex items-center justify-between">
                       <div className="flex items-center">
-                        <span className="text-lg font-bold text-indigo-600 ml-2">#{index + 1}</span>
+                        <span className="text-lg font-bold text-purple-600 ml-2">#{index + 1}</span>
                         <span className="text-sm font-medium">{pack.packName}</span>
                       </div>
                       <div className="text-left">
@@ -322,7 +322,7 @@ const Dashboard = ({
         {statistics?.recentActivity && statistics.recentActivity.length > 0 ? (
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
-              <Calendar className="w-5 h-5 ml-2 text-blue-600" />
+              <Calendar className="w-5 h-5 ml-2 text-purple-600" />
               {t('recentSalesActivity')}
             </h2>
             <div className="overflow-x-auto">
@@ -396,7 +396,7 @@ const Dashboard = ({
             <p className="text-gray-600 mb-4">{t('welcomeMessage')}</p>
             <button
               onClick={() => setCurrentScreen('packs')}
-              className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700"
+              className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700"
             >
               {t('makeFirstSale')}
             </button>

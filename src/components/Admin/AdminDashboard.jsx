@@ -497,7 +497,7 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
           <p className="text-gray-600 mb-4">{error}</p>
           <button
             onClick={fetchAdminData}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md transition-colors"
+            className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-md transition-colors"
           >
             إعادة المحاولة
           </button>
@@ -569,7 +569,7 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
               <select
                 value={delegateFilter}
                 onChange={(e) => setDelegateFilter(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
               >
                 <option value="all">جميع المندوبين</option>
                 {delegates.map(delegate => (
@@ -585,7 +585,7 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
               >
                 <option value="sales">المبيعات</option>
                 <option value="revenue">الإيرادات</option>
@@ -599,7 +599,7 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
               <select
                 value={sortOrder}
                 onChange={(e) => setSortOrder(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
               >
                 <option value="desc">تنازلي</option>
                 <option value="asc">تصاعدي</option>
@@ -609,7 +609,7 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
             <div className="flex items-end">
               <button
                 onClick={fetchAdminData}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors"
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md transition-colors"
               >
                 تحديث البيانات
               </button>
@@ -621,8 +621,8 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="bg-white rounded-lg shadow-sm p-6">
             <div className="flex items-center">
-              <div className="p-3 bg-blue-100 rounded-full">
-                <Users className="w-6 h-6 text-blue-600" />
+              <div className="p-3 bg-purple-100 rounded-full">
+                <Users className="w-6 h-6 text-purple-600" />
               </div>
               <div className="mr-4">
                 <p className="text-sm font-medium text-gray-600">المندوبون النشطون</p>
@@ -685,7 +685,7 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
                       <div 
-                        className="bg-blue-600 h-2 rounded-full" 
+                        className="bg-purple-600 h-2 rounded-full" 
                         style={{ 
                           width: `${(data.revenue / analyticsData.totalRevenue) * 100}%` 
                         }}

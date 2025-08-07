@@ -219,7 +219,7 @@ const PackManagement = ({
             </h2>
             <button
               onClick={() => setShowAddForm(true)}
-              className="flex items-center space-x-2 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700"
+              className="flex items-center space-x-2 bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700"
             >
               <Plus className="w-4 h-4" />
               <span>Add Pack</span>
@@ -235,7 +235,7 @@ const PackManagement = ({
                   placeholder="Search packs or articles..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />
               </div>
             </div>
@@ -244,7 +244,7 @@ const PackManagement = ({
               <select
                 value={priceFilter}
                 onChange={(e) => setPriceFilter(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
               >
                 <option value="all">All Prices</option>
                 <option value="low">Under $30</option>
@@ -273,7 +273,7 @@ const PackManagement = ({
                     type="text"
                     value={newPack.PackName}
                     onChange={(e) => setNewPack({ ...newPack, PackName: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                     placeholder="Enter pack name"
                   />
                 </div>
@@ -287,7 +287,7 @@ const PackManagement = ({
                     step="0.01"
                     value={newPack.TotalPackPrice}
                     onChange={(e) => setNewPack({ ...newPack, TotalPackPrice: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                     placeholder={`Auto-calculated: $${calculateTotalPrice().toFixed(2)}`}
                   />
                   <p className="text-xs text-gray-500 mt-1">
@@ -302,7 +302,7 @@ const PackManagement = ({
                   <select
                     value={selectedGift}
                     onChange={(e) => setSelectedGift(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                   >
                     <option value="">No Gift</option>
                     {(gifts || []).map(gift => (
@@ -321,7 +321,7 @@ const PackManagement = ({
                     type="number"
                     value={newPack.quantity}
                     onChange={(e) => setNewPack({ ...newPack, quantity: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                     placeholder="Enter quantity"
                   />
                 </div>
@@ -350,7 +350,7 @@ const PackManagement = ({
                           type="checkbox"
                           checked={!!isSelected}
                           onChange={() => toggleArticle(article)}
-                          className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                          className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
                         />
                         <div className="flex-1">
                           <span className="text-sm font-medium">{article.Name}</span>
@@ -392,7 +392,7 @@ const PackManagement = ({
               </button>
               <button
                 onClick={handleSavePack}
-                className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+                className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700"
               >
                 {editingPack ? 'Update Pack' : 'Create Pack'}
               </button>
@@ -418,7 +418,7 @@ const PackManagement = ({
                   </div>
                   <button
                     onClick={() => handleEditPack(pack)}
-                    className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-full"
+                    className="p-2 text-gray-400 hover:text-purple-600 hover:bg-indigo-50 rounded-full"
                   >
                     <Edit className="w-4 h-4" />
                   </button>
@@ -468,7 +468,7 @@ const PackManagement = ({
                 <div className="border-t pt-4">
                   <div className="grid grid-cols-2 gap-4 text-center">
                     <div>
-                      <p className="text-lg font-semibold text-indigo-600">{stats.totalSold}</p>
+                      <p className="text-lg font-semibold text-purple-600">{stats.totalSold}</p>
                       <p className="text-xs text-gray-500">Times Sold</p>
                     </div>
                     <div>
@@ -497,7 +497,7 @@ const PackManagement = ({
             {!searchTerm && priceFilter === 'all' && (
               <button
                 onClick={() => setShowAddForm(true)}
-                className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+                className="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Create First Pack

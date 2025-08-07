@@ -203,7 +203,7 @@ const ClientSelection = ({
                   placeholder="البحث بالاسم، المدينة، الهاتف..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pr-10 pl-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-right"
+                  className="w-full pr-10 pl-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-right"
                   dir="rtl"
                 />
               </div>
@@ -258,7 +258,7 @@ const ClientSelection = ({
                   setSearchTerm('');
                   setSelectedWilaya('all');
                 }}
-                className="px-3 py-2 text-sm text-indigo-600 hover:text-indigo-800"
+                className="px-3 py-2 text-sm text-purple-600 hover:text-purple-800"
               >
                 مسح الفلاتر
               </button>
@@ -269,10 +269,10 @@ const ClientSelection = ({
         {/* Results Count and Quick Stats */}
         {filteredClients.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div className="bg-blue-50 rounded-lg p-4 text-center">
-              <Users className="w-6 h-6 text-blue-600 mx-auto mb-2" />
-              <div className="text-2xl font-bold text-blue-900">{filteredClients.length}</div>
-              <div className="text-sm text-blue-600">عملاء متاحون</div>
+            <div className="bg-purple-50 rounded-lg p-4 text-center">
+              <Users className="w-6 h-6 text-purple-600 mx-auto mb-2" />
+              <div className="text-2xl font-bold text-purple-900">{filteredClients.length}</div>
+              <div className="text-sm text-purple-600">عملاء متاحون</div>
             </div>
             <div className="bg-green-50 rounded-lg p-4 text-center">
               <MapPin className="w-6 h-6 text-green-600 mx-auto mb-2" />
@@ -379,7 +379,7 @@ const ClientSelection = ({
                   setSearchTerm('');
                   setSelectedWilaya('all');
                 }}
-                className="text-indigo-600 hover:text-indigo-800 font-medium"
+                className="text-purple-600 hover:text-purple-800 font-medium"
               >
                 مسح الفلاتر وإظهار كل العملاء
               </button>

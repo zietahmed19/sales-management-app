@@ -172,7 +172,7 @@ const EnhancedSalesReport = ({ currentUser, data, setCurrentScreen }) => {
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => setCurrentScreen('dashboard')}
-                className="text-indigo-600 hover:text-indigo-800"
+                className="text-purple-600 hover:text-purple-800"
               >
                 ← {t('backToDashboard')}
               </button>
@@ -190,7 +190,7 @@ const EnhancedSalesReport = ({ currentUser, data, setCurrentScreen }) => {
               </select>
               <button
                 onClick={handleRefresh}
-                className="flex items-center space-x-1 bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 text-sm"
+                className="flex items-center space-x-1 bg-purple-600 text-white px-3 py-1 rounded-md hover:bg-purple-700 text-sm"
               >
                 <RefreshCw className="w-4 h-4" />
                 <span>{t('refreshData')}</span>
@@ -226,7 +226,7 @@ const EnhancedSalesReport = ({ currentUser, data, setCurrentScreen }) => {
                     <span className="text-sm">{reportData.summary.salesGrowth}%</span>
                   </div>
                 </div>
-                <BarChart3 className="w-8 h-8 text-indigo-600 mt-2" />
+                <BarChart3 className="w-8 h-8 text-purple-600 mt-2" />
               </div>
 
               <div className="bg-white rounded-lg shadow-md p-6">
@@ -254,7 +254,7 @@ const EnhancedSalesReport = ({ currentUser, data, setCurrentScreen }) => {
                     <span className="text-sm">5.2%</span>
                   </div>
                 </div>
-                <Users className="w-8 h-8 text-blue-600 mt-2" />
+                <Users className="w-8 h-8 text-purple-600 mt-2" />
               </div>
 
               <div className="bg-white rounded-lg shadow-md p-6">
@@ -276,7 +276,7 @@ const EnhancedSalesReport = ({ currentUser, data, setCurrentScreen }) => {
               {/* Daily Performance */}
               <div className="bg-white rounded-lg shadow-md p-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                  <Calendar className="w-5 h-5 mr-2 text-indigo-600" />
+                  <Calendar className="w-5 h-5 mr-2 text-purple-600" />
                   {t('dailySales')}
                 </h3>
                 <div className="space-y-3">
@@ -302,7 +302,7 @@ const EnhancedSalesReport = ({ currentUser, data, setCurrentScreen }) => {
                   {reportData.topPacks.map((pack, index) => (
                     <div key={pack.name} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                       <div className="flex items-center">
-                        <span className="text-lg font-bold text-indigo-600 mr-2">#{index + 1}</span>
+                        <span className="text-lg font-bold text-purple-600 mr-2">#{index + 1}</span>
                         <span className="text-sm font-medium">{pack.name}</span>
                       </div>
                       <div className="text-right">
@@ -328,7 +328,7 @@ const EnhancedSalesReport = ({ currentUser, data, setCurrentScreen }) => {
                   </div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-blue-600">{reportData.summary.conversionRate}%</div>
+                  <div className="text-3xl font-bold text-purple-600">{reportData.summary.conversionRate}%</div>
                   <div className="text-sm text-gray-600">{t('conversionRate')}</div>
                   <div className="flex items-center justify-center mt-2 text-green-600">
                     <ArrowUp className="w-4 h-4 mr-1" />

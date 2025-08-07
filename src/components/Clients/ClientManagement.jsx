@@ -185,7 +185,7 @@ const ClientManagement = ({
             </h2>
             <button
               onClick={() => setShowAddForm(true)}
-              className="flex items-center space-x-2 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700"
+              className="flex items-center space-x-2 bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700"
             >
               <Plus className="w-4 h-4" />
               <span>Add Client</span>
@@ -201,7 +201,7 @@ const ClientManagement = ({
                   placeholder="Search by name, city, or phone..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />
               </div>
             </div>
@@ -210,7 +210,7 @@ const ClientManagement = ({
               <select
                 value={cityFilter}
                 onChange={(e) => setCityFilter(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
               >
                 <option value="all">All Cities</option>
                 {cities.map(city => (
@@ -236,7 +236,7 @@ const ClientManagement = ({
                   type="text"
                   value={newClient.FullName}
                   onChange={(e) => setNewClient({ ...newClient, FullName: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                   placeholder="Enter full name"
                 />
               </div>
@@ -249,7 +249,7 @@ const ClientManagement = ({
                   type="text"
                   value={newClient.AllPhones}
                   onChange={(e) => setNewClient({ ...newClient, AllPhones: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                   placeholder="Enter phone number"
                 />
               </div>
@@ -262,7 +262,7 @@ const ClientManagement = ({
                   type="text"
                   value={newClient.City}
                   onChange={(e) => setNewClient({ ...newClient, City: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                   placeholder="Enter city"
                 />
               </div>
@@ -275,7 +275,7 @@ const ClientManagement = ({
                   type="text"
                   value={newClient.Wilaya}
                   onChange={(e) => setNewClient({ ...newClient, Wilaya: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                   placeholder="Enter wilaya"
                 />
               </div>
@@ -288,7 +288,7 @@ const ClientManagement = ({
                   type="text"
                   value={newClient.Location}
                   onChange={(e) => setNewClient({ ...newClient, Location: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
                   placeholder="Enter full address"
                 />
               </div>
@@ -303,7 +303,7 @@ const ClientManagement = ({
               </button>
               <button
                 onClick={handleSaveClient}
-                className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+                className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700"
               >
                 {editingClient ? 'Update Client' : 'Add Client'}
               </button>
@@ -326,7 +326,7 @@ const ClientManagement = ({
                   </div>
                   <button
                     onClick={() => handleEditClient(client)}
-                    className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-full"
+                    className="p-2 text-gray-400 hover:text-purple-600 hover:bg-indigo-50 rounded-full"
                   >
                     <Edit className="w-4 h-4" />
                   </button>
@@ -382,7 +382,7 @@ const ClientManagement = ({
                 <div className="border-t pt-4">
                   <div className="grid grid-cols-2 gap-4 text-center">
                     <div>
-                      <p className="text-lg font-semibold text-indigo-600">{stats.totalSales}</p>
+                      <p className="text-lg font-semibold text-purple-600">{stats.totalSales}</p>
                       <p className="text-xs text-gray-500">Total Sales</p>
                     </div>
                     <div>
@@ -418,7 +418,7 @@ const ClientManagement = ({
             {!searchTerm && cityFilter === 'all' && (
               <button
                 onClick={() => setShowAddForm(true)}
-                className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+                className="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Add First Client
