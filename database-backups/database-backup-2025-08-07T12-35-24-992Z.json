@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-08-07T13:12:16.428Z",
+  "timestamp": "2025-08-07T12:35:24.977Z",
   "tables": {
     "sales": [
       {
@@ -73,82 +73,32 @@
         "total_price": 516000,
         "sale_date": "2025-08-05 13:18:24",
         "created_at": "2025-08-05 13:18:24"
-      },
-      {
-        "id": 29,
-        "client_id": 1167,
-        "representative_id": 7,
-        "pack_id": 1,
-        "total_price": 100000,
-        "sale_date": "2025-08-07 12:59:22",
-        "created_at": "2025-08-07 12:59:22"
-      },
-      {
-        "id": 30,
-        "client_id": 1145,
-        "representative_id": 7,
-        "pack_id": 1,
-        "total_price": 868000,
-        "sale_date": "2025-08-07 13:08:37",
-        "created_at": "2025-08-07 13:08:37"
       }
     ],
-    "gifts": [
+    "packs": [
       {
         "id": 1,
-        "gift_name": "Travel Kit",
-        "description": "Compact travel-sized essentials",
-        "created_at": "2025-07-30 09:50:13",
-        "updated_at": "2025-07-30 09:50:13"
+        "pack_name": "Pack A",
+        "total_price": 868000,
+        "gift_id": 6,
+        "created_at": "2025-07-30 12:56:30",
+        "updated_at": "2025-07-30 12:56:30"
       },
       {
         "id": 2,
-        "gift_name": "Beauty Bag",
-        "description": "Elegant cosmetic bag",
-        "created_at": "2025-07-30 09:50:13",
-        "updated_at": "2025-07-30 09:50:13"
+        "pack_name": "Pack B",
+        "total_price": 516000,
+        "gift_id": 7,
+        "created_at": "2025-07-30 12:56:30",
+        "updated_at": "2025-07-30 12:56:30"
       },
       {
         "id": 3,
-        "gift_name": "Hand Mirror",
-        "description": "Portable beauty mirror",
-        "created_at": "2025-07-30 09:50:13",
-        "updated_at": "2025-07-30 09:50:13"
-      },
-      {
-        "id": 4,
-        "gift_name": "Sample Set",
-        "description": "Mini product samples",
-        "created_at": "2025-07-30 09:50:13",
-        "updated_at": "2025-07-30 09:50:13"
-      },
-      {
-        "id": 5,
-        "gift_name": "Face Mask Set",
-        "description": "Collection of facial masks",
-        "created_at": "2025-07-30 09:50:13",
-        "updated_at": "2025-07-30 09:50:13"
-      },
-      {
-        "id": 6,
-        "gift_name": "TV 43'",
-        "description": "Gift for Pack A",
-        "created_at": "2025-07-30 12:55:35",
-        "updated_at": "2025-07-30 12:55:35"
-      },
-      {
-        "id": 7,
-        "gift_name": "TV 32 IRIS'",
-        "description": "Gift for Pack B",
-        "created_at": "2025-07-30 12:55:35",
-        "updated_at": "2025-07-30 12:55:35"
-      },
-      {
-        "id": 8,
-        "gift_name": "5 internet Card 500 DA'",
-        "description": "Gift for Pack C",
-        "created_at": "2025-07-30 12:55:35",
-        "updated_at": "2025-07-30 12:55:35"
+        "pack_name": "Pack C",
+        "total_price": 138400,
+        "gift_id": 8,
+        "created_at": "2025-07-30 12:56:30",
+        "updated_at": "2025-07-30 12:56:30"
       }
     ],
     "pack_articles": [
@@ -193,6 +143,344 @@
         "article_id": 10,
         "created_at": "2025-07-30 12:56:30",
         "quantity": 5
+      }
+    ],
+    "representatives": [
+      {
+        "id": 1,
+        "rep_code": "REP001",
+        "rep_name": "Ahmed ",
+        "username": "ahmed",
+        "password_hash": "$2b$10$oHqUcWhdnyX3oMrLGQn7EecVkypgOS9bZZsFeVd3PGsZAtYp2TYi2",
+        "phone": "0555123456",
+        "city": "Setif",
+        "wilaya": "Setif",
+        "created_at": "2025-07-30 09:50:13",
+        "updated_at": "2025-07-31 09:07:50"
+      },
+      {
+        "id": 2,
+        "rep_code": "R001",
+        "rep_name": "ali djabali",
+        "username": "test",
+        "password_hash": "$2b$10$59J6952TAQJjloawcTLvQOYGW1.3YLCTXBsy88PXkOGZotmfG6hxu",
+        "phone": "0555123456",
+        "city": "Algiers",
+        "wilaya": "Algiers",
+        "created_at": "2025-07-30 13:15:54",
+        "updated_at": "2025-07-31 09:32:50"
+      },
+      {
+        "id": 3,
+        "rep_code": "COM 1",
+        "rep_name": "SAGHIRI ABDELKADER",
+        "username": "abdelkaders",
+        "password_hash": "$2b$10$4NtIuG/D/l5b9tM7.pX5LuJhrtspvE5cRIqgtlhtb4yDkFi3qeOLC",
+        "phone": "0555000000",
+        "city": "Oeb",
+        "wilaya": "Oeb",
+        "created_at": "2025-07-31 09:22:30",
+        "updated_at": "2025-07-31 09:22:30"
+      },
+      {
+        "id": 4,
+        "rep_code": "COM 10",
+        "rep_name": "OUCHEN NECEREDDINE",
+        "username": "necereddineo",
+        "password_hash": "$2b$10$FQzMZqiqc3AVZ.rCjEs6ZOu96T56E/gkjdifLi0hlxK4s/Em9WyLu",
+        "phone": "0555000000",
+        "city": "Bejaia",
+        "wilaya": "Bejaia",
+        "created_at": "2025-07-31 09:22:30",
+        "updated_at": "2025-07-31 09:22:30"
+      },
+      {
+        "id": 5,
+        "rep_code": "COM 12",
+        "rep_name": "CHAOUCH ISLEM",
+        "username": "islemc",
+        "password_hash": "$2b$10$SHWj5fOfOQwEZ21frfJpSelW.VGn8.KvphEbAD3IHA9pqJxj7ad4y",
+        "phone": "0555000000",
+        "city": "Constantine",
+        "wilaya": "Constantine",
+        "created_at": "2025-07-31 09:22:30",
+        "updated_at": "2025-07-31 09:22:30"
+      },
+      {
+        "id": 6,
+        "rep_code": "COM 13",
+        "rep_name": "KERBECHE HOUDHEIFA",
+        "username": "houdheifak",
+        "password_hash": "$2b$10$lab2EueJxcYVihsPpwquKuKlBYXaQ0oAwBdM3areetBqLf8toFbyS",
+        "phone": "0555000000",
+        "city": "Guelma",
+        "wilaya": "Guelma",
+        "created_at": "2025-07-31 09:22:30",
+        "updated_at": "2025-07-31 09:22:30"
+      },
+      {
+        "id": 7,
+        "rep_code": "COM 14",
+        "rep_name": "SEHIL RAMZI",
+        "username": "ramzis",
+        "password_hash": "$2b$10$KdMjiW406PNOohpSfsw01.5mZXLZxN8x6cKp4L1RJBlyXU3dztEQS",
+        "phone": "0555000000",
+        "city": "Batna",
+        "wilaya": "Batna",
+        "created_at": "2025-07-31 09:22:30",
+        "updated_at": "2025-07-31 09:22:30"
+      },
+      {
+        "id": 8,
+        "rep_code": "COM 15",
+        "rep_name": "MERZOUK ELYES",
+        "username": "elyesm",
+        "password_hash": "$2b$10$k9mTH4vy0AYg/UI87PmpHeMQkaWhl7jkk.bbLVtr2NrxY9o9Wbcf.",
+        "phone": "0555000000",
+        "city": "Tizi Ouzou",
+        "wilaya": "Tizi Ouzou",
+        "created_at": "2025-07-31 09:22:31",
+        "updated_at": "2025-07-31 09:22:31"
+      },
+      {
+        "id": 9,
+        "rep_code": "COM 16",
+        "rep_name": "HIDRI NADJIM",
+        "username": "nadjimh",
+        "password_hash": "$2b$10$2ZazJgwxT0Z.AwpLaM580eDBwFgqM2L6rst2PwhDkPH7d7DHDC90.",
+        "phone": "0555000000",
+        "city": "Bejaia",
+        "wilaya": "Bejaia",
+        "created_at": "2025-07-31 09:22:31",
+        "updated_at": "2025-07-31 09:22:31"
+      },
+      {
+        "id": 10,
+        "rep_code": "COM 17",
+        "rep_name": "HAFSI ABDELOUAHAB",
+        "username": "abdelouahabh",
+        "password_hash": "$2b$10$MtnYYCdmiYy.yZZ4Z0dQIeeq6v8qikOFDuzXGpObsWuZecwgHN0.6",
+        "phone": "0555000000",
+        "city": "jijel",
+        "wilaya": "jijel",
+        "created_at": "2025-07-31 09:22:31",
+        "updated_at": "2025-07-31 09:22:31"
+      },
+      {
+        "id": 11,
+        "rep_code": "COM 18",
+        "rep_name": "REZIG YOUCEF",
+        "username": "youcefr",
+        "password_hash": "$2b$10$nsPZwQAlnByyHGAM75yatOzXa735eIVVNEeH1z4f5.6i82MnPhyly",
+        "phone": "0555000000",
+        "city": "bouira",
+        "wilaya": "bouira",
+        "created_at": "2025-07-31 09:22:31",
+        "updated_at": "2025-07-31 09:22:31"
+      },
+      {
+        "id": 12,
+        "rep_code": "COM 19",
+        "rep_name": "SAADAOUI HAMZA",
+        "username": "hamzas",
+        "password_hash": "$2b$10$ClBj6XnsX/4WrIzF/NS.XubUNtwpgfV4X3HRM9fZpKiEOh6rTM7wu",
+        "phone": "0555000000",
+        "city": "msila",
+        "wilaya": "msila",
+        "created_at": "2025-07-31 09:22:31",
+        "updated_at": "2025-07-31 09:22:31"
+      },
+      {
+        "id": 13,
+        "rep_code": "COM 2",
+        "rep_name": "LASMI ABDELHAMID",
+        "username": "abdelhamidl",
+        "password_hash": "$2b$10$l7PC1ULuxPHWfkvoPGW.CO4Qlt8amOwxds1/y6DoD1I/kMPe96Fg2",
+        "phone": "0555000000",
+        "city": "skikda",
+        "wilaya": "skikda",
+        "created_at": "2025-07-31 09:22:31",
+        "updated_at": "2025-07-31 09:22:31"
+      },
+      {
+        "id": 14,
+        "rep_code": "COM 20",
+        "rep_name": "MAHAR LOKMANE",
+        "username": "lokmanem",
+        "password_hash": "$2b$10$hc2Jdr1ytSUm7.zdhToXHe8uv9G7m6xsIziYAtC45U0yxCazwEqS.",
+        "phone": "0555000000",
+        "city": "Setif",
+        "wilaya": "Setif",
+        "created_at": "2025-07-31 09:22:31",
+        "updated_at": "2025-07-31 09:22:31"
+      },
+      {
+        "id": 15,
+        "rep_code": "COM 21",
+        "rep_name": "KADI KHOUBAIB",
+        "username": "khoubaibk",
+        "password_hash": "$2b$10$eS/fibnQk0Q1e/3ZLMhs8ez5q1yaG62iph1bl7BA9vcyw6J6ABzeC",
+        "phone": "0555000000",
+        "city": "Oum El Bouaghi",
+        "wilaya": "Oum El Bouaghi",
+        "created_at": "2025-07-31 09:22:31",
+        "updated_at": "2025-07-31 09:22:31"
+      },
+      {
+        "id": 16,
+        "rep_code": "COM 3",
+        "rep_name": "BOUCHAMA ADIL",
+        "username": "adilb",
+        "password_hash": "$2b$10$9Afg9q5XgK7sios8nWDggOW2unjRr.bkHjzGxabS10CG/XB//laQC",
+        "phone": "0555000000",
+        "city": "Annaba",
+        "wilaya": "Annaba",
+        "created_at": "2025-07-31 09:22:31",
+        "updated_at": "2025-07-31 09:22:31"
+      },
+      {
+        "id": 17,
+        "rep_code": "COM 4",
+        "rep_name": "ACHAB CHAFIK",
+        "username": "chafika",
+        "password_hash": "$2b$10$4wrzuVe.dos3Aa/uz0PSYeym/Jc/.tpnwcRWua/SqCg1/Z7eivNj.",
+        "phone": "0555000000",
+        "city": "Batna",
+        "wilaya": "Batna",
+        "created_at": "2025-07-31 09:22:31",
+        "updated_at": "2025-07-31 09:22:31"
+      },
+      {
+        "id": 18,
+        "rep_code": "COM 5",
+        "rep_name": "KETFI NIDHAL",
+        "username": "nidhalk",
+        "password_hash": "$2b$10$L8MTTDf9kPTpgBJeR2hW8./N/e4yPsom2/cfIP5JxN1hxZ94UhBiS",
+        "phone": "0555000000",
+        "city": "Setif",
+        "wilaya": "Setif",
+        "created_at": "2025-07-31 09:22:31",
+        "updated_at": "2025-07-31 09:22:31"
+      },
+      {
+        "id": 19,
+        "rep_code": "COM 6",
+        "rep_name": "LEBSIS TAHER",
+        "username": "taherl",
+        "password_hash": "$2b$10$6kgNj9bsmCLmVwM9pnqPee4ny3HBRIFBwXqY4MXsHDicHr6cgQ27a",
+        "phone": "0555000000",
+        "city": "Constantine",
+        "wilaya": "Constantine",
+        "created_at": "2025-07-31 09:22:31",
+        "updated_at": "2025-07-31 09:22:31"
+      },
+      {
+        "id": 20,
+        "rep_code": "COM 7",
+        "rep_name": "NOUREDDINE TAREK",
+        "username": "tarekn",
+        "password_hash": "$2b$10$oMmMrOsS0/3TN9iiFhB74.vozdVawUSvG7T0p3.bUUpYRBJNbaosy",
+        "phone": "0555000000",
+        "city": "Setif",
+        "wilaya": "Setif",
+        "created_at": "2025-07-31 09:22:31",
+        "updated_at": "2025-07-31 09:22:31"
+      },
+      {
+        "id": 21,
+        "rep_code": "COM 8",
+        "rep_name": "BOUHOURA ILYES",
+        "username": "ilyesb",
+        "password_hash": "$2b$10$7cTnjGAkvD0h6wadGhL5HunFPesScqfhJP0JhW1sKhlqUlW22QcWq",
+        "phone": "0555000000",
+        "city": "Khenchela",
+        "wilaya": "Khenchela",
+        "created_at": "2025-07-31 09:22:31",
+        "updated_at": "2025-07-31 09:22:31"
+      },
+      {
+        "id": 22,
+        "rep_code": "COM 9",
+        "rep_name": "ADJEL MED",
+        "username": "meda",
+        "password_hash": "$2b$10$AG4gnOIy3VCbS8YdBMJDtOZtNDjOL0f6jTBEdQ.zf18LD1ONNLALW",
+        "phone": "0555000000",
+        "city": "Biskra",
+        "wilaya": "Biskra",
+        "created_at": "2025-07-31 09:22:31",
+        "updated_at": "2025-07-31 09:22:31"
+      },
+      {
+        "id": 23,
+        "rep_code": "LIV 3",
+        "rep_name": "ZINE EDDINE",
+        "username": "eddinez",
+        "password_hash": "$2b$10$9rFFFqwP.QrwcUNZlGPfi.urp8J6evflNxcV/NRHJbpyexxP9OBtC",
+        "phone": "0555000000",
+        "city": "Setif",
+        "wilaya": "Setif",
+        "created_at": "2025-07-31 09:22:31",
+        "updated_at": "2025-07-31 09:22:31"
+      },
+      {
+        "id": 24,
+        "rep_code": "LIV 4",
+        "rep_name": "FERRADJ ADEM",
+        "username": "ademf",
+        "password_hash": "$2b$10$CzhsT13K2Q6TIPv72Vb9xuaMw.tBnuNmtivRRoe.6Jw2iPrTINCYC",
+        "phone": "0555000000",
+        "city": "Setif",
+        "wilaya": "Setif",
+        "created_at": "2025-07-31 09:22:31",
+        "updated_at": "2025-07-31 09:22:31"
+      },
+      {
+        "id": 25,
+        "rep_code": "LIV 5",
+        "rep_name": "LAOUAMEUR ATIK",
+        "username": "atikl",
+        "password_hash": "$2b$10$hNAC/fZG4NmQxviKECTWWeV60.LoT8rM2OZ.gf6PSTKV7A2FD4MNm",
+        "phone": "0555000000",
+        "city": "Setif",
+        "wilaya": "Setif",
+        "created_at": "2025-07-31 09:22:32",
+        "updated_at": "2025-07-31 09:22:32"
+      },
+      {
+        "id": 26,
+        "rep_code": "LIV 6",
+        "rep_name": "AMARCHI NADJI",
+        "username": "nadjia",
+        "password_hash": "$2b$10$xy1UAgKeO0.LYXS35jiuSe9K5sQnr8sqtdxDAP/T87JEdv9.SKd02",
+        "phone": "0555000000",
+        "city": "Setif",
+        "wilaya": "Setif",
+        "created_at": "2025-07-31 09:22:32",
+        "updated_at": "2025-07-31 09:22:32"
+      },
+      {
+        "id": 27,
+        "rep_code": "LIV 7",
+        "rep_name": "KOUSSA NAIM",
+        "username": "naimk",
+        "password_hash": "$2b$10$jcTKwzZsnc8dvGyxyVvtaeiqjoVsgWOOushaq4zmBxNqdtP9bywwi",
+        "phone": "0555000000",
+        "city": "Setif",
+        "wilaya": "Setif",
+        "created_at": "2025-07-31 09:22:32",
+        "updated_at": "2025-07-31 09:22:32"
+      },
+      {
+        "id": 28,
+        "rep_code": "ADMIN",
+        "rep_name": "System Administrator",
+        "username": "mohcenacid",
+        "password_hash": "$2b$10$H1oLzaGXbNRz26csgu2aIeCNDs3P15uyj37xvuPl9tQ0hjftsAP3y",
+        "phone": "",
+        "city": "Admin",
+        "wilaya": "ADMIN",
+        "created_at": "2025-08-03 10:34:12",
+        "updated_at": "2025-08-03 10:34:12"
       }
     ],
     "clients": [
@@ -13199,6 +13487,64 @@
         "updated_at": "2025-08-05 10:57:45"
       }
     ],
+    "gifts": [
+      {
+        "id": 1,
+        "gift_name": "Travel Kit",
+        "description": "Compact travel-sized essentials",
+        "created_at": "2025-07-30 09:50:13",
+        "updated_at": "2025-07-30 09:50:13"
+      },
+      {
+        "id": 2,
+        "gift_name": "Beauty Bag",
+        "description": "Elegant cosmetic bag",
+        "created_at": "2025-07-30 09:50:13",
+        "updated_at": "2025-07-30 09:50:13"
+      },
+      {
+        "id": 3,
+        "gift_name": "Hand Mirror",
+        "description": "Portable beauty mirror",
+        "created_at": "2025-07-30 09:50:13",
+        "updated_at": "2025-07-30 09:50:13"
+      },
+      {
+        "id": 4,
+        "gift_name": "Sample Set",
+        "description": "Mini product samples",
+        "created_at": "2025-07-30 09:50:13",
+        "updated_at": "2025-07-30 09:50:13"
+      },
+      {
+        "id": 5,
+        "gift_name": "Face Mask Set",
+        "description": "Collection of facial masks",
+        "created_at": "2025-07-30 09:50:13",
+        "updated_at": "2025-07-30 09:50:13"
+      },
+      {
+        "id": 6,
+        "gift_name": "TV 43'",
+        "description": "Gift for Pack A",
+        "created_at": "2025-07-30 12:55:35",
+        "updated_at": "2025-07-30 12:55:35"
+      },
+      {
+        "id": 7,
+        "gift_name": "TV 32 IRIS'",
+        "description": "Gift for Pack B",
+        "created_at": "2025-07-30 12:55:35",
+        "updated_at": "2025-07-30 12:55:35"
+      },
+      {
+        "id": 8,
+        "gift_name": "5 internet Card 500 DA'",
+        "description": "Gift for Pack C",
+        "created_at": "2025-07-30 12:55:35",
+        "updated_at": "2025-07-30 12:55:35"
+      }
+    ],
     "articles": [
       {
         "id": 9,
@@ -13215,370 +13561,6 @@
         "description": "Spark Go 1 128+4 - Quantity available: 20 units",
         "created_at": "2025-07-30 12:56:30",
         "updated_at": "2025-07-30 12:56:30"
-      }
-    ],
-    "packs": [
-      {
-        "id": 1,
-        "pack_name": "Pack A",
-        "total_price": 868000,
-        "gift_id": 6,
-        "created_at": "2025-07-30 12:56:30",
-        "updated_at": "2025-07-30 12:56:30"
-      },
-      {
-        "id": 2,
-        "pack_name": "Pack B",
-        "total_price": 516000,
-        "gift_id": 7,
-        "created_at": "2025-07-30 12:56:30",
-        "updated_at": "2025-07-30 12:56:30"
-      },
-      {
-        "id": 3,
-        "pack_name": "Pack C",
-        "total_price": 138400,
-        "gift_id": 8,
-        "created_at": "2025-07-30 12:56:30",
-        "updated_at": "2025-07-30 12:56:30"
-      }
-    ],
-    "representatives": [
-      {
-        "id": 1,
-        "rep_code": "REP001",
-        "rep_name": "Ahmed ",
-        "username": "ahmed",
-        "password_hash": "$2b$10$oHqUcWhdnyX3oMrLGQn7EecVkypgOS9bZZsFeVd3PGsZAtYp2TYi2",
-        "phone": "0555123456",
-        "city": "Setif",
-        "wilaya": "Setif",
-        "created_at": "2025-07-30 09:50:13",
-        "updated_at": "2025-07-31 09:07:50"
-      },
-      {
-        "id": 2,
-        "rep_code": "R001",
-        "rep_name": "ali djabali",
-        "username": "test",
-        "password_hash": "$2b$10$59J6952TAQJjloawcTLvQOYGW1.3YLCTXBsy88PXkOGZotmfG6hxu",
-        "phone": "0555123456",
-        "city": "Algiers",
-        "wilaya": "Algiers",
-        "created_at": "2025-07-30 13:15:54",
-        "updated_at": "2025-07-31 09:32:50"
-      },
-      {
-        "id": 3,
-        "rep_code": "COM 1",
-        "rep_name": "SAGHIRI ABDELKADER",
-        "username": "abdelkaders",
-        "password_hash": "$2b$10$4NtIuG/D/l5b9tM7.pX5LuJhrtspvE5cRIqgtlhtb4yDkFi3qeOLC",
-        "phone": "0555000000",
-        "city": "Oeb",
-        "wilaya": "Oeb",
-        "created_at": "2025-07-31 09:22:30",
-        "updated_at": "2025-07-31 09:22:30"
-      },
-      {
-        "id": 4,
-        "rep_code": "COM 10",
-        "rep_name": "OUCHEN NECEREDDINE",
-        "username": "necereddineo",
-        "password_hash": "$2b$10$FQzMZqiqc3AVZ.rCjEs6ZOu96T56E/gkjdifLi0hlxK4s/Em9WyLu",
-        "phone": "0555000000",
-        "city": "Bejaia",
-        "wilaya": "Bejaia",
-        "created_at": "2025-07-31 09:22:30",
-        "updated_at": "2025-07-31 09:22:30"
-      },
-      {
-        "id": 5,
-        "rep_code": "COM 12",
-        "rep_name": "CHAOUCH ISLEM",
-        "username": "islemc",
-        "password_hash": "$2b$10$SHWj5fOfOQwEZ21frfJpSelW.VGn8.KvphEbAD3IHA9pqJxj7ad4y",
-        "phone": "0555000000",
-        "city": "Constantine",
-        "wilaya": "Constantine",
-        "created_at": "2025-07-31 09:22:30",
-        "updated_at": "2025-07-31 09:22:30"
-      },
-      {
-        "id": 6,
-        "rep_code": "COM 13",
-        "rep_name": "KERBECHE HOUDHEIFA",
-        "username": "houdheifak",
-        "password_hash": "$2b$10$lab2EueJxcYVihsPpwquKuKlBYXaQ0oAwBdM3areetBqLf8toFbyS",
-        "phone": "0555000000",
-        "city": "Guelma",
-        "wilaya": "Guelma",
-        "created_at": "2025-07-31 09:22:30",
-        "updated_at": "2025-07-31 09:22:30"
-      },
-      {
-        "id": 7,
-        "rep_code": "COM 14",
-        "rep_name": "SEHIL RAMZI",
-        "username": "ramzis",
-        "password_hash": "$2b$10$KdMjiW406PNOohpSfsw01.5mZXLZxN8x6cKp4L1RJBlyXU3dztEQS",
-        "phone": "0555000000",
-        "city": "Batna",
-        "wilaya": "Batna",
-        "created_at": "2025-07-31 09:22:30",
-        "updated_at": "2025-07-31 09:22:30"
-      },
-      {
-        "id": 8,
-        "rep_code": "COM 15",
-        "rep_name": "MERZOUK ELYES",
-        "username": "elyesm",
-        "password_hash": "$2b$10$k9mTH4vy0AYg/UI87PmpHeMQkaWhl7jkk.bbLVtr2NrxY9o9Wbcf.",
-        "phone": "0555000000",
-        "city": "Tizi Ouzou",
-        "wilaya": "Tizi Ouzou",
-        "created_at": "2025-07-31 09:22:31",
-        "updated_at": "2025-07-31 09:22:31"
-      },
-      {
-        "id": 9,
-        "rep_code": "COM 16",
-        "rep_name": "HIDRI NADJIM",
-        "username": "nadjimh",
-        "password_hash": "$2b$10$2ZazJgwxT0Z.AwpLaM580eDBwFgqM2L6rst2PwhDkPH7d7DHDC90.",
-        "phone": "0555000000",
-        "city": "Bejaia",
-        "wilaya": "Bejaia",
-        "created_at": "2025-07-31 09:22:31",
-        "updated_at": "2025-07-31 09:22:31"
-      },
-      {
-        "id": 10,
-        "rep_code": "COM 17",
-        "rep_name": "HAFSI ABDELOUAHAB",
-        "username": "abdelouahabh",
-        "password_hash": "$2b$10$MtnYYCdmiYy.yZZ4Z0dQIeeq6v8qikOFDuzXGpObsWuZecwgHN0.6",
-        "phone": "0555000000",
-        "city": "jijel",
-        "wilaya": "jijel",
-        "created_at": "2025-07-31 09:22:31",
-        "updated_at": "2025-07-31 09:22:31"
-      },
-      {
-        "id": 11,
-        "rep_code": "COM 18",
-        "rep_name": "REZIG YOUCEF",
-        "username": "youcefr",
-        "password_hash": "$2b$10$nsPZwQAlnByyHGAM75yatOzXa735eIVVNEeH1z4f5.6i82MnPhyly",
-        "phone": "0555000000",
-        "city": "bouira",
-        "wilaya": "bouira",
-        "created_at": "2025-07-31 09:22:31",
-        "updated_at": "2025-07-31 09:22:31"
-      },
-      {
-        "id": 12,
-        "rep_code": "COM 19",
-        "rep_name": "SAADAOUI HAMZA",
-        "username": "hamzas",
-        "password_hash": "$2b$10$ClBj6XnsX/4WrIzF/NS.XubUNtwpgfV4X3HRM9fZpKiEOh6rTM7wu",
-        "phone": "0555000000",
-        "city": "msila",
-        "wilaya": "msila",
-        "created_at": "2025-07-31 09:22:31",
-        "updated_at": "2025-07-31 09:22:31"
-      },
-      {
-        "id": 13,
-        "rep_code": "COM 2",
-        "rep_name": "LASMI ABDELHAMID",
-        "username": "abdelhamidl",
-        "password_hash": "$2b$10$l7PC1ULuxPHWfkvoPGW.CO4Qlt8amOwxds1/y6DoD1I/kMPe96Fg2",
-        "phone": "0555000000",
-        "city": "skikda",
-        "wilaya": "skikda",
-        "created_at": "2025-07-31 09:22:31",
-        "updated_at": "2025-07-31 09:22:31"
-      },
-      {
-        "id": 14,
-        "rep_code": "COM 20",
-        "rep_name": "MAHAR LOKMANE",
-        "username": "lokmanem",
-        "password_hash": "$2b$10$hc2Jdr1ytSUm7.zdhToXHe8uv9G7m6xsIziYAtC45U0yxCazwEqS.",
-        "phone": "0555000000",
-        "city": "Setif",
-        "wilaya": "Setif",
-        "created_at": "2025-07-31 09:22:31",
-        "updated_at": "2025-07-31 09:22:31"
-      },
-      {
-        "id": 15,
-        "rep_code": "COM 21",
-        "rep_name": "KADI KHOUBAIB",
-        "username": "khoubaibk",
-        "password_hash": "$2b$10$eS/fibnQk0Q1e/3ZLMhs8ez5q1yaG62iph1bl7BA9vcyw6J6ABzeC",
-        "phone": "0555000000",
-        "city": "Oum El Bouaghi",
-        "wilaya": "Oum El Bouaghi",
-        "created_at": "2025-07-31 09:22:31",
-        "updated_at": "2025-07-31 09:22:31"
-      },
-      {
-        "id": 16,
-        "rep_code": "COM 3",
-        "rep_name": "BOUCHAMA ADIL",
-        "username": "adilb",
-        "password_hash": "$2b$10$9Afg9q5XgK7sios8nWDggOW2unjRr.bkHjzGxabS10CG/XB//laQC",
-        "phone": "0555000000",
-        "city": "Annaba",
-        "wilaya": "Annaba",
-        "created_at": "2025-07-31 09:22:31",
-        "updated_at": "2025-07-31 09:22:31"
-      },
-      {
-        "id": 17,
-        "rep_code": "COM 4",
-        "rep_name": "ACHAB CHAFIK",
-        "username": "chafika",
-        "password_hash": "$2b$10$4wrzuVe.dos3Aa/uz0PSYeym/Jc/.tpnwcRWua/SqCg1/Z7eivNj.",
-        "phone": "0555000000",
-        "city": "Batna",
-        "wilaya": "Batna",
-        "created_at": "2025-07-31 09:22:31",
-        "updated_at": "2025-07-31 09:22:31"
-      },
-      {
-        "id": 18,
-        "rep_code": "COM 5",
-        "rep_name": "KETFI NIDHAL",
-        "username": "nidhalk",
-        "password_hash": "$2b$10$L8MTTDf9kPTpgBJeR2hW8./N/e4yPsom2/cfIP5JxN1hxZ94UhBiS",
-        "phone": "0555000000",
-        "city": "Setif",
-        "wilaya": "Setif",
-        "created_at": "2025-07-31 09:22:31",
-        "updated_at": "2025-07-31 09:22:31"
-      },
-      {
-        "id": 19,
-        "rep_code": "COM 6",
-        "rep_name": "LEBSIS TAHER",
-        "username": "taherl",
-        "password_hash": "$2b$10$6kgNj9bsmCLmVwM9pnqPee4ny3HBRIFBwXqY4MXsHDicHr6cgQ27a",
-        "phone": "0555000000",
-        "city": "Constantine",
-        "wilaya": "Constantine",
-        "created_at": "2025-07-31 09:22:31",
-        "updated_at": "2025-07-31 09:22:31"
-      },
-      {
-        "id": 20,
-        "rep_code": "COM 7",
-        "rep_name": "NOUREDDINE TAREK",
-        "username": "tarekn",
-        "password_hash": "$2b$10$oMmMrOsS0/3TN9iiFhB74.vozdVawUSvG7T0p3.bUUpYRBJNbaosy",
-        "phone": "0555000000",
-        "city": "Setif",
-        "wilaya": "Setif",
-        "created_at": "2025-07-31 09:22:31",
-        "updated_at": "2025-07-31 09:22:31"
-      },
-      {
-        "id": 21,
-        "rep_code": "COM 8",
-        "rep_name": "BOUHOURA ILYES",
-        "username": "ilyesb",
-        "password_hash": "$2b$10$7cTnjGAkvD0h6wadGhL5HunFPesScqfhJP0JhW1sKhlqUlW22QcWq",
-        "phone": "0555000000",
-        "city": "Khenchela",
-        "wilaya": "Khenchela",
-        "created_at": "2025-07-31 09:22:31",
-        "updated_at": "2025-07-31 09:22:31"
-      },
-      {
-        "id": 22,
-        "rep_code": "COM 9",
-        "rep_name": "ADJEL MED",
-        "username": "meda",
-        "password_hash": "$2b$10$AG4gnOIy3VCbS8YdBMJDtOZtNDjOL0f6jTBEdQ.zf18LD1ONNLALW",
-        "phone": "0555000000",
-        "city": "Biskra",
-        "wilaya": "Biskra",
-        "created_at": "2025-07-31 09:22:31",
-        "updated_at": "2025-07-31 09:22:31"
-      },
-      {
-        "id": 23,
-        "rep_code": "LIV 3",
-        "rep_name": "ZINE EDDINE",
-        "username": "eddinez",
-        "password_hash": "$2b$10$9rFFFqwP.QrwcUNZlGPfi.urp8J6evflNxcV/NRHJbpyexxP9OBtC",
-        "phone": "0555000000",
-        "city": "Setif",
-        "wilaya": "Setif",
-        "created_at": "2025-07-31 09:22:31",
-        "updated_at": "2025-07-31 09:22:31"
-      },
-      {
-        "id": 24,
-        "rep_code": "LIV 4",
-        "rep_name": "FERRADJ ADEM",
-        "username": "ademf",
-        "password_hash": "$2b$10$CzhsT13K2Q6TIPv72Vb9xuaMw.tBnuNmtivRRoe.6Jw2iPrTINCYC",
-        "phone": "0555000000",
-        "city": "Setif",
-        "wilaya": "Setif",
-        "created_at": "2025-07-31 09:22:31",
-        "updated_at": "2025-07-31 09:22:31"
-      },
-      {
-        "id": 25,
-        "rep_code": "LIV 5",
-        "rep_name": "LAOUAMEUR ATIK",
-        "username": "atikl",
-        "password_hash": "$2b$10$hNAC/fZG4NmQxviKECTWWeV60.LoT8rM2OZ.gf6PSTKV7A2FD4MNm",
-        "phone": "0555000000",
-        "city": "Setif",
-        "wilaya": "Setif",
-        "created_at": "2025-07-31 09:22:32",
-        "updated_at": "2025-07-31 09:22:32"
-      },
-      {
-        "id": 26,
-        "rep_code": "LIV 6",
-        "rep_name": "AMARCHI NADJI",
-        "username": "nadjia",
-        "password_hash": "$2b$10$xy1UAgKeO0.LYXS35jiuSe9K5sQnr8sqtdxDAP/T87JEdv9.SKd02",
-        "phone": "0555000000",
-        "city": "Setif",
-        "wilaya": "Setif",
-        "created_at": "2025-07-31 09:22:32",
-        "updated_at": "2025-07-31 09:22:32"
-      },
-      {
-        "id": 27,
-        "rep_code": "LIV 7",
-        "rep_name": "KOUSSA NAIM",
-        "username": "naimk",
-        "password_hash": "$2b$10$jcTKwzZsnc8dvGyxyVvtaeiqjoVsgWOOushaq4zmBxNqdtP9bywwi",
-        "phone": "0555000000",
-        "city": "Setif",
-        "wilaya": "Setif",
-        "created_at": "2025-07-31 09:22:32",
-        "updated_at": "2025-07-31 09:22:32"
-      },
-      {
-        "id": 28,
-        "rep_code": "ADMIN",
-        "rep_name": "System Administrator",
-        "username": "mohcenacid",
-        "password_hash": "$2b$10$H1oLzaGXbNRz26csgu2aIeCNDs3P15uyj37xvuPl9tQ0hjftsAP3y",
-        "phone": "",
-        "city": "Admin",
-        "wilaya": "ADMIN",
-        "created_at": "2025-08-03 10:34:12",
-        "updated_at": "2025-08-03 10:34:12"
       }
     ]
   }

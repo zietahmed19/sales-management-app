@@ -241,6 +241,73 @@ app.post('/api/auth/login', async (req, res) => {
   }
 });
 
+// Demo login endpoint for development
+app.post('/api/auth/demo-login', async (req, res) => {
+  try {
+    const { userType, userData } = req.body;
+    
+    // Use a representative ID that has sales data (from our debug, we saw ID 7 has sales)
+    const demoRepId = 7;
+    
+    // Use "Batna" as the wilaya since most clients are in Batna
+    const demoWilaya = "Batna";
+    
+    // Create a demo JWT token with a real rep ID that has sales data
+    const token = jwt.sign(
+      { 
+        id: demoRepId,
+        username: userData?.username || 'demo-user',
+        userType: userType,
+        rep_code: userData?.rep_code || 'DEMO001',
+        wilaya: demoWilaya
+      },
+      JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+
+    console.log(`✅ Demo login token generated for: ${userType} (rep ID: ${demoRepId}, wilaya: ${demoWilaya})`);
+    
+    res.json({ 
+      token,
+      user: {
+        id: demoRepId,
+        rep_name: userData?.rep_name || 'Demo User',
+        rep_code: userData?.rep_code || 'DEMO001',
+        username: userData?.username || 'demo-user',
+        userType: userType,
+        wilaya: demoWilaya
+      }
+    });
+  } catch (error) {
+    console.error('Demo login error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Temporary debug endpoint to see all sales
+app.get('/api/debug/all-sales', async (req, res) => {
+  try {
+    const sales = await promiseQuery('SELECT * FROM sales ORDER BY created_at DESC LIMIT 15');
+    res.json(sales);
+  } catch (error) {
+    console.error('Error fetching all sales:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Debug endpoint to check token validation
+app.get('/api/debug/check-auth', authenticateToken, async (req, res) => {
+  try {
+    res.json({
+      success: true,
+      user: req.user,
+      message: 'Authentication working correctly'
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 // REPRESENTATIVES ROUTES
 app.get('/api/representatives', async (req, res) => {
   try {

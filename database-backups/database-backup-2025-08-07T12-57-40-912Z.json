@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-08-07T13:12:16.428Z",
+  "timestamp": "2025-08-07T12:57:40.893Z",
   "tables": {
     "sales": [
       {
@@ -73,82 +73,6 @@
         "total_price": 516000,
         "sale_date": "2025-08-05 13:18:24",
         "created_at": "2025-08-05 13:18:24"
-      },
-      {
-        "id": 29,
-        "client_id": 1167,
-        "representative_id": 7,
-        "pack_id": 1,
-        "total_price": 100000,
-        "sale_date": "2025-08-07 12:59:22",
-        "created_at": "2025-08-07 12:59:22"
-      },
-      {
-        "id": 30,
-        "client_id": 1145,
-        "representative_id": 7,
-        "pack_id": 1,
-        "total_price": 868000,
-        "sale_date": "2025-08-07 13:08:37",
-        "created_at": "2025-08-07 13:08:37"
-      }
-    ],
-    "gifts": [
-      {
-        "id": 1,
-        "gift_name": "Travel Kit",
-        "description": "Compact travel-sized essentials",
-        "created_at": "2025-07-30 09:50:13",
-        "updated_at": "2025-07-30 09:50:13"
-      },
-      {
-        "id": 2,
-        "gift_name": "Beauty Bag",
-        "description": "Elegant cosmetic bag",
-        "created_at": "2025-07-30 09:50:13",
-        "updated_at": "2025-07-30 09:50:13"
-      },
-      {
-        "id": 3,
-        "gift_name": "Hand Mirror",
-        "description": "Portable beauty mirror",
-        "created_at": "2025-07-30 09:50:13",
-        "updated_at": "2025-07-30 09:50:13"
-      },
-      {
-        "id": 4,
-        "gift_name": "Sample Set",
-        "description": "Mini product samples",
-        "created_at": "2025-07-30 09:50:13",
-        "updated_at": "2025-07-30 09:50:13"
-      },
-      {
-        "id": 5,
-        "gift_name": "Face Mask Set",
-        "description": "Collection of facial masks",
-        "created_at": "2025-07-30 09:50:13",
-        "updated_at": "2025-07-30 09:50:13"
-      },
-      {
-        "id": 6,
-        "gift_name": "TV 43'",
-        "description": "Gift for Pack A",
-        "created_at": "2025-07-30 12:55:35",
-        "updated_at": "2025-07-30 12:55:35"
-      },
-      {
-        "id": 7,
-        "gift_name": "TV 32 IRIS'",
-        "description": "Gift for Pack B",
-        "created_at": "2025-07-30 12:55:35",
-        "updated_at": "2025-07-30 12:55:35"
-      },
-      {
-        "id": 8,
-        "gift_name": "5 internet Card 500 DA'",
-        "description": "Gift for Pack C",
-        "created_at": "2025-07-30 12:55:35",
-        "updated_at": "2025-07-30 12:55:35"
       }
     ],
     "pack_articles": [
@@ -13199,24 +13123,6 @@
         "updated_at": "2025-08-05 10:57:45"
       }
     ],
-    "articles": [
-      {
-        "id": 9,
-        "name": "Spark Go 1 64+3",
-        "price": 16400,
-        "description": "Spark Go 1 64+3 - Quantity available: 30 units",
-        "created_at": "2025-07-30 12:56:30",
-        "updated_at": "2025-07-30 12:56:30"
-      },
-      {
-        "id": 10,
-        "name": "Spark Go 1 128+4",
-        "price": 18800,
-        "description": "Spark Go 1 128+4 - Quantity available: 20 units",
-        "created_at": "2025-07-30 12:56:30",
-        "updated_at": "2025-07-30 12:56:30"
-      }
-    ],
     "packs": [
       {
         "id": 1,
@@ -13239,6 +13145,82 @@
         "pack_name": "Pack C",
         "total_price": 138400,
         "gift_id": 8,
+        "created_at": "2025-07-30 12:56:30",
+        "updated_at": "2025-07-30 12:56:30"
+      }
+    ],
+    "gifts": [
+      {
+        "id": 1,
+        "gift_name": "Travel Kit",
+        "description": "Compact travel-sized essentials",
+        "created_at": "2025-07-30 09:50:13",
+        "updated_at": "2025-07-30 09:50:13"
+      },
+      {
+        "id": 2,
+        "gift_name": "Beauty Bag",
+        "description": "Elegant cosmetic bag",
+        "created_at": "2025-07-30 09:50:13",
+        "updated_at": "2025-07-30 09:50:13"
+      },
+      {
+        "id": 3,
+        "gift_name": "Hand Mirror",
+        "description": "Portable beauty mirror",
+        "created_at": "2025-07-30 09:50:13",
+        "updated_at": "2025-07-30 09:50:13"
+      },
+      {
+        "id": 4,
+        "gift_name": "Sample Set",
+        "description": "Mini product samples",
+        "created_at": "2025-07-30 09:50:13",
+        "updated_at": "2025-07-30 09:50:13"
+      },
+      {
+        "id": 5,
+        "gift_name": "Face Mask Set",
+        "description": "Collection of facial masks",
+        "created_at": "2025-07-30 09:50:13",
+        "updated_at": "2025-07-30 09:50:13"
+      },
+      {
+        "id": 6,
+        "gift_name": "TV 43'",
+        "description": "Gift for Pack A",
+        "created_at": "2025-07-30 12:55:35",
+        "updated_at": "2025-07-30 12:55:35"
+      },
+      {
+        "id": 7,
+        "gift_name": "TV 32 IRIS'",
+        "description": "Gift for Pack B",
+        "created_at": "2025-07-30 12:55:35",
+        "updated_at": "2025-07-30 12:55:35"
+      },
+      {
+        "id": 8,
+        "gift_name": "5 internet Card 500 DA'",
+        "description": "Gift for Pack C",
+        "created_at": "2025-07-30 12:55:35",
+        "updated_at": "2025-07-30 12:55:35"
+      }
+    ],
+    "articles": [
+      {
+        "id": 9,
+        "name": "Spark Go 1 64+3",
+        "price": 16400,
+        "description": "Spark Go 1 64+3 - Quantity available: 30 units",
+        "created_at": "2025-07-30 12:56:30",
+        "updated_at": "2025-07-30 12:56:30"
+      },
+      {
+        "id": 10,
+        "name": "Spark Go 1 128+4",
+        "price": 18800,
+        "description": "Spark Go 1 128+4 - Quantity available: 20 units",
         "created_at": "2025-07-30 12:56:30",
         "updated_at": "2025-07-30 12:56:30"
       }

@@ -101,14 +101,28 @@ const handleCompleteSale = async () => {
       total_amount: getTotalPrice()
     };
 
-    console.log('💰 Completing sale with data:', newSale);
+    console.log('💰 SaleConfirmation - Starting sale completion...');
+    console.log('💰 SaleConfirmation - Sale data:', newSale);
+    console.log('💰 SaleConfirmation - Selected client:', selectedClient);
+    console.log('💰 SaleConfirmation - Selected packs:', selectedPacks);
 
     // Send to database API
     const token = localStorage.getItem('token');
+    console.log('🔑 SaleConfirmation - Token exists:', !!token);
+    console.log('🔑 SaleConfirmation - Token preview:', token ? token.substring(0, 50) + '...' : 'No token');
+    
+    if (!token || token === 'demo-token') {
+      throw new Error('No valid authentication token found. Please log in again.');
+    }
+
     const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
     const apiBase = baseURL.replace('/api', '');
+    const apiUrl = `${apiBase}/api/sales`;
     
-    const response = await fetch(`${apiBase}/api/sales`, {
+    console.log('🌐 SaleConfirmation - API URL:', apiUrl);
+    console.log('🌐 SaleConfirmation - Making API request...');
+    
+    const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -117,25 +131,30 @@ const handleCompleteSale = async () => {
       body: JSON.stringify(newSale),
     });
     
+    console.log('📡 SaleConfirmation - API Response status:', response.status);
+    console.log('📡 SaleConfirmation - API Response ok:', response.ok);
+    
     if (!response.ok) {
-      const errorData = await response.json();
-      console.error('Server response:', errorData);
-      throw new Error(errorData.message || `Failed to save sale: ${response.status}`);
+      const errorData = await response.json().catch(() => ({ message: 'Unknown error' }));
+      console.error('❌ SaleConfirmation - Server response error:', errorData);
+      throw new Error(errorData.message || `Failed to save sale: ${response.status} ${response.statusText}`);
     }
 
     const responseData = await response.json();
-    console.log('✅ Sale saved successfully:', responseData);
+    console.log('✅ SaleConfirmation - Sale saved successfully:', responseData);
+    console.log('🎉 SaleConfirmation - Sale ID:', responseData.saleId);
 
     // Refresh sales data to show the new sale
     if (refreshSalesData) {
-      console.log('🔄 Refreshing sales data after successful sale...');
+      console.log('🔄 SaleConfirmation - Refreshing sales data after successful sale...');
       await refreshSalesData();
     }
 
     setSaleCompleted(true);
   } catch (error) {
-    console.error('❌ Error saving sale:', error);
-    alert(`Failed to complete sale: ${error.message}`);
+    console.error('❌ SaleConfirmation - Error saving sale:', error);
+    console.error('❌ SaleConfirmation - Error details:', error.message);
+    alert(`Failed to complete sale: ${error.message}\n\nPlease check the console for details and try logging in again.`);
   } finally {
     setIsProcessing(false);
   }

@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-08-07T13:12:16.428Z",
+  "timestamp": "2025-08-07T12:40:47.446Z",
   "tables": {
     "sales": [
       {
@@ -73,24 +73,6 @@
         "total_price": 516000,
         "sale_date": "2025-08-05 13:18:24",
         "created_at": "2025-08-05 13:18:24"
-      },
-      {
-        "id": 29,
-        "client_id": 1167,
-        "representative_id": 7,
-        "pack_id": 1,
-        "total_price": 100000,
-        "sale_date": "2025-08-07 12:59:22",
-        "created_at": "2025-08-07 12:59:22"
-      },
-      {
-        "id": 30,
-        "client_id": 1145,
-        "representative_id": 7,
-        "pack_id": 1,
-        "total_price": 868000,
-        "sale_date": "2025-08-07 13:08:37",
-        "created_at": "2025-08-07 13:08:37"
       }
     ],
     "gifts": [
