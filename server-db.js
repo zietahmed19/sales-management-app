@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const path = require('path');
 const DatabaseBackup = require('./database-backup');
+const DatabaseBackupManager = require('./backup-db');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -25,8 +26,9 @@ app.use(express.json());
 const dbPath = path.join(__dirname, 'sales_management.db');
 const db = new sqlite3.Database(dbPath);
 
-// Initialize database backup system
+// Initialize database backup systems
 const dbBackup = new DatabaseBackup(dbPath);
+const dbBackupManager = new DatabaseBackupManager();
 
 // Initialize database tables
 const initializeDatabase = () => {
@@ -1746,11 +1748,93 @@ app.post('/api/admin/restore-database', authenticateAdmin, async (req, res) => {
     res.json({
       message: 'Database restored successfully',
       restored: result.restored,
-      total: result.total
+      tables: result.tables
     });
   } catch (error) {
     console.error('❌ Error restoring database:', error);
     res.status(500).json({ message: 'Failed to restore database', error: error.message });
+  }
+});
+
+// NEW DATABASE BACKUP METHODS (Better than JSON)
+
+// Database File Backup (recommended method)
+app.post('/api/admin/backup-database-file', authenticateAdmin, async (req, res) => {
+  try {
+    console.log('🚀 Admin requesting database file backup...');
+    const backupPath = await dbBackupManager.createDatabaseFileBackup();
+    
+    const fs = require('fs');
+    const stats = fs.statSync(backupPath);
+    
+    res.json({
+      message: 'Database file backup created successfully',
+      method: 'SQLite Database File (.db)',
+      backupFile: path.basename(backupPath),
+      fullPath: backupPath,
+      sizeKB: (stats.size / 1024).toFixed(2),
+      created: stats.mtime.toISOString(),
+      advantages: [
+        '⚡ Fastest backup/restore method',
+        '🔒 Complete database copy with all relationships',
+        '💾 No data loss or conversion issues',
+        '🎯 Ready for immediate use'
+      ]
+    });
+  } catch (error) {
+    console.error('❌ Error creating database file backup:', error);
+    res.status(500).json({ message: 'Failed to create database file backup', error: error.message });
+  }
+});
+
+// VACUUM Backup (optimized)
+app.post('/api/admin/backup-vacuum', authenticateAdmin, async (req, res) => {
+  try {
+    console.log('🚀 Admin requesting VACUUM backup...');
+    const backupPath = await dbBackupManager.createVacuumBackup();
+    
+    const fs = require('fs');
+    const stats = fs.statSync(backupPath);
+    
+    res.json({
+      message: 'VACUUM backup created successfully',
+      method: 'SQLite VACUUM INTO (.db)',
+      backupFile: path.basename(backupPath),
+      fullPath: backupPath,
+      sizeKB: (stats.size / 1024).toFixed(2),
+      created: stats.mtime.toISOString(),
+      advantages: [
+        '🗜️ Optimized and compressed',
+        '🧹 Removes unused space',
+        '📊 Smaller file size',
+        '⚡ Fast restore'
+      ]
+    });
+  } catch (error) {
+    console.error('❌ Error creating VACUUM backup:', error);
+    res.status(500).json({ message: 'Failed to create VACUUM backup', error: error.message });
+  }
+});
+
+// List All Backups
+app.get('/api/admin/list-backups', authenticateAdmin, async (req, res) => {
+  try {
+    const backups = dbBackupManager.listBackups();
+    res.json({
+      message: 'Available backups retrieved',
+      count: backups.length,
+      backups: backups.map(backup => ({
+        name: backup.name,
+        type: backup.name.endsWith('.db') ? 'Database File' : 
+              backup.name.endsWith('.sql') ? 'SQL Dump' : 'JSON Export',
+        sizeKB: (backup.size / 1024).toFixed(2),
+        created: backup.created.toISOString(),
+        path: backup.path
+      }))
+    });
+  } catch (error) {
+    console.error('❌ Error listing backups:', error);
+    res.status(500).json({ message: 'Failed to list backups', error: error.message });
   }
 });
 
