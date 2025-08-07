@@ -106,7 +106,7 @@ const PackSelection = ({
   // Show loading state
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-amber-50 flex items-center justify-center" dir="rtl">
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white flex items-center justify-center" dir="rtl">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
           <p className="text-gray-600">{t('loading')} {t('packs')}...</p>
@@ -182,8 +182,8 @@ const PackSelection = ({
   };
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-amber-50" dir="rtl">
-      <div className="bg-gradient-to-r from-purple-600 via-purple-500 to-amber-500 shadow-xl border-b border-purple-300">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white" dir="rtl">
+      <div className="bg-gradient-to-r from-purple-600 via-purple-500 to-white0 shadow-xl border-b border-purple-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-reverse space-x-4">
@@ -209,11 +209,11 @@ const PackSelection = ({
                   console.log('🔵 selectedPacks length:', selectedPacks.length);
                   setCurrentScreen('clients');
                 }}
-                className="bg-gradient-to-r from-amber-500 to-amber-600 text-white px-6 py-3 rounded-lg hover:from-amber-600 hover:to-amber-700 flex items-center gap-2 font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+                className="bg-gradient-to-r from-purple-500 to-purple-600 text-white px-6 py-3 rounded-lg hover:from-purple-600 hover:to-purple-700 flex items-center gap-2 font-medium transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
               >
                 <ShoppingCart className="w-5 h-5" />
                 الانتقال لاختيار العميل
-                <span className="bg-amber-800 text-white px-2 py-1 rounded-full text-xs">
+                <span className="bg-purple-800 text-white px-2 py-1 rounded-full text-xs">
                   {selectedPacks.length}
                 </span>
               </button>
@@ -300,7 +300,7 @@ const PackSelection = ({
 
         {/* Selected Packs Summary */}
         {selectedPacks.length > 0 && (
-          <div className="mb-8 bg-gradient-to-r from-purple-600 via-purple-500 to-amber-500 text-white rounded-xl shadow-xl p-6 border border-purple-300">
+          <div className="mb-8 bg-gradient-to-r from-purple-600 via-purple-500 to-white0 text-white rounded-xl shadow-xl p-6 border border-purple-300">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-semibold flex items-center gap-2">
                 <ShoppingCart className="w-6 h-6" />

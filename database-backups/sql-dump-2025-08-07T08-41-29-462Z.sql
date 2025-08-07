@@ -1,5 +1,5 @@
 -- SQLite Database Dump
--- Generated: 2025-08-07T08:41:29.462Z
+-- Generated: 2025-08-07 T08:41:29.462Z
 -- 
 
 CREATE TABLE pack_articles (

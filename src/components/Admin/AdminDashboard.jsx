@@ -520,8 +520,8 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-amber-50" dir="rtl">
-      <div className="bg-gradient-to-r from-purple-600 via-purple-500 to-amber-500 shadow-xl">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white" dir="rtl">
+      <div className="bg-gradient-to-r from-purple-600 via-purple-500 to-white0 shadow-xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <h1 className="text-3xl font-bold text-white drop-shadow-lg">
@@ -530,7 +530,7 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
             <div className="flex space-x-4">
               <button
                 onClick={() => setCurrentScreen && setCurrentScreen('admin-pack-management')}
-                className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg transition-all duration-300 flex items-center transform hover:scale-105 hover:shadow-lg"
+                className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-all duration-300 flex items-center transform hover:scale-105 hover:shadow-lg"
               >
                 <Package className="w-4 h-4 ml-2" />
                 إدارة الحزم
@@ -556,7 +556,7 @@ const AdminDashboard = ({ onLogout, resetAppState, setCurrentScreen }) => {
             </h2>
             <button
               onClick={exportToExcel}
-              className="flex items-center space-x-2 bg-gradient-to-r from-purple-600 to-amber-500 text-white py-2 px-4 rounded-lg hover:from-purple-700 hover:to-amber-600 transition-all duration-300 transform hover:scale-105"
+              className="flex items-center space-x-2 bg-gradient-to-r from-purple-600 to-white0 text-white py-2 px-4 rounded-lg hover:from-purple-700 hover:to-purple-600 transition-all duration-300 transform hover:scale-105"
             >
               <Download className="w-4 h-4" />
               <span>تصدير Excel</span>

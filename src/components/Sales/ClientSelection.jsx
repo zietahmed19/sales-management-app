@@ -141,7 +141,7 @@ const ClientSelection = ({
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-amber-50 flex items-center justify-center" dir="rtl">
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white flex items-center justify-center" dir="rtl">
         <div className="text-center">
           <h2 className="text-xl font-semibold text-purple-800 mb-2">جاري تحميل العملاء...</h2>
           <p className="text-purple-600">يرجى الانتظار</p>
@@ -152,13 +152,13 @@ const ClientSelection = ({
 
   if (!clients || clients.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-amber-50 flex items-center justify-center" dir="rtl">
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white flex items-center justify-center" dir="rtl">
         <div className="text-center">
           <h2 className="text-xl font-semibold text-purple-800 mb-2">{t('noClientsInTerritory')}</h2>
           <p className="text-purple-600 mb-4">{t('loading')} {t('clients')} أو لا يوجد عملاء متاحون في منطقتك.</p>
           <button
             onClick={() => setCurrentScreen('dashboard')}
-            className="bg-gradient-to-r from-purple-600 to-amber-500 text-white px-4 py-2 rounded-lg hover:from-purple-700 hover:to-amber-600 transition-all duration-300 transform hover:scale-105"
+            className="bg-gradient-to-r from-purple-600 to-white0 text-white px-4 py-2 rounded-lg hover:from-purple-700 hover:to-purple-600 transition-all duration-300 transform hover:scale-105"
           >
             {t('backToDashboard')}
           </button>
@@ -168,8 +168,8 @@ const ClientSelection = ({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-amber-50" dir="rtl">
-      <div className="bg-gradient-to-r from-purple-600 via-purple-500 to-amber-500 shadow-xl border-b border-purple-300">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white" dir="rtl">
+      <div className="bg-gradient-to-r from-purple-600 via-purple-500 to-white0 shadow-xl border-b border-purple-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center">
             <button 
@@ -356,7 +356,7 @@ const ClientSelection = ({
                 
                 <button
                   onClick={() => handleClientSelect(client)}
-                  className="w-full bg-gradient-to-r from-purple-600 to-amber-500 text-white py-2 px-4 rounded-lg hover:from-purple-700 hover:to-amber-600 font-medium transition-all duration-300 flex items-center justify-center gap-2 transform hover:scale-105 hover:shadow-lg"
+                  className="w-full bg-gradient-to-r from-purple-600 to-white0 text-white py-2 px-4 rounded-lg hover:from-purple-700 hover:to-purple-600 font-medium transition-all duration-300 flex items-center justify-center gap-2 transform hover:scale-105 hover:shadow-lg"
                 >
                   <Users className="w-4 h-4" />
                   {t('selectClient')}
