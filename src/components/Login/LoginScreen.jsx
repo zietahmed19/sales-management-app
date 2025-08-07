@@ -151,7 +151,7 @@ const LoginScreen = ({ setCurrentUser, setCurrentScreen, initializeData, trackUs
     } catch (error) {
       console.error('âŒ LoginScreen - Login error:', error);
       trackUserAction('LOGIN_ERROR', { username: credentials.username, error: error.message });
-      setError(isAdminLogin ? 'Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ø¹ØªÙ…Ø§Ø¯ Ø§Ù„Ù…Ø¯ÙŠØ± ØºÙŠØ± ØµØ­ÙŠØ­Ø©' : 'Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„Ø§Ø¹ØªÙ…Ø§Ø¯ ØºÙŠØ± ØµØ­ÙŠØ­Ø©');
+      setError(isAdminLogin ? 'بيانات اعتماد المدير غير صحيحة' : 'بيانات الاعتماد غير صحيحة');
     } finally {
       setLoading(false);
     }
@@ -169,10 +169,10 @@ const LoginScreen = ({ setCurrentUser, setCurrentScreen, initializeData, trackUs
             <Shield className="h-10 w-10 text-white" />
           </div>
           <h2 className="mt-6 text-3xl font-extrabold text-purple-900 drop-shadow-lg">
-            Ù†Ø¸Ø§Ù… Ø¥Ø¯Ø§Ø±Ø© Ø§Ù„Ù…Ø¨ÙŠØ¹Ø§Øª
+            نظام إدارة المبيعات
           </h2>
           <p className="mt-2 text-sm text-purple-600">
-            {isAdminLogin ? 'Ø¯Ø®ÙˆÙ„ Ø§Ù„Ù…Ø¯ÙŠØ±' : t('login')} Ø¥Ù„Ù‰ Ø­Ø³Ø§Ø¨Ùƒ
+            {isAdminLogin ? 'دخول المدير' : t('login')} إلى حسابك
           </p>
         </div>
 
@@ -189,7 +189,7 @@ const LoginScreen = ({ setCurrentUser, setCurrentScreen, initializeData, trackUs
               onClick={() => setIsAdminLogin(false)}
             >
               <Users className="w-4 h-4 mr-2" />
-              Ø¯Ø®ÙˆÙ„ Ø§Ù„Ù…Ù†Ø¯ÙˆØ¨
+              دخول المندوب
             </button>
             <button
               type="button"
@@ -201,7 +201,7 @@ const LoginScreen = ({ setCurrentUser, setCurrentScreen, initializeData, trackUs
               onClick={() => setIsAdminLogin(true)}
             >
               <Shield className="w-4 h-4 mr-2" />
-              Ø¯Ø®ÙˆÙ„ Ø§Ù„Ù…Ø¯ÙŠØ±
+              دخول المدير
             </button>
           </div>
         </div>
@@ -251,14 +251,14 @@ const LoginScreen = ({ setCurrentUser, setCurrentScreen, initializeData, trackUs
             disabled={loading}
             className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed transform transition-all duration-300 hover:scale-105 hover:shadow-2xl"
           >
-            {loading ? 'Ø¬Ø§Ø±ÙŠ ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø¯Ø®ÙˆÙ„...' : (isAdminLogin ? 'Ø¯Ø®ÙˆÙ„ ÙƒÙ…Ø¯ÙŠØ±' : t('login'))}
+            {loading ? 'جاري تسجيل الدخول...' : (isAdminLogin ? 'دخول كمدير' : t('login'))}
           </button>
         </form>
 
         {/* Quick Access - Only show admin credentials */}
         {isAdminLogin && (
           <div className="text-center text-sm text-purple-700 bg-white bg-opacity-95 backdrop-blur-lg rounded-xl p-4 shadow-2xl border border-purple-200">
-            <p className="mb-3 font-semibold text-purple-800">Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„Ù…Ø¯ÙŠØ±ÙŠÙ†:</p>
+            <p className="mb-3 font-semibold text-purple-800">بيانات المديرين:</p>
             <div className="grid gap-2">
               {adminUsers.map(admin => (
                 <button
